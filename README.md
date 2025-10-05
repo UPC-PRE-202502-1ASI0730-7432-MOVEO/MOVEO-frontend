@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # moveo-frontend
 
 This template should help get you started developing with Vue 3 in Vite.
@@ -36,3 +37,6 @@ npm run dev
 ```sh
 npm run build
 ```
+=======
+# MOVEO-frontend
+>>>>>>> 1e33a22318d02054e818522f3ca5713872ff2e58
