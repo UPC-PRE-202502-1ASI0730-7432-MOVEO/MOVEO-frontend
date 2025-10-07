@@ -1,0 +1,219 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "carlos@moveo.com",
+      "role": "owner",
+      "firstName": "Carlos",
+      "lastName": "Mendoza",
+      "phone": "+51987654321",
+      "dni": "74125896",
+      "licenseNumber": "LIC-2020-789",
+      "isVerified": true,
+      "reputationScore": 4.8,
+      "totalReviews": 12,
+      "joinedAt": "2024-01-15T10:00:00Z",
+      "profilePicture": "carlos.jpg"
+    },
+    {
+      "id": 2,
+      "email": "ana@moveo.com",
+      "role": "renter",
+      "firstName": "Ana",
+      "lastName": "López",
+      "phone": "+51963852741",
+      "dni": "85236974",
+      "licenseNumber": "LIC-2021-456",
+      "isVerified": true,
+      "reputationScore": 4.9,
+      "totalReviews": 8,
+      "joinedAt": "2024-02-20T14:30:00Z",
+      "profilePicture": "ana.jpg"
+    }
+  ],
+  "vehicles": [
+    {
+      "id": 1,
+      "ownerId": 1,
+      "brand": "Toyota",
+      "model": "Corolla",
+      "year": 2022,
+      "color": "Blanco",
+      "licensePlate": "ABC-123",
+      "seats": 5,
+      "transmission": "automático",
+      "fuelType": "gasolina",
+      "dailyPrice": 45.00,
+      "hourlyPrice": 8.00,
+      "depositAmount": 200.00,
+      "location": {
+        "latitude": -12.0464,
+        "longitude": -77.0428,
+        "address": "Av. Arequipa 123, Miraflores, Lima"
+      },
+      "features": ["Aire acondicionado", "Bluetooth", "Cámara de retroceso"],
+      "photos": ["corolla_1.jpg", "corolla_2.jpg"],
+      "isAvailable": true,
+      "restrictions": ["No fumar", "Mascotas no permitidas"],
+      "createdAt": "2024-03-01T09:00:00Z",
+      "status": "active"
+    }
+  ],
+  "rentals": [
+    {
+      "id": 1,
+      "vehicleId": 1,
+      "renterId": 2,
+      "ownerId": 1,
+      "startDate": "2024-07-10T08:00:00Z",
+      "endDate": "2024-07-12T18:00:00Z",
+      "totalPrice": 90.00,
+      "status": "completed",
+      "pickupLocation": "Av. Arequipa 123, Miraflores",
+      "returnLocation": "Av. Arequipa 123, Miraflores",
+      "notes": "Entregado con tanque lleno.",
+      "createdAt": "2024-07-05T14:22:00Z",
+      "acceptedAt": "2024-07-06T10:00:00Z"
+    }
+  ],
+  "payments": [
+    {
+      "id": 1,
+      "rentalId": 1,
+      "payerId": 2,
+      "amount": 90.00,
+      "currency": "PEN",
+      "method": "credit_card",
+      "status": "completed",
+      "transactionId": "txn_rental_123",
+      "type": "rental_payment",
+      "createdAt": "2024-07-05T14:25:00Z"
+    },
+    {
+      "id": 2,
+      "rentalId": 1,
+      "payerId": 2,
+      "amount": 200.00,
+      "currency": "PEN",
+      "method": "credit_card",
+      "status": "held",
+      "transactionId": "txn_deposit_456",
+      "type": "security_deposit",
+      "createdAt": "2024-07-05T14:25:05Z"
+    },
+    {
+      "id": 3,
+      "rentalId": 1,
+      "payerId": 2,
+      "recipientId": 2,
+      "amount": 30.00,
+      "currency": "PEN",
+      "status": "refunded",
+      "type": "partial_refund",
+      "reason": "Daño menor no justifica retención total",
+      "createdAt": "2024-07-15T11:00:00Z"
+    }
+  ],
+  "reviews": [
+    {
+      "id": 1,
+      "rentalId": 1,
+      "reviewerId": 2,
+      "reviewedId": 1,
+      "reviewedType": "owner",
+      "rating": 5,
+      "comment": "Carlos fue muy amable y el auto estaba impecable. ¡Totalmente recomendado!",
+      "isPublic": true,
+      "createdAt": "2024-07-13T10:00:00Z"
+    },
+    {
+      "id": 2,
+      "rentalId": 1,
+      "reviewerId": 1,
+      "reviewedId": 2,
+      "reviewedType": "renter",
+      "rating": 4,
+      "comment": "Ana devolvió el auto limpio y a tiempo. Muy responsable.",
+      "isPublic": false,
+      "createdAt": "2024-07-13T11:30:00Z"
+    }
+  ],
+  "incidents": [
+    {
+      "id": 1,
+      "rentalId": 1,
+      "reportedById": 2,
+      "assignedToId": 1,
+      "type": "vehicle_damage",
+      "description": "Encontré una rayadura en la puerta trasera al recoger el auto.",
+      "status": "resolved",
+      "evidencePhotos": ["damage_1.jpg"],
+      "createdAt": "2024-07-10T08:30:00Z",
+      "resolvedAt": "2024-07-11T16:00:00Z",
+      "resolutionNotes": "Daño menor. No se aplica cargo. Depósito liberado parcialmente."
+    }
+  ],
+  "notifications": [
+    {
+      "id": 1,
+      "userId": 2,
+      "actorId": 1,
+      "rentalId": 1,
+      "title": "Reserva confirmada",
+      "message": "Carlos ha aceptado tu solicitud para el Toyota Corolla del 10 al 12 de julio.",
+      "type": "rental_accepted",
+      "isRead": false,
+      "createdAt": "2024-07-06T10:05:00Z"
+    },
+    {
+      "id": 2,
+      "userId": 1,
+      "actorId": 2,
+      "rentalId": 1,
+      "title": "Nueva calificación",
+      "message": "Ana te dio 5 estrellas por tu auto.",
+      "type": "review_received",
+      "isRead": false,
+      "createdAt": "2024-07-13T10:05:00Z"
+    },
+    {
+      "id": 3,
+      "userId": 2,
+      "actorId": null,
+      "rentalId": 1,
+      "title": "Reembolso procesado",
+      "message": "Se ha acreditado S/ 30.00 por el incidente reportado.",
+      "type": "refund_processed",
+      "isRead": false,
+      "createdAt": "2024-07-15T11:05:00Z"
+    }
+  ],
+  "pricingPlans": [
+    {
+      "id": 1,
+      "target": "renter",
+      "title": "Para inquilinos",
+      "description": "Sin costo de registro. Solo pagas al reservar.",
+      "features": [
+        "Reserva segura con contrato digital",
+        "Depósito de seguridad retenido hasta devolución",
+        "Soporte 24/7 durante el alquiler",
+        "Reembolsos parciales por incidentes validados"
+      ],
+      "commissionNote": "MOVEO no cobra comisión al inquilino."
+    },
+    {
+      "id": 2,
+      "target": "owner",
+      "title": "Para propietarios",
+      "description": "Gana dinero compartiendo tu auto.",
+      "features": [
+        "Publicación gratuita",
+        "Verificación de inquilinos",
+        "Protección contra daños menores",
+        "Pago liberado al finalizar el alquiler"
+      ],
+      "commissionNote": "MOVEO cobra 15% de comisión sobre el monto del alquiler."
+    }
+  ]
+}
