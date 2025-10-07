@@ -1,1 +1,2 @@
-npm run json-server.js
+node server/json-server.js
+

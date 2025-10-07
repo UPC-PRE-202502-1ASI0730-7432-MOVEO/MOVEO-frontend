@@ -1,24 +1,57 @@
 // json-server.js
-import jsonServer from 'json-server';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { extname, resolve } from 'node:path';
+import { Low } from 'lowdb';
+import { JSONFile, DataFile } from 'lowdb/node';
+import { createApp } from 'json-server/lib/app.js';
+import { Observer } from 'json-server/lib/observer.js';
 
-const server = jsonServer.create();
-const router = jsonServer.router('db.json');
-const middlewares = jsonServer.defaults();
-const port = 5332;
+const DB_PATH = resolve('server', 'db.json');
+const PORT = parseInt(process.env.PORT || '5332', 10);
 
-
-const routes= {
-    "/api/v1/*": "/$1"
+if (!existsSync(DB_PATH)) {
+  console.error(`No existe el archivo de datos: ${DB_PATH}`);
+  process.exit(1);
 }
 
-server.use(middlewares);
+if (readFileSync(DB_PATH, 'utf-8').trim() === '') {
+  writeFileSync(DB_PATH, '{}');
+}
 
-server.use(jsonServer.bodyParser);
+let adapter;
+if (extname(DB_PATH) === '.json5') {
+  const JSON5 = await import('json5');
+  adapter = new DataFile(DB_PATH, {
+    parse: JSON5.parse,
+    stringify: JSON5.stringify,
+  });
+} else {
+  adapter = new JSONFile(DB_PATH);
+}
 
-server.use(jsonServer.rewriter(routes));
+const observer = new Observer(adapter);
+const db = new Low(observer, {});
+await db.read();
 
-server.use(router);
+const app = createApp(db, { logger: false });
 
-server.listen(port, () => {
-    console.log(`JSON Server listening => http://localhost:${port}`);
+// Rewrite /api/v1/* -> /*
+app.use((req, _res, next) => {
+  if (req.url && req.url.startsWith('/api/v1/')) {
+    req.url = req.url.replace(/^\/api\/v1/, '') || '/';
+  }
+  next();
+});
+
+app.listen(PORT, () => {
+  console.log(`JSON Server listening => http://localhost:${PORT}`);
+  if (db.data) {
+    const keys = Object.keys(db.data);
+    if (keys.length) {
+      console.log('Endpoints:');
+      keys.forEach(k => console.log(`  http://localhost:${PORT}/api/v1/${k}`));
+    } else {
+      console.log('Sin colecciones en el archivo db.json');
+    }
+  }
 });
