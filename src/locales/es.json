@@ -52,5 +52,15 @@
         "description": "Recoge el auto y disfruta tu viaje"
       }
     }
+  },
+  "adventures": {
+    "title": "Lista de Aventuras",
+    "new": "Nueva Aventura",
+    "id": "ID",
+    "name": "Nombre",
+    "actions": "Acciones"
+  },
+  "errors": {
+    "ocurred": "Ocurrieron errores"
   }
 }
