@@ -1,6 +1,7 @@
 import {createRouter, createWebHistory} from "vue-router";
 import AdventureList from "./app/adventure/components/views/adventure-list.vue";
 import AdventureForm from "./app/adventure/components/views/adventure-form.vue";
+import PaymentsView from "./app/payment/components/views/payments-view.vue";
 
 const routes = [
     {
@@ -22,6 +23,13 @@ const routes = [
         props: true,
         meta: { title: "Edit Adventure" },
     },
+    {
+        path: "/payments",
+        name: "payments",
+        component: PaymentsView,
+        meta: { title: "Payment Module" },
+    }
+
 ];
 
 const router = createRouter(
