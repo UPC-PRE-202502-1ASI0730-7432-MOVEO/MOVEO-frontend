@@ -5,6 +5,7 @@ import RentalPage from '@/app/rental/presentation/views/rental-page.vue'
 import PageNotFound from '@/app/shared/views/page-not-found.vue'
 import AdventureList from './app/adventure/presentation/components/adventure-list.vue'
 import AdventureForm from './app/adventure/presentation/components/adventure-form.vue'
+import PaymentsView from './app/payment/components/views/payments-view.vue'
 
 const routes = [
   { path: '/', name: 'home', component: Home },
@@ -70,6 +71,14 @@ const routes = [
     component: AdventureForm,
     props: true,
     meta: { title: 'Edit Adventure' }
+  },
+
+  // Rutas de Payments
+  {
+    path: '/payments',
+    name: 'payments',
+    component: PaymentsView,
+    meta: { title: 'Payment Module' }
   },
 
   // Rutas compartidas
