@@ -1,0 +1,56 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "rentals": "Alquileres",
+    "register": "Registrarse"
+  },
+  "footer": {
+    "description": "Plataforma de alquiler de vehículos entre particulares. Encuentra el auto perfecto para tu próximo viaje.",
+    "quickLinks": "Enlaces Rápidos",
+    "support": "Soporte",
+    "faq": "Preguntas Frecuentes",
+    "help": "Centro de Ayuda",
+    "contact": "Contacto",
+    "terms": "Términos y Condiciones",
+    "contactTitle": "Contacto",
+    "rights": "Todos los derechos reservados."
+  },
+  "home": {
+    "hero": {
+      "title": "Alquila el Auto Perfecto",
+      "subtitle": "Encuentra vehículos cerca de ti. Conecta con propietarios verificados.",
+      "cta": "Explorar Vehículos",
+      "ctaOwner": "Publica tu Auto"
+    },
+    "features": {
+      "title": "¿Por qué elegir MOVEO?",
+      "trust": {
+        "title": "Confianza y Seguridad",
+        "description": "Usuarios verificados, seguros y depósitos protegidos."
+      },
+      "flexible": {
+        "title": "Precios Flexibles",
+        "description": "Alquila por horas o días. Tú decides."
+      },
+      "support": {
+        "title": "Soporte 24/7",
+        "description": "Estamos aquí para ayudarte en todo momento."
+      }
+    },
+    "howItWorks": {
+      "title": "¿Cómo funciona?",
+      "step1": {
+        "title": "Busca",
+        "description": "Encuentra el vehículo perfecto cerca de ti"
+      },
+      "step2": {
+        "title": "Reserva",
+        "description": "Solicita el alquiler con contrato digital"
+      },
+      "step3": {
+        "title": "Disfruta",
+        "description": "Recoge el auto y disfruta tu viaje"
+      }
+    }
+  }
+}

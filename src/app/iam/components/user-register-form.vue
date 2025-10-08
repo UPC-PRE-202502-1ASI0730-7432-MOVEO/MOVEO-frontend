@@ -1,0 +1,90 @@
+<template>
+  <form class="user-register-form" @submit.prevent="submit">
+    <h1 class="title">Registro de Usuario</h1>
+    <div class="field-group">
+      <label>Rol</label>
+      <select v-model="form.role" required>
+        <option value="renter">Inquilino</option>
+        <option value="owner">Propietario</option>
+      </select>
+    </div>
+    <div class="grid">
+      <div class="field-group">
+        <label>Nombre</label>
+        <input v-model="form.firstName" required />
+      </div>
+      <div class="field-group">
+        <label>Apellido</label>
+        <input v-model="form.lastName" required />
+      </div>
+    </div>
+    <div class="field-group">
+      <label>Email</label>
+      <input type="email" v-model="form.email" required />
+    </div>
+    <div class="grid">
+      <div class="field-group">
+        <label>Teléfono</label>
+        <input v-model="form.phone" />
+      </div>
+      <div class="field-group">
+        <label>DNI</label>
+        <input v-model="form.dni" />
+      </div>
+    </div>
+    <div class="field-group">
+      <label>Licencia (si aplica)</label>
+      <input v-model="form.licenseNumber" :required="form.role === 'renter' || form.role === 'owner'" />
+    </div>
+    <div class="actions">
+      <button class="btn primary" :disabled="submitting">{{ submitting ? 'Enviando...' : 'Registrar' }}</button>
+    </div>
+    <div v-if="error" class="alert error">{{ error }}</div>
+    <div v-if="created" class="alert success">Usuario creado id {{ created.id }}</div>
+  </form>
+</template>
+<script setup>
+import { reactive, ref } from 'vue'
+import { apiClient } from '@/app/shared/infrastructure/apiClient.js'
+
+const form = reactive({
+  role: 'renter',
+  firstName: '',
+  lastName: '',
+  email: '',
+  phone: '',
+  dni: '',
+  licenseNumber: ''
+})
+const submitting = ref(false)
+const error = ref(null)
+const created = ref(null)
+
+async function submit() {
+  error.value = null
+  created.value = null
+  submitting.value = true
+  try {
+    const payload = { ...form, isVerified:false, reputationScore:0, totalReviews:0, joinedAt:new Date().toISOString() }
+    const user = await apiClient.post('/users', payload)
+    created.value = user
+  } catch (e) { error.value = e.message } finally { submitting.value = false }
+}
+</script>
+<style scoped>
+.user-register-form { max-width:520px; margin:0 auto; display:grid; gap:1rem; background:#fff; padding:1.5rem 1.75rem 2rem; border:1px solid #e0e0e0; border-radius:16px; }
+.title { margin:0 0 .25rem; font-size:1.4rem; }
+.field-group { display:flex; flex-direction:column; gap:.35rem; }
+.field-group label { font-size:.75rem; text-transform:uppercase; letter-spacing:.5px; font-weight:600; color:#37474f; }
+input, select { border:1px solid #cfd8dc; border-radius:8px; padding:.55rem .7rem; font-size:.85rem; background:#fafafa; }
+input:focus, select:focus { outline:2px solid #3f51b5; outline-offset:2px; background:#fff; }
+.grid { display:grid; gap:.85rem; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); }
+.actions { display:flex; justify-content:flex-end; }
+.btn { border:none; background:#607d8b; color:#fff; padding:.6rem 1.1rem; border-radius:8px; cursor:pointer; font-weight:500; }
+.btn.primary { background:#3f51b5; }
+.btn:disabled { opacity:.6; cursor:default; }
+.alert { padding:.6rem .9rem; border-radius:8px; font-size:.75rem; }
+.alert.error { background:#ffebee; color:#c62828; }
+.alert.success { background:#e8f5e9; color:#2e7d32; }
+</style>
+

@@ -1,0 +1,479 @@
+<template>
+  <AuthLayout>
+    <div class="login-form">
+      <div class="login-form__header">
+        <h1 class="login-form__title">Bienvenido a MOVEO</h1>
+        <p class="login-form__subtitle">Inicia sesión para continuar</p>
+      </div>
+
+      <form @submit.prevent="handleSubmit" class="form">
+        <div class="form__field">
+          <label for="email" class="form__label">Correo Electrónico</label>
+          <input
+            id="email"
+            v-model="formData.email"
+            type="email"
+            class="form__input"
+            :class="{ 'form__input--error': errors.email }"
+            placeholder="tu@email.com"
+            required
+          />
+          <span v-if="errors.email" class="form__error">{{ errors.email }}</span>
+        </div>
+
+        <div class="form__field">
+          <label for="password" class="form__label">Contraseña</label>
+          <div class="form__input-wrapper">
+            <input
+              id="password"
+              v-model="formData.password"
+              :type="showPassword ? 'text' : 'password'"
+              class="form__input"
+              :class="{ 'form__input--error': errors.password }"
+              placeholder="Ingresa tu contraseña"
+              required
+            />
+            <button
+              type="button"
+              @click="showPassword = !showPassword"
+              class="form__input-icon"
+            >
+              <svg v-if="!showPassword" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+                <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path>
+                <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path>
+                <line x1="2" x2="22" y1="2" y2="22"></line>
+              </svg>
+            </button>
+          </div>
+          <span v-if="errors.password" class="form__error">{{ errors.password }}</span>
+        </div>
+
+        <div class="form__options">
+          <label class="form__checkbox">
+            <input v-model="formData.rememberMe" type="checkbox" />
+            <span>Recordarme</span>
+          </label>
+          <a href="#" class="link">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <button
+          type="submit"
+          class="form__submit"
+          :disabled="isSubmitting"
+        >
+          <span v-if="!isSubmitting">Iniciar sesión</span>
+          <span v-else>Iniciando sesión...</span>
+        </button>
+
+        <!-- Demo Users Info -->
+        <div class="demo-info" v-if="demoUsers.length > 0">
+          <div class="demo-info__header">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 16v-4"></path>
+              <path d="M12 8h.01"></path>
+            </svg>
+            <span>Usuarios Demo (Desarrollo)</span>
+          </div>
+          <div class="demo-info__users">
+            <div 
+              v-for="user in demoUsers" 
+              :key="user.id" 
+              class="demo-user" 
+              @click="fillDemoUser(user.email)"
+            >
+              <strong>{{ user.role === 'renter' ? 'Cliente' : 'Propietario' }}:</strong> 
+              {{ user.email }} / password123
+            </div>
+          </div>
+        </div>
+
+        <div class="form__divider">
+          <span>o</span>
+        </div>
+
+        <router-link to="/register/select-role" class="form__register-link">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <line x1="19" x2="19" y1="8" y2="14"></line>
+            <line x1="22" x2="16" y1="11" y2="11"></line>
+          </svg>
+          Crear cuenta nueva
+        </router-link>
+      </form>
+    </div>
+  </AuthLayout>
+</template>
+
+<script setup>
+import { ref, reactive, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import AuthLayout from '../components/AuthLayout.vue'
+import { login, loadDemoUsers, userState } from '../application/user.store.js'
+
+const router = useRouter()
+const isSubmitting = ref(false)
+const showPassword = ref(false)
+const demoUsers = ref([])
+
+const formData = reactive({
+  email: '',
+  password: '',
+  rememberMe: false
+})
+
+const errors = reactive({
+  email: '',
+  password: ''
+})
+
+// Cargar usuarios demo al montar el componente
+onMounted(async () => {
+  try {
+    demoUsers.value = await loadDemoUsers()
+  } catch (error) {
+    console.error('Error loading demo users:', error)
+  }
+})
+
+const fillDemoUser = (email) => {
+  formData.email = email
+  formData.password = 'password123' // Demo password
+}
+
+const validateForm = () => {
+  let isValid = true
+  
+  // Reset errors
+  Object.keys(errors).forEach(key => errors[key] = '')
+
+  // Validate email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!emailRegex.test(formData.email)) {
+    errors.email = 'Ingresa un correo electrónico válido'
+    isValid = false
+  }
+
+  // Validate password
+  if (formData.password.length < 6) {
+    errors.password = 'La contraseña debe tener al menos 6 caracteres'
+    isValid = false
+  }
+
+  return isValid
+}
+
+const handleSubmit = async () => {
+  if (!validateForm()) {
+    return
+  }
+
+  isSubmitting.value = true
+
+  try {
+    // Llamar a la función login del store (valida contra la API)
+    const user = await login(formData.email.toLowerCase().trim(), formData.password)
+
+    // Redirect based on role with full page reload to ensure layout is shown
+    if (user.role === 'renter') {
+      window.location.href = '/rentals'
+    } else if (user.role === 'owner') {
+      window.location.href = '/my-vehicles'
+    }
+  } catch (error) {
+    console.error('Error logging in:', error)
+    errors.email = 'Correo o contraseña incorrectos'
+    errors.password = 'Correo o contraseña incorrectos'
+  } finally {
+    isSubmitting.value = false
+  }
+}
+</script>
+
+<style scoped>
+.login-form {
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+}
+
+.login-form__header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.login-form__title {
+  font-family: var(--font-primary);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.login-form__subtitle {
+  font-family: var(--font-secondary);
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.form__field {
+  margin-bottom: 1.25rem;
+}
+
+.form__label {
+  display: block;
+  font-family: var(--font-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.form__input-wrapper {
+  position: relative;
+}
+
+.form__input {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  font-family: var(--font-secondary);
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+  background: white;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.form__input:focus {
+  outline: none;
+  border-color: var(--bg-moveo-green);
+  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
+}
+
+.form__input--error {
+  border-color: #ef4444;
+}
+
+.form__input--error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.form__input-wrapper .form__input {
+  padding-right: 3rem;
+}
+
+.form__input-icon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-secondary);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.form__input-icon:hover {
+  color: var(--text-primary);
+}
+
+.form__error {
+  display: block;
+  font-family: var(--font-secondary);
+  font-size: 0.8125rem;
+  color: #ef4444;
+  margin-top: 0.375rem;
+}
+
+.form__options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.form__checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.form__checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.form__checkbox span {
+  font-family: var(--font-secondary);
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.form__submit {
+  width: 100%;
+  padding: 1rem;
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  background: var(--bg-moveo-green);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 1.5rem;
+}
+
+.form__submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(74, 222, 128, 0.3);
+}
+
+.form__submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.demo-info {
+  background: #fef3c7;
+  border: 2px solid #fbbf24;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.demo-info__header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-primary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #92400e;
+  margin-bottom: 0.75rem;
+}
+
+.demo-info__header svg {
+  flex-shrink: 0;
+  color: #f59e0b;
+}
+
+.demo-info__users {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.demo-user {
+  font-family: var(--font-secondary);
+  font-size: 0.8125rem;
+  color: #78350f;
+  padding: 0.5rem 0.75rem;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.demo-user:hover {
+  background: #fef3c7;
+  transform: translateX(4px);
+}
+
+.demo-user strong {
+  font-weight: 600;
+  color: #92400e;
+}
+
+.form__divider {
+  position: relative;
+  text-align: center;
+  margin: 1.5rem 0;
+}
+
+.form__divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--border-color);
+}
+
+.form__divider span {
+  position: relative;
+  display: inline-block;
+  padding: 0 1rem;
+  background: white;
+  font-family: var(--font-secondary);
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.form__register-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 1rem;
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--bg-moveo-green);
+  background: white;
+  border: 2px solid var(--bg-moveo-green);
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.form__register-link:hover {
+  background: var(--bg-moveo-green);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(74, 222, 128, 0.2);
+}
+
+.link {
+  font-family: var(--font-secondary);
+  font-size: 0.875rem;
+  color: var(--bg-moveo-green);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.link:hover {
+  color: var(--bg-moveo-orange);
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .login-form__title {
+    font-size: 1.75rem;
+  }
+
+  .form__options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+}
+</style>
