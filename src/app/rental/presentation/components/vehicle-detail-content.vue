@@ -29,7 +29,8 @@
 const props = defineProps({ 
   vehicle: {
     type: Object,
-    required: true
+    required: false,
+    default: null
   }
 })
 </script>

@@ -23,9 +23,9 @@
       <h3 class="vehicle-title">{{ vehicle.fullName }}</h3>
       <p class="vehicle-year">{{ vehicle.year }}</p>
       <div class="vehicle-specs">
-        <span class="spec">🚗 {{ vehicle.transmission }}</span>
-        <span class="spec">⛽ {{ vehicle.fuelType }}</span>
-        <span class="spec">👥 {{ vehicle.seats }} asientos</span>
+        <span class="spec"> {{ vehicle.transmission }}</span>
+        <span class="spec"> {{ vehicle.fuelType }}</span>
+        <span class="spec"> {{ vehicle.seats }} asientos</span>
       </div>
       <div class="vehicle-price">
         <span class="price-amount">S/ {{ vehicle.dailyPrice }}</span>

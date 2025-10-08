@@ -57,6 +57,32 @@
       "restrictions": ["No fumar", "Mascotas no permitidas"],
       "createdAt": "2024-03-01T09:00:00Z",
       "status": "active"
+    },
+        {
+      "id": 2,
+      "ownerId": 1,
+      "brand": "ToyotaXDDDD",
+      "model": "Corollaxdxdxdxd",
+      "year": 2022,
+      "color": "negro",
+      "licensePlate": "ABC-123",
+      "seats": 5,
+      "transmission": "automático",
+      "fuelType": "gasolina",
+      "dailyPrice": 45.00,
+      "hourlyPrice": 8.00,
+      "depositAmount": 200.00,
+      "location": {
+        "latitude": -12.0464,
+        "longitude": -77.0428,
+        "address": "Av. Arequipa 123, Miraflores, Lima"
+      },
+      "features": ["Aire acondicionado", "Bluetooth", "Cámara de retroceso"],
+      "photos": ["corolla_1.jpg", "corolla_2.jpg"],
+      "isAvailable": true,
+      "restrictions": ["No fumar", "Mascotas no permitidas"],
+      "createdAt": "2024-03-01T09:00:00Z",
+      "status": "active"
     }
   ],
   "rentals": [

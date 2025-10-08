@@ -1,7 +1,7 @@
 import { reactive, computed } from 'vue'
 import { RentalApi } from '../infrastructure/rental-api.js'
 
-const state = reactive({
+export const state = reactive({
   vehicles: [],
   rentals: [],
   loading: false,
