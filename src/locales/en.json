@@ -1,0 +1,14 @@
+{
+  "home": "Home",
+  "about": "About",
+  "adventures": {
+    "title": "Adventure List",
+    "new": "New Adventure",
+    "id": "ID",
+    "name": "Name",
+    "actions": "Actions"
+  },
+  "errors": {
+    "ocurred": "Errors occurred"
+  }
+}
