@@ -1,11 +1,13 @@
 <script setup>
 import HeaderContent from '@/app/shared/components/header-content.vue'
+import RoleToolbar from '@/app/shared/components/role-toolbar.vue'
 import FooterContent from '@/app/shared/components/footer-content.vue'
 </script>
 
 <template>
   <div class="app-shell">
     <HeaderContent />
+    <RoleToolbar />
     <main class="app-main">
       <router-view />
     </main>

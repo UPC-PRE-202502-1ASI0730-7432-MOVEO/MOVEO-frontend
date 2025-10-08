@@ -100,6 +100,21 @@
       "notes": "Entregado con tanque lleno.",
       "createdAt": "2024-07-05T14:22:00Z",
       "acceptedAt": "2024-07-06T10:00:00Z"
+    },
+    {
+      "id": 2,
+      "vehicleId": 2,
+      "renterId": 2,
+      "ownerId": 1,
+      "startDate": "2025-10-07T08:00:00Z",
+      "endDate": "2025-10-10T18:00:00Z",
+      "totalPrice": 135.00,
+      "status": "active",
+      "pickupLocation": "Av. Arequipa 123, Miraflores",
+      "returnLocation": "Av. Arequipa 123, Miraflores",
+      "notes": "Alquiler activo en curso.",
+      "createdAt": "2025-10-05T10:00:00Z",
+      "acceptedAt": "2025-10-06T09:00:00Z"
     }
   ],
   "payments": [
