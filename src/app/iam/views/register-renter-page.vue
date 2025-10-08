@@ -213,7 +213,7 @@
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import AuthLayout from '../components/AuthLayout.vue'
-import { setUser } from '../application/user.store.js'
+import { register } from '../application/user.store.js'
 
 const router = useRouter()
 const isSubmitting = ref(false)
@@ -311,12 +311,8 @@ const handleSubmit = async () => {
   isSubmitting.value = true
 
   try {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000))
-
-    // Create new user object
-    const newUser = {
-      id: Date.now(), // Generate temporary ID
+    // Create new user using the register function from store
+    const userData = {
       role: 'renter',
       firstName: formData.firstName.trim(),
       lastName: formData.lastName.trim(),
@@ -324,40 +320,20 @@ const handleSubmit = async () => {
       phone: formData.phone.trim(),
       dni: formData.dni,
       licenseNumber: formData.licenseNumber.trim(),
-      avatar: null,
-      verified: {
-        email: false,
-        phone: false,
-        identity: false,
-        license: false
-      },
-      stats: {
-        rating: 0,
-        reviewsCount: 0,
-        rentalsCount: 0,
-        memberSince: new Date().toISOString()
-      },
       preferences: {
         language: 'es',
         notifications: {
           email: true,
           push: true,
           sms: false
-        },
-        favoriteDistricts: [],
-        priceRange: {
-          min: 50,
-          max: 500
-        },
-        preferredTransmission: 'all'
+        }
       }
     }
 
-    // Set user in store (this will save to localStorage)
-    setUser(newUser)
+    await register(userData)
 
-    // Redirect to rentals page
-    router.push('/rentals')
+    // Redirect to rentals page with full page reload to ensure layout is shown
+    window.location.href = '/rentals'
   } catch (error) {
     console.error('Error creating account:', error)
     alert('Hubo un error al crear tu cuenta. Por favor intenta nuevamente.')

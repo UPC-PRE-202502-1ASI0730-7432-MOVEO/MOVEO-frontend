@@ -2,33 +2,93 @@
   "users": [
     {
       "id": 1,
-      "email": "carlos@moveo.com",
       "role": "owner",
       "firstName": "Carlos",
       "lastName": "Mendoza",
+      "email": "carlos@moveo.com",
       "phone": "+51987654321",
       "dni": "74125896",
       "licenseNumber": "LIC-2020-789",
-      "isVerified": true,
-      "reputationScore": 4.8,
-      "totalReviews": 12,
-      "joinedAt": "2024-01-15T10:00:00Z",
-      "profilePicture": "carlos.jpg"
+      "avatar": "carlos.jpg",
+      "verified": {
+        "email": true,
+        "phone": true,
+        "dni": true,
+        "license": true
+      },
+      "stats": {
+        "totalRentals": 24,
+        "totalSpent": 0,
+        "totalEarned": 3200,
+        "activeRentals": 1,
+        "completedRentals": 22,
+        "canceledRentals": 1
+      },
+      "preferences": {
+        "language": "es",
+        "notifications": {
+          "email": true,
+          "push": true,
+          "sms": true
+        },
+        "autoAcceptRentals": false,
+        "minimumRentalDays": 1,
+        "instantBooking": false
+      },
+      "bankAccount": {
+        "bankName": "BCP",
+        "accountType": "ahorros",
+        "accountNumber": "19100234567890",
+        "verified": true
+      }
     },
     {
       "id": 2,
-      "email": "ana@moveo.com",
       "role": "renter",
       "firstName": "Ana",
       "lastName": "López",
+      "email": "ana@moveo.com",
       "phone": "+51963852741",
       "dni": "85236974",
       "licenseNumber": "LIC-2021-456",
-      "isVerified": true,
-      "reputationScore": 4.9,
-      "totalReviews": 8,
-      "joinedAt": "2024-02-20T14:30:00Z",
-      "profilePicture": "ana.jpg"
+      "avatar": "ana.jpg",
+      "verified": {
+        "email": true,
+        "phone": true,
+        "dni": true,
+        "license": true
+      },
+      "stats": {
+        "totalRentals": 8,
+        "totalSpent": 620,
+        "totalEarned": 0,
+        "activeRentals": 1,
+        "completedRentals": 6,
+        "canceledRentals": 1
+      },
+      "preferences": {
+        "language": "es",
+        "notifications": {
+          "email": true,
+          "push": true,
+          "sms": false
+        },
+        "favoriteDistricts": [
+          "Miraflores",
+          "San Isidro",
+          "Barranco"
+        ],
+        "priceRange": {
+          "min": 30,
+          "max": 70
+        },
+        "preferredTransmission": "automático",
+        "favoriteVehicleTypes": [
+          "sedan",
+          "suv"
+        ]
+      },
+      "bankAccount": null
     }
   ],
   "vehicles": [
@@ -43,19 +103,29 @@
       "seats": 5,
       "transmission": "automático",
       "fuelType": "gasolina",
-      "dailyPrice": 45.00,
-      "hourlyPrice": 8.00,
-      "depositAmount": 200.00,
+      "dailyPrice": 45,
+      "hourlyPrice": 8,
+      "depositAmount": 200,
       "location": {
         "district": "Miraflores",
         "latitude": -12.0464,
         "longitude": -77.0428,
         "address": "Av. Arequipa 123, Miraflores, Lima"
       },
-      "features": ["Aire acondicionado", "Bluetooth", "Cámara de retroceso"],
-      "photos": ["corolla_1.jpg", "corolla_2.jpg"],
+      "features": [
+        "Aire acondicionado",
+        "Bluetooth",
+        "Cámara de retroceso"
+      ],
+      "photos": [
+        "corolla_1.jpg",
+        "corolla_2.jpg"
+      ],
       "isAvailable": true,
-      "restrictions": ["No fumar", "Mascotas no permitidas"],
+      "restrictions": [
+        "No fumar",
+        "Mascotas no permitidas"
+      ],
       "createdAt": "2024-03-01T09:00:00Z",
       "status": "active"
     },
@@ -70,19 +140,29 @@
       "seats": 5,
       "transmission": "automático",
       "fuelType": "gasolina",
-      "dailyPrice": 45.00,
-      "hourlyPrice": 8.00,
-      "depositAmount": 200.00,
+      "dailyPrice": 45,
+      "hourlyPrice": 8,
+      "depositAmount": 200,
       "location": {
         "district": "Miraflores",
         "latitude": -12.0464,
         "longitude": -77.0428,
         "address": "Av. Arequipa 123, Miraflores, Lima"
       },
-      "features": ["Aire acondicionado", "Bluetooth", "Cámara de retroceso"],
-      "photos": ["corolla_1.jpg", "corolla_2.jpg"],
+      "features": [
+        "Aire acondicionado",
+        "Bluetooth",
+        "Cámara de retroceso"
+      ],
+      "photos": [
+        "corolla_1.jpg",
+        "corolla_2.jpg"
+      ],
       "isAvailable": true,
-      "restrictions": ["No fumar", "Mascotas no permitidas"],
+      "restrictions": [
+        "No fumar",
+        "Mascotas no permitidas"
+      ],
       "createdAt": "2024-03-01T09:00:00Z",
       "status": "active"
     },
@@ -97,19 +177,29 @@
       "seats": 5,
       "transmission": "manual",
       "fuelType": "gasolina",
-      "dailyPrice": 50.00,
-      "hourlyPrice": 9.00,
-      "depositAmount": 250.00,
+      "dailyPrice": 50,
+      "hourlyPrice": 9,
+      "depositAmount": 250,
       "location": {
         "district": "San Isidro",
         "latitude": -12.0931,
         "longitude": -77.0465,
         "address": "Av. Javier Prado 234, San Isidro, Lima"
       },
-      "features": ["Aire acondicionado", "GPS", "Bluetooth", "Sensores de estacionamiento"],
-      "photos": ["civic_1.jpg", "civic_2.jpg"],
+      "features": [
+        "Aire acondicionado",
+        "GPS",
+        "Bluetooth",
+        "Sensores de estacionamiento"
+      ],
+      "photos": [
+        "civic_1.jpg",
+        "civic_2.jpg"
+      ],
       "isAvailable": true,
-      "restrictions": ["No fumar"],
+      "restrictions": [
+        "No fumar"
+      ],
       "createdAt": "2024-03-05T10:00:00Z",
       "status": "active"
     },
@@ -124,19 +214,27 @@
       "seats": 5,
       "transmission": "automático",
       "fuelType": "gasolina",
-      "dailyPrice": 40.00,
-      "hourlyPrice": 7.00,
-      "depositAmount": 180.00,
+      "dailyPrice": 40,
+      "hourlyPrice": 7,
+      "depositAmount": 180,
       "location": {
         "district": "Surco",
         "latitude": -12.1391,
         "longitude": -77.0106,
         "address": "Av. Benavides 567, Surco, Lima"
       },
-      "features": ["Aire acondicionado", "Bluetooth"],
-      "photos": ["versa_1.jpg"],
+      "features": [
+        "Aire acondicionado",
+        "Bluetooth"
+      ],
+      "photos": [
+        "versa_1.jpg"
+      ],
       "isAvailable": true,
-      "restrictions": ["No fumar", "Mascotas no permitidas"],
+      "restrictions": [
+        "No fumar",
+        "Mascotas no permitidas"
+      ],
       "createdAt": "2024-03-10T11:30:00Z",
       "status": "active"
     },
@@ -151,19 +249,25 @@
       "seats": 5,
       "transmission": "manual",
       "fuelType": "gasolina",
-      "dailyPrice": 35.00,
-      "hourlyPrice": 6.50,
-      "depositAmount": 150.00,
+      "dailyPrice": 35,
+      "hourlyPrice": 6.5,
+      "depositAmount": 150,
       "location": {
         "district": "San Miguel",
         "latitude": -12.0775,
         "longitude": -77.0911,
         "address": "Av. La Marina 890, San Miguel, Lima"
       },
-      "features": ["Aire acondicionado"],
-      "photos": ["accent_1.jpg"],
+      "features": [
+        "Aire acondicionado"
+      ],
+      "photos": [
+        "accent_1.jpg"
+      ],
       "isAvailable": true,
-      "restrictions": ["No fumar"],
+      "restrictions": [
+        "No fumar"
+      ],
       "createdAt": "2024-03-15T14:00:00Z",
       "status": "active"
     },
@@ -178,19 +282,34 @@
       "seats": 5,
       "transmission": "automático",
       "fuelType": "gasolina",
-      "dailyPrice": 60.00,
-      "hourlyPrice": 11.00,
-      "depositAmount": 300.00,
+      "dailyPrice": 60,
+      "hourlyPrice": 11,
+      "depositAmount": 300,
       "location": {
         "district": "Barranco",
         "latitude": -12.1467,
         "longitude": -77.0208,
         "address": "Av. Grau 123, Barranco, Lima"
       },
-      "features": ["Aire acondicionado", "GPS", "Bluetooth", "Cámara 360°", "Sensores de estacionamiento", "Techo panorámico"],
-      "photos": ["mazda3_1.jpg", "mazda3_2.jpg", "mazda3_3.jpg"],
+      "features": [
+        "Aire acondicionado",
+        "GPS",
+        "Bluetooth",
+        "Cámara 360°",
+        "Sensores de estacionamiento",
+        "Techo panorámico"
+      ],
+      "photos": [
+        "mazda3_1.jpg",
+        "mazda3_2.jpg",
+        "mazda3_3.jpg"
+      ],
       "isAvailable": true,
-      "restrictions": ["No fumar", "Mascotas no permitidas", "Solo conductores con más de 2 años de experiencia"],
+      "restrictions": [
+        "No fumar",
+        "Mascotas no permitidas",
+        "Solo conductores con más de 2 años de experiencia"
+      ],
       "createdAt": "2024-03-20T09:30:00Z",
       "status": "active"
     },
@@ -205,19 +324,27 @@
       "seats": 5,
       "transmission": "automático",
       "fuelType": "gasolina",
-      "dailyPrice": 38.00,
-      "hourlyPrice": 7.00,
-      "depositAmount": 170.00,
+      "dailyPrice": 38,
+      "hourlyPrice": 7,
+      "depositAmount": 170,
       "location": {
         "district": "Jesús María",
         "latitude": -12.0722,
         "longitude": -77.0483,
         "address": "Av. Brasil 456, Jesús María, Lima"
       },
-      "features": ["Aire acondicionado", "Bluetooth", "USB"],
-      "photos": ["rio_1.jpg"],
+      "features": [
+        "Aire acondicionado",
+        "Bluetooth",
+        "USB"
+      ],
+      "photos": [
+        "rio_1.jpg"
+      ],
       "isAvailable": true,
-      "restrictions": ["No fumar"],
+      "restrictions": [
+        "No fumar"
+      ],
       "createdAt": "2024-03-25T16:00:00Z",
       "status": "active"
     },
@@ -232,19 +359,27 @@
       "seats": 5,
       "transmission": "manual",
       "fuelType": "gasolina",
-      "dailyPrice": 32.00,
-      "hourlyPrice": 6.00,
-      "depositAmount": 140.00,
+      "dailyPrice": 32,
+      "hourlyPrice": 6,
+      "depositAmount": 140,
       "location": {
         "district": "Surco",
         "latitude": -12.1528,
         "longitude": -76.9939,
         "address": "Av. Tomás Marsano 789, Surco, Lima"
       },
-      "features": ["Aire acondicionado", "Radio"],
-      "photos": ["sail_1.jpg"],
+      "features": [
+        "Aire acondicionado",
+        "Radio"
+      ],
+      "photos": [
+        "sail_1.jpg"
+      ],
       "isAvailable": true,
-      "restrictions": ["No fumar", "Mascotas no permitidas"],
+      "restrictions": [
+        "No fumar",
+        "Mascotas no permitidas"
+      ],
       "createdAt": "2024-04-01T10:00:00Z",
       "status": "active"
     }
@@ -257,7 +392,7 @@
       "ownerId": 1,
       "startDate": "2024-07-10T08:00:00Z",
       "endDate": "2024-07-12T18:00:00Z",
-      "totalPrice": 90.00,
+      "totalPrice": 90,
       "status": "completed",
       "pickupLocation": "Av. Arequipa 123, Miraflores",
       "returnLocation": "Av. Arequipa 123, Miraflores",
@@ -272,7 +407,7 @@
       "ownerId": 1,
       "startDate": "2025-10-07T08:00:00Z",
       "endDate": "2025-10-10T18:00:00Z",
-      "totalPrice": 135.00,
+      "totalPrice": 135,
       "status": "active",
       "pickupLocation": "Av. Arequipa 123, Miraflores",
       "returnLocation": "Av. Arequipa 123, Miraflores",
@@ -287,7 +422,7 @@
       "ownerId": 1,
       "startDate": "2025-10-12T09:00:00Z",
       "endDate": "2025-10-15T19:00:00Z",
-      "totalPrice": 200.00,
+      "totalPrice": 200,
       "status": "confirmed",
       "pickupLocation": "Av. Javier Prado 234, San Isidro",
       "returnLocation": "Av. Javier Prado 234, San Isidro",
@@ -302,7 +437,7 @@
       "ownerId": 1,
       "startDate": "2025-10-09T10:00:00Z",
       "endDate": "2025-10-11T20:00:00Z",
-      "totalPrice": 180.00,
+      "totalPrice": 180,
       "status": "pending",
       "pickupLocation": "Av. Grau 123, Barranco",
       "returnLocation": "Av. Grau 123, Barranco",
@@ -315,7 +450,7 @@
       "id": 1,
       "rentalId": 1,
       "payerId": 2,
-      "amount": 90.00,
+      "amount": 90,
       "currency": "PEN",
       "method": "credit_card",
       "status": "completed",
@@ -327,7 +462,7 @@
       "id": 2,
       "rentalId": 1,
       "payerId": 2,
-      "amount": 200.00,
+      "amount": 200,
       "currency": "PEN",
       "method": "credit_card",
       "status": "held",
@@ -340,7 +475,7 @@
       "rentalId": 1,
       "payerId": 2,
       "recipientId": 2,
-      "amount": 30.00,
+      "amount": 30,
       "currency": "PEN",
       "status": "refunded",
       "type": "partial_refund",
@@ -381,7 +516,9 @@
       "type": "vehicle_damage",
       "description": "Encontré una rayadura en la puerta trasera al recoger el auto.",
       "status": "resolved",
-      "evidencePhotos": ["damage_1.jpg"],
+      "evidencePhotos": [
+        "damage_1.jpg"
+      ],
       "createdAt": "2024-07-10T08:30:00Z",
       "resolvedAt": "2024-07-11T16:00:00Z",
       "resolutionNotes": "Daño menor. No se aplica cargo. Depósito liberado parcialmente."

@@ -288,7 +288,7 @@
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import AuthLayout from '../components/AuthLayout.vue'
-import { setUser } from '../application/user.store.js'
+import { register } from '../application/user.store.js'
 
 const router = useRouter()
 const isSubmitting = ref(false)
@@ -410,12 +410,8 @@ const handleSubmit = async () => {
   isSubmitting.value = true
 
   try {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000))
-
-    // Create new user object
-    const newUser = {
-      id: Date.now(), // Generate temporary ID
+    // Create new user using the register function from store
+    const userData = {
       role: 'owner',
       firstName: formData.firstName.trim(),
       lastName: formData.lastName.trim(),
@@ -423,21 +419,6 @@ const handleSubmit = async () => {
       phone: formData.phone.trim(),
       dni: formData.dni,
       licenseNumber: formData.licenseNumber.trim(),
-      avatar: null,
-      verified: {
-        email: false,
-        phone: false,
-        identity: false,
-        license: false,
-        bankAccount: false
-      },
-      stats: {
-        rating: 0,
-        reviewsCount: 0,
-        vehiclesCount: 0,
-        rentalsCount: 0,
-        memberSince: new Date().toISOString()
-      },
       bankAccount: {
         bankName: formData.bankName,
         accountType: formData.accountType,
@@ -450,17 +431,14 @@ const handleSubmit = async () => {
           email: true,
           push: true,
           sms: false
-        },
-        instantBooking: true,
-        minimumRentalDays: 1
+        }
       }
     }
 
-    // Set user in store (this will save to localStorage)
-    setUser(newUser)
+    await register(userData)
 
-    // Redirect to owner dashboard (my-vehicles)
-    router.push('/my-vehicles')
+    // Redirect to owner dashboard with full page reload to ensure layout is shown
+    window.location.href = '/my-vehicles'
   } catch (error) {
     console.error('Error creating account:', error)
     alert('Hubo un error al crear tu cuenta. Por favor intenta nuevamente.')

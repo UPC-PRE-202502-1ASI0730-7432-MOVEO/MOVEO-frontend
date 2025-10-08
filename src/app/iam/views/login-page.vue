@@ -71,7 +71,7 @@
         </button>
 
         <!-- Demo Users Info -->
-        <div class="demo-info">
+        <div class="demo-info" v-if="demoUsers.length > 0">
           <div class="demo-info__header">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="10"></circle>
@@ -81,11 +81,14 @@
             <span>Usuarios Demo (Desarrollo)</span>
           </div>
           <div class="demo-info__users">
-            <div class="demo-user" @click="fillDemoUser('renter')">
-              <strong>Cliente:</strong> ana@moveo.com / password123
-            </div>
-            <div class="demo-user" @click="fillDemoUser('owner')">
-              <strong>Propietario:</strong> carlos@moveo.com / password123
+            <div 
+              v-for="user in demoUsers" 
+              :key="user.id" 
+              class="demo-user" 
+              @click="fillDemoUser(user.email)"
+            >
+              <strong>{{ user.role === 'renter' ? 'Cliente' : 'Propietario' }}:</strong> 
+              {{ user.email }} / password123
             </div>
           </div>
         </div>
@@ -109,14 +112,15 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import AuthLayout from '../components/AuthLayout.vue'
-import { setUser, DEMO_USERS } from '../application/user.store.js'
+import { login, loadDemoUsers, userState } from '../application/user.store.js'
 
 const router = useRouter()
 const isSubmitting = ref(false)
 const showPassword = ref(false)
+const demoUsers = ref([])
 
 const formData = reactive({
   email: '',
@@ -129,9 +133,17 @@ const errors = reactive({
   password: ''
 })
 
-const fillDemoUser = (role) => {
-  const demoUser = DEMO_USERS[role]
-  formData.email = demoUser.email
+// Cargar usuarios demo al montar el componente
+onMounted(async () => {
+  try {
+    demoUsers.value = await loadDemoUsers()
+  } catch (error) {
+    console.error('Error loading demo users:', error)
+  }
+})
+
+const fillDemoUser = (email) => {
+  formData.email = email
   formData.password = 'password123' // Demo password
 }
 
@@ -165,42 +177,19 @@ const handleSubmit = async () => {
   isSubmitting.value = true
 
   try {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 800))
+    // Llamar a la función login del store (valida contra la API)
+    const user = await login(formData.email.toLowerCase().trim(), formData.password)
 
-    // Check against demo users
-    const email = formData.email.toLowerCase().trim()
-    const password = formData.password
-
-    let authenticatedUser = null
-
-    // Check renter demo user
-    if (email === DEMO_USERS.renter.email && password === 'password123') {
-      authenticatedUser = DEMO_USERS.renter
-    }
-    // Check owner demo user
-    else if (email === DEMO_USERS.owner.email && password === 'password123') {
-      authenticatedUser = DEMO_USERS.owner
-    }
-
-    if (authenticatedUser) {
-      // Set user in store (this will save to localStorage)
-      setUser(authenticatedUser)
-
-      // Redirect based on role
-      if (authenticatedUser.role === 'renter') {
-        router.push('/rentals')
-      } else if (authenticatedUser.role === 'owner') {
-        router.push('/my-vehicles')
-      }
-    } else {
-      // Invalid credentials
-      errors.email = 'Correo o contraseña incorrectos'
-      errors.password = 'Correo o contraseña incorrectos'
+    // Redirect based on role with full page reload to ensure layout is shown
+    if (user.role === 'renter') {
+      window.location.href = '/rentals'
+    } else if (user.role === 'owner') {
+      window.location.href = '/my-vehicles'
     }
   } catch (error) {
     console.error('Error logging in:', error)
-    alert('Hubo un error al iniciar sesión. Por favor intenta nuevamente.')
+    errors.email = 'Correo o contraseña incorrectos'
+    errors.password = 'Correo o contraseña incorrectos'
   } finally {
     isSubmitting.value = false
   }
