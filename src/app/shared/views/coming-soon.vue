@@ -30,7 +30,7 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--bg-moveo-green) 0%, var(--brand-green) 100%);
 }
 
 .content {
@@ -50,21 +50,24 @@
 }
 
 .title {
+  font-family: var(--font-family-primary);
   font-size: 2.5rem;
   font-weight: 700;
   margin: 0 0 1rem 0;
-  color: #1a202c;
+  color: var(--text-primary);
 }
 
 .message {
+  font-family: var(--font-family-primary);
   font-size: 1.1rem;
-  color: #4a5568;
+  color: var(--text-secondary);
   margin: 0 0 0.5rem 0;
 }
 
 .hint {
+  font-family: var(--font-family-primary);
   font-size: 0.9rem;
-  color: #718096;
+  color: var(--text-secondary);
   margin: 0 0 2rem 0;
 }
 
@@ -82,6 +85,7 @@
   padding: 0.75rem 1.5rem;
   border: none;
   border-radius: 8px;
+  font-family: var(--font-family-primary);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -90,22 +94,23 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--bg-moveo-green) 0%, var(--brand-green) 100%);
+  color: var(--text-secondary-2);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 20px rgba(58, 94, 94, 0.4);
 }
 
 .btn-secondary {
-  background: #e2e8f0;
-  color: #2d3748;
+  background: var(--bg-muted);
+  color: var(--text-primary);
 }
 
 .btn-secondary:hover {
-  background: #cbd5e0;
+  background: var(--bg-moveo-green);
+  color: var(--text-secondary-2);
   transform: translateY(-2px);
 }
 

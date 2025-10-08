@@ -84,7 +84,7 @@ defineExpose({ setRole: (role) => { currentRole.value = role } })
 
 <style scoped>
 .role-toolbar {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--bg-moveo-green) 0%, var(--brand-green) 100%);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
@@ -114,16 +114,18 @@ defineExpose({ setRole: (role) => { currentRole.value = role } })
 .role-badge {
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(10px);
-  color: white;
+  color: var(--text-secondary-2);
   padding: 0.5rem 1rem;
   border-radius: 20px;
+  font-family: var(--font-family-primary);
   font-weight: 600;
   font-size: 0.9rem;
   white-space: nowrap;
 }
 
 .role-badge.owner {
-  background: rgba(255, 215, 0, 0.3);
+  background: var(--bg-moveo-orange-light);
+  color: var(--text-primary);
 }
 
 /* Toolbar Navigation */
@@ -143,6 +145,7 @@ defineExpose({ setRole: (role) => { currentRole.value = role } })
   color: rgba(255, 255, 255, 0.9);
   text-decoration: none;
   border-radius: 8px;
+  font-family: var(--font-family-primary);
   font-size: 0.9rem;
   font-weight: 500;
   transition: all 0.3s ease;
@@ -152,13 +155,13 @@ defineExpose({ setRole: (role) => { currentRole.value = role } })
 
 .toolbar-link:hover {
   background: rgba(255, 255, 255, 0.25);
-  color: white;
+  color: var(--text-secondary-2);
   transform: translateY(-2px);
 }
 
 .toolbar-link.active {
-  background: rgba(255, 255, 255, 0.3);
-  color: white;
+  background: var(--bg-moveo-orange);
+  color: var(--text-secondary-2);
   font-weight: 600;
 }
 
@@ -183,9 +186,10 @@ defineExpose({ setRole: (role) => { currentRole.value = role } })
   padding: 0.5rem 1rem;
   background: rgba(255, 255, 255, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
+  color: var(--text-secondary-2);
   border-radius: 8px;
   cursor: pointer;
+  font-family: var(--font-family-primary);
   font-weight: 600;
   font-size: 0.85rem;
   transition: all 0.3s ease;
@@ -193,7 +197,8 @@ defineExpose({ setRole: (role) => { currentRole.value = role } })
 }
 
 .switch-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: var(--bg-moveo-pink);
+  border-color: var(--brand-pink);
   transform: scale(1.05);
 }
 

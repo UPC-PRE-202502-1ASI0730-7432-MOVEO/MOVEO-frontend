@@ -73,14 +73,16 @@ const statusLabel = computed(() => {
 }
 
 .page-title {
+  font-family: var(--font-family-primary);
   font-size: 2rem;
   font-weight: 700;
   margin: 0 0 0.5rem 0;
-  color: #1a202c;
+  color: var(--text-primary);
 }
 
 .page-subtitle {
-  color: #718096;
+  font-family: var(--font-family-primary);
+  color: var(--text-secondary);
   margin: 0;
   font-size: 1rem;
 }
@@ -103,22 +105,23 @@ const statusLabel = computed(() => {
   padding: 0.75rem 1.25rem;
   border: none;
   background: transparent;
-  color: #718096;
+  color: var(--text-secondary);
   border-radius: 8px;
   cursor: pointer;
+  font-family: var(--font-family-primary);
   font-weight: 500;
   transition: all 0.3s ease;
   white-space: nowrap;
 }
 
 .tab-btn:hover {
-  background: #f7fafc;
-  color: #2d3748;
+  background: var(--bg-base);
+  color: var(--text-primary);
 }
 
 .tab-btn.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--bg-moveo-green) 0%, var(--brand-green) 100%);
+  color: var(--text-secondary-2);
 }
 
 .tab-icon {
@@ -152,14 +155,16 @@ const statusLabel = computed(() => {
 }
 
 .empty-title {
+  font-family: var(--font-family-primary);
   font-size: 1.5rem;
   font-weight: 600;
   margin: 0 0 0.5rem 0;
-  color: #2d3748;
+  color: var(--text-primary);
 }
 
 .empty-message {
-  color: #718096;
+  font-family: var(--font-family-primary);
+  color: var(--text-secondary);
   margin: 0 0 2rem 0;
   font-size: 1rem;
 }
@@ -171,6 +176,7 @@ const statusLabel = computed(() => {
   padding: 0.75rem 1.5rem;
   border: none;
   border-radius: 8px;
+  font-family: var(--font-family-primary);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -179,13 +185,13 @@ const statusLabel = computed(() => {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--bg-moveo-green) 0%, var(--brand-green) 100%);
+  color: var(--text-secondary-2);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 20px rgba(58, 94, 94, 0.4);
 }
 
 .btn .icon {
