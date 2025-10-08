@@ -1,7 +1,6 @@
 // Configuración básica de enrutador
 import { createRouter, createWebHistory } from 'vue-router'
-import RenterDashboard from '@/app/shared/views/renter-dashboard.vue'
-import OwnerDashboard from '@/app/shared/views/owner-dashboard.vue'
+import DashboardPage from '@/app/shared/views/dashboard-page.vue'
 import RentalPage from '@/app/rental/presentation/views/rental-page.vue'
 import PageNotFound from '@/app/shared/views/page-not-found.vue'
 import AdventureList from '@/app/adventure/components/views/adventure-list.vue'
@@ -13,20 +12,15 @@ const routes = [
   // Redirect root to dashboard based on role
   { 
     path: '/', 
-    redirect: () => {
-      const userStore = useUserStore()
-      return '/dashboard'
-    }
+    redirect: '/dashboard'
   },
   
   // Dashboard (dinámico según rol)
   {
     path: '/dashboard',
     name: 'dashboard',
-    component: () => {
-      const userStore = useUserStore()
-      return userStore.currentUser?.isRenter ? RenterDashboard : OwnerDashboard
-    }
+    component: DashboardPage,
+    meta: { requiresAuth: true }
   },
   
   // Rutas de Autenticación (sin layout principal)
