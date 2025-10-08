@@ -5,20 +5,15 @@ import { AdventureAssembler } from "../infrastructure/adventure.assembler.js";
 
 const adventureApi = new AdventuresApi();
 
-export default function useAdventuresStore() {
-    const adventures = ref([]);
-    const adventuresLoaded = ref(true)
-    const errors = ref([]);
+const adventures = ref([]);
+const adventuresLoaded = ref(false);
+const errors = ref([]);
 
-    async function fetchAdventures() {
-        try {
-            const response = await adventureApi.getAdventures();
-            adventures.value = AdventureAssembler.toEntitiesFromResponse(response);
-            adventuresLoaded.value = true;
-        } catch (error) {
-            errors.value.push(error);
-            console.error("Error fetching adventures:", error);
-        }
+export default function useAdventuresStore() {
+
+    function fetchAdventures() {
+        adventuresLoaded.value = true;
+        // No sobreescribimos adventures para mantener las agregadas desde el form
     }
 
     function getAdventureById(id) {
@@ -26,10 +21,9 @@ export default function useAdventuresStore() {
     }
 
     function addAdventure(adventure) {
-        adventure.id = Date.now() // id único temporal
-        adventures.value.push(new Adventure({ ...adventure })) // crea instancia
+        adventure.id = Date.now(); // ID temporal único
+        adventures.value.push(new Adventure({ ...adventure }));
     }
-
 
     function updateAdventure(updatedAdventure) {
         const index = adventures.value.findIndex(a => a.id === updatedAdventure.id);
