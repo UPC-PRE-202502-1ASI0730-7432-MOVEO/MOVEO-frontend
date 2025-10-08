@@ -17,11 +17,26 @@ export class AdventureAssembler {
     }
 
     static toEntitiesFromResponse(response) {
-        if (!response || response.status !== 200) {
-            console.error('Adventures response error', response && response.status);
+        if (!response) {
+            console.error('Adventures response error: response is null or undefined');
             return [];
         }
-        const resources = Array.isArray(response.data) ? response.data : (response.data.adventures || []);
+
+        let resources = [];
+
+        if (Array.isArray(response)) {
+            // Si response ya es un array directo
+            resources = response;
+        } else if (Array.isArray(response.data)) {
+            resources = response.data;
+        } else if (Array.isArray(response.data?.adventures)) {
+            resources = response.data.adventures;
+        } else {
+            console.warn('No adventures found in response', response);
+            return [];
+        }
+
         return resources.map(r => this.toEntityFromResource(r));
     }
 }
+
