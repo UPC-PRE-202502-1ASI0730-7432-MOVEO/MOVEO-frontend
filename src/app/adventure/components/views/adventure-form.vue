@@ -14,7 +14,7 @@ const { adventures, getAdventureById, addAdventure, updateAdventure } = store;
 const isEditMode = ref(false);
 const formTitle = ref("Nueva Aventura");
 
-const adventureForm = ref(new Adventure({ name: "", description: "", category: "" }));
+const adventureForm = ref(new Adventure({ title: "", description: "", categoryId: null }));
 
 onMounted(() => {
   const id = route.params.id;

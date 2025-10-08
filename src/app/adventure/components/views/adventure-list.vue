@@ -1,33 +1,25 @@
-<!-- src/adventure/presentation/views/adventure-list.vue -->
 <script setup lang="js">
 import { onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { DataTable, Column, Button, ConfirmDialog, useConfirm } from "primevue";
-import { useI18n } from "vue-i18n";
 import useAdventureStore from "../../application/adventures.store.js";
 
-const { t } = useI18n();
 const router = useRouter();
 const confirm = useConfirm();
+const store = useAdventureStore();
 
-const {
-  adventures,
-  adventuresLoaded,
-  errors,
-  fetchAdventures,
-  deleteAdventure
-} = useAdventureStore();
+const { adventures, adventuresLoaded, errors, fetchAdventures, deleteAdventure } = store;
 
-onMounted(async () => {
-  if (!adventuresLoaded.value) await fetchAdventures()
-})
+onMounted(() => {
+  if (!adventuresLoaded.value) fetchAdventures();
+});
 
 const navigateToNew = () => router.push("/adventures/new");
 const navigateToEdit = (id) => router.push(`/adventures/edit/${id}`);
 
 const confirmDelete = (adventure) => {
   confirm.require({
-    message: `¿Eliminar la aventura "${adventure.name}"?`,
+    message: `¿Eliminar la aventura "${adventure.title}"?`,
     header: "Confirmar Eliminación",
     icon: "pi pi-exclamation-triangle",
     acceptLabel: "Eliminar",
@@ -55,6 +47,7 @@ const confirmDelete = (adventure) => {
         tableStyle="min-width: 50rem"
         :rows="5"
         :rowsPerPageOptions="[5,10,20]"
+        responsiveLayout="scroll"
     >
       <Column field="id" header="ID" sortable />
       <Column field="title" header="Nombre" sortable />
