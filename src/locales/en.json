@@ -1,6 +1,58 @@
 {
-  "home": "Home",
-  "about": "About",
+  "nav": {
+    "home": "Home",
+    "rentals": "Rentals",
+    "register": "Sign Up"
+  },
+  "footer": {
+    "description": "Peer-to-peer vehicle rental platform. Find the perfect car for your next trip.",
+    "quickLinks": "Quick Links",
+    "support": "Support",
+    "faq": "FAQ",
+    "help": "Help Center",
+    "contact": "Contact",
+    "terms": "Terms & Conditions",
+    "contactTitle": "Contact",
+    "rights": "All rights reserved."
+  },
+  "home": {
+    "hero": {
+      "title": "Rent the Perfect Car",
+      "subtitle": "Find vehicles near you. Connect with verified owners.",
+      "cta": "Explore Vehicles",
+      "ctaOwner": "List Your Car"
+    },
+    "features": {
+      "title": "Why choose MOVEO?",
+      "trust": {
+        "title": "Trust & Safety",
+        "description": "Verified users, insurance and protected deposits."
+      },
+      "flexible": {
+        "title": "Flexible Pricing",
+        "description": "Rent by hour or day. You decide."
+      },
+      "support": {
+        "title": "24/7 Support",
+        "description": "We're here to help you anytime."
+      }
+    },
+    "howItWorks": {
+      "title": "How it works?",
+      "step1": {
+        "title": "Search",
+        "description": "Find the perfect vehicle near you"
+      },
+      "step2": {
+        "title": "Book",
+        "description": "Request rental with digital contract"
+      },
+      "step3": {
+        "title": "Enjoy",
+        "description": "Pick up the car and enjoy your trip"
+      }
+    }
+  },
   "adventures": {
     "title": "Adventure List",
     "new": "New Adventure",
