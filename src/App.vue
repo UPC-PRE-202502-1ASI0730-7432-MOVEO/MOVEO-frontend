@@ -1,47 +1,27 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+  <div id="app" class="min-h-screen bg-light-bg text-primary-dark font-main">
+    <header class="p-4 shadow-md bg-primary-dark text-light-bg flex justify-between items-center">
+      <h1 class="text-2xl font-semibold tracking-wide">MOVEO</h1>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
+      <nav class="space-x-4">
+        <RouterLink to="/home" class="hover:text-accent-coral">Inicio</RouterLink>
+        <RouterLink to="/about" class="hover:text-accent-coral">Sobre Nosotros</RouterLink>
+        <RouterLink to="/adventures" class="hover:text-accent-coral">Aventuras</RouterLink>
+      </nav>
+    </header>
 
-  <main>
-    <TheWelcome />
-  </main>
+    <main class="p-6">
+      <RouterView />
+    </main>
+  </div>
 </template>
 
+<script setup>
+import { RouterView, RouterLink } from "vue-router";
+import "./app/shared/styles/colors.css";
+import "./app/shared/styles/typography.css";
+</script>
+
 <style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
+/* Puedes añadir ajustes adicionales si deseas */
 </style>
