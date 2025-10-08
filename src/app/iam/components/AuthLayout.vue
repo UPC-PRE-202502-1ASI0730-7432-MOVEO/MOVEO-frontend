@@ -44,22 +44,31 @@ const currentYear = computed(() => new Date().getFullYear())
 
 <style scoped>
 .auth-layout {
-  min-height: 100vh;
-  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, #2C3E50 0%, #34495E 50%, #2C3E50 100%);
-  position: relative;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding: 2rem;
 }
 
 .auth-container {
   width: 100%;
-  max-width: 480px;
+  max-width: 100%;
   position: relative;
   z-index: 10;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* Logo */
@@ -93,29 +102,19 @@ const currentYear = computed(() => new Date().getFullYear())
 
 /* Contenido */
 .auth-content {
-  background: white;
-  border-radius: 20px;
-  padding: 2.5rem;
-  box-shadow: 
-    0 20px 60px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(255, 111, 0, 0.1);
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
   animation: fadeInUp 0.5s ease;
-  border: 2px solid transparent;
+  border: none;
   background-clip: padding-box;
   position: relative;
+  width: 100%;
 }
 
 .auth-content::before {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  background: linear-gradient(135deg, #FF6F00 0%, #FF8F00 100%);
-  border-radius: 20px;
-  z-index: -1;
-  opacity: 0.3;
+  display: none;
 }
 
 @keyframes fadeInUp {
