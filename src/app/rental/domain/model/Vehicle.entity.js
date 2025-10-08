@@ -31,6 +31,3 @@ export class Vehicle {
     return this.photos?.[0] || null
   }
 }
-
-export function mapVehicle(dto) { return new Vehicle(dto) }
-

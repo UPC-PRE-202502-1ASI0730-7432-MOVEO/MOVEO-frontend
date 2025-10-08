@@ -35,10 +35,12 @@ await db.read();
 
 const app = createApp(db, { logger: false });
 
-// Rewrite /api/v1/* -> /*
-app.use((req, _res, next) => {
+// Middleware para manejar /api/v1/* rutas
+// Debe ir ANTES de que json-server procese las rutas
+app.use((req, res, next) => {
+  // Si la URL empieza con /api/v1/, la reescribimos
   if (req.url && req.url.startsWith('/api/v1/')) {
-    req.url = req.url.replace(/^\/api\/v1/, '') || '/';
+    req.url = req.url.replace(/^\/api\/v1/, '');
   }
   next();
 });

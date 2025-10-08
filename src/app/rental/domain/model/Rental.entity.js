@@ -24,6 +24,3 @@ export class Rental {
     } catch { return null }
   }
 }
-
-export function mapRental(dto) { return new Rental(dto) }
-

@@ -1,4 +1,3 @@
-// Archivo mínimo para application
+// (No usar) Archivo index.js no requerido. Mantener vacío para evitar imports.
+// export * from './rental.store.js'
 
-// Exportar store y casos de uso del bounded context rental
-export * from './rental.store.js'

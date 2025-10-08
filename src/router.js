@@ -1,11 +1,15 @@
 // Configuración básica de enrutador
 import { createRouter, createWebHistory } from 'vue-router'
-import RentalPage from '@/app/rental/components/index.vue'
+import Home from '@/app/shared/views/home.vue'
+import RentalPage from '@/app/rental/presentation/views/rental-page.vue'
+import RegisterPage from '@/app/iam/views/register-page.vue'
+import PageNotFound from '@/app/shared/views/page-not-found.vue'
 
 const routes = [
-  { path: '/', redirect: '/rentals' },
+  { path: '/', name: 'home', component: Home },
   { path: '/rentals', name: 'rentals', component: RentalPage },
-  { path: '/:pathMatch(.*)*', name: 'not-found', component: { template: '<div style="padding:2rem">Página no encontrada</div>' } }
+  { path: '/register', name: 'register', component: RegisterPage },
+  { path: '/:pathMatch(.*)*', name: 'not-found', component: PageNotFound }
 ]
 
 export const router = createRouter({
@@ -14,4 +18,3 @@ export const router = createRouter({
 })
 
 export default router
-
