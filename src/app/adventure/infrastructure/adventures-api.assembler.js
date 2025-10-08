@@ -1,32 +1,50 @@
-import { BaseApi } from "../../shared/infrastructure/base-api.js";
-import { BaseEndpoint } from "../../shared/infrastructure/base-endpoint.js";
+import { ref } from 'vue'
+import { AdventureAssembler } from './adventure.assembler.js'
+import {BaseApi} from "@/app/shared/infrastructure/base-api.js";
+
+const adventures = ref([])
+const adventuresLoaded = ref(false)
+const errors = ref([])
 
 export class AdventuresApi extends BaseApi {
-    #adventuresEndpoint;
+    export
+    default
+    function
 
-    constructor() {
-        super();
-        const adventuresEndpointPath = import.meta.env.VITE_ADVENTURES_ENDPOINT_PATH;
-        this.#adventuresEndpoint = new BaseEndpoint(this, adventuresEndpointPath);
-    }
+    useAdventuresStore() {
 
-    getAdventures(params) {
-        return this.#adventuresEndpoint.getAll(params);
-    }
+        function fetchAdventures() {
+            adventuresLoaded.value = true
+            // No sobreescribimos adventures si quieres que se acumulen los agregados desde el form
+        }
 
-    getAdventureById(id) {
-        return this.#adventuresEndpoint.getById(id);
-    }
+        function getAdventureById(id) {
+            return adventures.value.find(a => a?.id === Number(id))
+        }
 
-    createAdventure(adventureData) {
-        return this.#adventuresEndpoint.create(adventureData);
-    }
+        function addAdventure(adventure) {
+            adventure.id = Date.now()  // genera un id único temporal
+            adventures.value.push(adventure)
+        }
 
-    updateAdventure(adventureData) {
-        return this.#adventuresEndpoint.update(adventureData.id, adventureData);
-    }
+        function updateAdventure(updatedAdventure) {
+            const index = adventures.value.findIndex(a => a?.id === updatedAdventure.id)
+            if (index !== -1) adventures.value[index] = updatedAdventure
+        }
 
-    deleteAdventure(id) {
-        return this.#adventuresEndpoint.delete(id);
+        function deleteAdventure(adventure) {
+            adventures.value = adventures.value.filter(a => a?.id !== adventure.id)
+        }
+
+        return {
+            adventures,
+            adventuresLoaded,
+            errors,
+            fetchAdventures,
+            getAdventureById,
+            addAdventure,
+            updateAdventure,
+            deleteAdventure
+        }
     }
 }
