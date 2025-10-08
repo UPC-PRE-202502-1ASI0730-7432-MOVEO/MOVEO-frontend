@@ -45,10 +45,11 @@ const currentYear = computed(() => new Date().getFullYear())
 <style scoped>
 .auth-layout {
   min-height: 100vh;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--bg-moveo-green) 0%, var(--brand-green) 100%);
+  background: linear-gradient(135deg, #2C3E50 0%, #34495E 50%, #2C3E50 100%);
   position: relative;
   overflow: hidden;
   padding: 2rem;
@@ -56,7 +57,7 @@ const currentYear = computed(() => new Date().getFullYear())
 
 .auth-container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 480px;
   position: relative;
   z-index: 10;
 }
@@ -78,23 +79,43 @@ const currentYear = computed(() => new Date().getFullYear())
 
 .logo-icon {
   font-size: 3rem;
+  filter: drop-shadow(0 4px 8px rgba(255, 111, 0, 0.5));
 }
 
 .logo-text {
   font-family: var(--font-family-primary);
   font-size: 2.5rem;
   font-weight: 800;
-  color: var(--text-secondary-2);
-  letter-spacing: -0.05em;
+  color: white;
+  letter-spacing: 2px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 /* Contenido */
 .auth-content {
   background: white;
-  border-radius: 24px;
-  padding: 3rem;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 111, 0, 0.1);
   animation: fadeInUp 0.5s ease;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+}
+
+.auth-content::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(135deg, #FF6F00 0%, #FF8F00 100%);
+  border-radius: 20px;
+  z-index: -1;
+  opacity: 0.3;
 }
 
 @keyframes fadeInUp {
@@ -116,33 +137,35 @@ const currentYear = computed(() => new Date().getFullYear())
 
 .footer-text {
   font-family: var(--font-family-primary);
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 0.85rem;
-  margin: 0 0 0.5rem 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.875rem;
+  margin: 0 0 0.75rem 0;
 }
 
 .footer-links {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
 }
 
 .footer-link {
   font-family: var(--font-family-primary);
   color: rgba(255, 255, 255, 0.9);
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
 }
 
 .footer-link:hover {
-  color: white;
-  text-decoration: underline;
+  color: #FFB74D;
+  background: rgba(255, 111, 0, 0.1);
 }
 
 .separator {
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 /* Fondo animado */
@@ -159,7 +182,7 @@ const currentYear = computed(() => new Date().getFullYear())
 .bg-circle {
   position: absolute;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 111, 0, 0.1);
   backdrop-filter: blur(2px);
   animation: float 20s infinite ease-in-out;
 }
@@ -223,6 +246,17 @@ const currentYear = computed(() => new Date().getFullYear())
 
   .separator {
     display: none;
+  }
+}
+
+/* Desktop - asegurar fullscreen */
+@media (min-width: 1024px) {
+  .auth-container {
+    max-width: 520px;
+  }
+
+  .auth-content {
+    padding: 3rem;
   }
 }
 </style>

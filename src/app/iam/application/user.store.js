@@ -30,6 +30,8 @@ function initializeUser() {
 export const currentUser = computed(() => userState.currentUser)
 export const isAuthenticated = computed(() => userState.isAuthenticated)
 export const userRole = computed(() => userState.currentUser?.role || null)
+export const isRenter = computed(() => userState.currentUser?.role === 'renter')
+export const isOwner = computed(() => userState.currentUser?.role === 'owner')
 export const userName = computed(() => {
   const user = userState.currentUser
   return user ? user.fullName : ''
@@ -220,6 +222,8 @@ export function useUserStore() {
     currentUser,
     isAuthenticated,
     userRole,
+    isRenter,
+    isOwner,
     userName,
     userInitials,
     login,

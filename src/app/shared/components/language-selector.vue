@@ -56,24 +56,18 @@ function selectLanguage(option) {
 .language-selector-wrapper {
   position: relative;
   display: inline-flex;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(10px);
-  border-radius: 16px;
+  border-radius: 12px;
   padding: 4px;
-  box-shadow:
-    0 4px 12px rgba(0, 0, 0, 0.1),
-    0 0 0 1px rgba(255, 255, 255, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .language-selector-wrapper:hover {
-  transform: translateY(-1px);
-  box-shadow:
-    0 8px 25px rgba(59, 130, 246, 0.15),
-    0 0 0 1px rgba(59, 130, 246, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .language-buttons {
@@ -88,58 +82,50 @@ function selectLanguage(option) {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 8px 14px;
+  padding: 6px 12px;
   border: none;
   background: transparent;
-  border-radius: 12px;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-weight: 600;
   font-size: 0.875rem;
-  color: #64748b;
+  color: rgba(255, 255, 255, 0.8);
   overflow: hidden;
-  min-width: 60px;
+  min-width: 55px;
   justify-content: center;
 }
 
 .lang-button:hover {
-  transform: translateY(-1px) scale(1.02);
-  color: #3b82f6;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 197, 253, 0.1) 100%);
+  color: white;
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
 }
 
 .lang-button.active {
-  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-  color: white;
-  box-shadow:
-    0 4px 12px rgba(59, 130, 246, 0.4),
-    0 2px 4px rgba(59, 130, 246, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  transform: translateY(-1px) scale(1.02);
+  background: white;
+  color: #FF6F00;
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
 }
 
 .lang-button.active:hover {
-  background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
-  transform: translateY(-2px) scale(1.03);
-  box-shadow:
-    0 6px 20px rgba(59, 130, 246, 0.5),
-    0 4px 8px rgba(59, 130, 246, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  background: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.6);
 }
 
 .flag-icon {
-  font-size: 1.1rem;
+  font-size: 1rem;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
 }
 
 .lang-button:hover .flag-icon {
-  transform: scale(1.1) rotate(5deg);
+  transform: scale(1.1);
 }
 
 .lang-button.active .flag-icon {
   transform: scale(1.05);
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 .lang-text {
@@ -148,92 +134,33 @@ function selectLanguage(option) {
   transition: all 0.3s ease;
 }
 
-.lang-button.active .lang-text {
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
 .button-glow {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 12px;
-  opacity: 0;
-  background: radial-gradient(circle at center, rgba(59, 130, 246, 0.3) 0%, transparent 70%);
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-.lang-button:hover .button-glow {
-  opacity: 1;
-  animation: pulse 2s infinite;
+  display: none;
 }
 
 .selector-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 16px;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.02) 0%, rgba(147, 197, 253, 0.02) 100%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-.language-selector-wrapper:hover .selector-bg {
-  opacity: 1;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 0.3;
-  }
-  50% {
-    transform: scale(1.1);
-    opacity: 0.1;
-  }
+  display: none;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .language-selector-wrapper {
     padding: 3px;
-    border-radius: 14px;
+    border-radius: 10px;
   }
 
   .lang-button {
-    padding: 6px 10px;
+    padding: 5px 10px;
     min-width: 50px;
     gap: 4px;
   }
 
   .flag-icon {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 
   .lang-text {
-    font-size: 0.8rem;
-  }
-}
-
-/* Dark theme compatibility */
-@media (prefers-color-scheme: dark) {
-  .language-selector-wrapper {
-    background: rgba(30, 41, 59, 0.95);
-    border-color: rgba(59, 130, 246, 0.2);
-  }
-
-  .lang-button {
-    color: #cbd5e1;
-  }
-
-  .lang-button:hover {
-    color: #93c5fd;
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(147, 197, 253, 0.2) 100%);
+    font-size: 0.75rem;
   }
 }
 </style>

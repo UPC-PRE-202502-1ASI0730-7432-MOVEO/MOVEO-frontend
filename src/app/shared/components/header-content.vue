@@ -1,312 +1,145 @@
 <template>
   <header class="app-header">
-    <div class="container">
-      <div class="header-content">
-        <!-- Logo -->
-        <router-link to="/" class="logo">
-          <span class="logo-icon">🚗</span>
-          <span class="logo-text">MOVEO</span>
-        </router-link>
+    <div class="header-container">
+      <!-- Hero Section Dinámico -->
+      <div class="hero-section" v-if="isAuthenticated">
+        <div class="hero-content">
+          <!-- Para Renters -->
+          <div v-if="isRenter" class="hero-text">
+            <h1 class="hero-title">
+              <i class="pi pi-compass"></i>
+              Encuentra tu próximo viaje
+            </h1>
+          </div>
 
-        <!-- Navigation Desktop -->
-        <nav class="nav-desktop" :class="{ open: mobileMenuOpen }">
-          <router-link to="/" class="nav-link" @click="closeMobileMenu">
-            {{ $t('nav.home') }}
-          </router-link>
-          <router-link to="/rentals" class="nav-link" @click="closeMobileMenu">
-            {{ $t('nav.rentals') }}
-          </router-link>
-        </nav>
+          <!-- Para Owners -->
+          <div v-if="isOwner" class="hero-text">
+            <h1 class="hero-title">
+              <i class="pi pi-briefcase"></i>
+              Gestiona tu flota
+            </h1>
+          </div>
 
-        <!-- Actions -->
-        <div class="header-actions">
-          <!-- Login Button -->
-          <router-link to="/login" class="btn-login" @click="closeMobileMenu">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
-              <polyline points="10 17 15 12 10 7"></polyline>
-              <line x1="15" x2="3" y1="12" y2="12"></line>
-            </svg>
-            <span>Ingresar</span>
-          </router-link>
-          
-          <!-- Language Switcher -->
-          <LanguageSelector />
-
-          <!-- Mobile Menu Toggle -->
-          <button 
-            class="mobile-menu-toggle" 
-            @click="toggleMobileMenu"
-            :aria-label="mobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'"
-          >
-            <span class="hamburger" :class="{ open: mobileMenuOpen }">
-              <span></span>
-              <span></span>
-              <span></span>
-            </span>
-          </button>
+          <!-- Language Selector -->
+          <div class="hero-lang">
+            <LanguageSelector />
+          </div>
         </div>
       </div>
     </div>
-
-    <!-- Mobile Menu Overlay -->
-    <transition name="fade">
-      <div v-if="mobileMenuOpen" class="mobile-overlay" @click="closeMobileMenu"></div>
-    </transition>
   </header>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed } from 'vue'
+import { useUserStore } from '@/app/iam/application/user.store'
 import LanguageSelector from './language-selector.vue'
 
-const mobileMenuOpen = ref(false)
-
-const toggleMobileMenu = () => {
-  mobileMenuOpen.value = !mobileMenuOpen.value
-  // Prevent body scroll when menu is open
-  document.body.style.overflow = mobileMenuOpen.value ? 'hidden' : ''
-}
-
-const closeMobileMenu = () => {
-  mobileMenuOpen.value = false
-  document.body.style.overflow = ''
-}
+const userStore = useUserStore()
+const isAuthenticated = computed(() => userStore.isAuthenticated.value)
+const isRenter = computed(() => userStore.isRenter.value)
+const isOwner = computed(() => userStore.isOwner.value)
 </script>
 
 <style scoped>
 .app-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  color: white;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-.header-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 70px;
-}
-
-/* Logo */
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  text-decoration: none;
-  color: white;
-  font-size: 1.5rem;
-  font-weight: 700;
-  transition: transform 0.3s ease;
-}
-
-.logo:hover {
-  transform: scale(1.05);
-}
-
-.logo-icon {
-  font-size: 2rem;
-}
-
-.logo-text {
-  letter-spacing: 1px;
-}
-
-/* Navigation Desktop */
-.nav-desktop {
-  display: flex;
-  gap: 2rem;
-  align-items: center;
-}
-
-.nav-link {
-  color: white;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 1rem;
-  padding: 0.5rem 0;
+  background: linear-gradient(135deg, #FF6F00 0%, #FF8F00 50%, #FFA726 100%);
+  box-shadow: 0 4px 20px rgba(255, 111, 0, 0.3);
   position: relative;
-  transition: opacity 0.3s ease;
+  overflow: hidden;
 }
 
-.nav-link::after {
+.app-header::before {
   content: '';
   position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: white;
-  transition: width 0.3s ease;
-}
-
-.nav-link:hover::after,
-.nav-link.router-link-active::after {
-  width: 100%;
-}
-
-.nav-link:hover {
-  opacity: 0.8;
-}
-
-/* Header Actions */
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-/* Login Button */
-.btn-login {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.6rem 1.2rem;
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  text-decoration: none;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 0.9375rem;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  transition: all 0.3s ease;
-}
-
-.btn-login:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.btn-login svg {
-  width: 18px;
-  height: 18px;
-}
-
-.btn-login.router-link-active {
-  background: rgba(255, 255, 255, 0.4);
-}
-
-/* Mobile Menu Toggle */
-.mobile-menu-toggle {
-  display: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.5rem;
-}
-
-.hamburger {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  width: 24px;
-}
-
-.hamburger span {
-  display: block;
-  height: 2px;
-  background: white;
-  border-radius: 2px;
-  transition: all 0.3s ease;
-}
-
-.hamburger.open span:nth-child(1) {
-  transform: rotate(45deg) translate(5px, 5px);
-}
-
-.hamburger.open span:nth-child(2) {
-  opacity: 0;
-}
-
-.hamburger.open span:nth-child(3) {
-  transform: rotate(-45deg) translate(7px, -6px);
-}
-
-/* Mobile Overlay */
-.mobile-overlay {
-  position: fixed;
-  top: 70px;
+  top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 999;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.1;
+  z-index: 0;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .mobile-menu-toggle {
-    display: block;
-  }
+.header-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+  z-index: 1;
+}
 
-  .nav-desktop {
-    position: fixed;
-    top: 70px;
-    right: 0;
-    width: 280px;
-    height: calc(100vh - 70px);
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.hero-section {
+  padding: 1.5rem 2rem;
+  color: white;
+}
+
+.hero-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.hero-text {
+  flex: 1;
+}
+
+.hero-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.hero-title i {
+  font-size: 2rem;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.hero-lang {
+  flex-shrink: 0;
+}
+
+@media (max-width: 968px) {
+  .hero-content {
     flex-direction: column;
     align-items: flex-start;
-    padding: 2rem;
-    gap: 1.5rem;
-    transform: translateX(100%);
-    transition: transform 0.3s ease;
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
   }
 
-  .nav-desktop.open {
-    transform: translateX(0);
+  .hero-title {
+    font-size: 1.5rem;
   }
 
-  .nav-link {
-    font-size: 1.2rem;
-    width: 100%;
-  }
-
-  .btn-login {
-    width: 100%;
-    justify-content: center;
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
+  .hero-title i {
+    font-size: 1.75rem;
   }
 }
 
-@media (max-width: 480px) {
-  .logo-text {
-    font-size: 1.2rem;
+@media (max-width: 640px) {
+  .hero-section {
+    padding: 1rem;
   }
 
-  .btn-login span {
-    display: none;
+  .hero-title {
+    font-size: 1.25rem;
   }
 
-  .btn-login {
-    padding: 0.6rem;
-    aspect-ratio: 1;
-    justify-content: center;
+  .hero-title i {
+    font-size: 1.5rem;
   }
-}
-
-/* Transitions */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
 }
 </style>

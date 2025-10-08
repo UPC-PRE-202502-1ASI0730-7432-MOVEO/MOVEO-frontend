@@ -1,14 +1,27 @@
 // Configuración básica de enrutador
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '@/app/shared/views/home.vue'
+import DashboardPage from '@/app/shared/views/dashboard-page.vue'
 import RentalPage from '@/app/rental/presentation/views/rental-page.vue'
 import PageNotFound from '@/app/shared/views/page-not-found.vue'
-import AdventureList from './app/adventure/presentation/components/adventure-list.vue'
-import AdventureForm from './app/adventure/presentation/components/adventure-form.vue'
-import PaymentsView from './app/payment/components/views/payments-view.vue'
+import AdventureList from '@/app/adventure/components/views/adventure-list.vue'
+import AdventureForm from '@/app/adventure/components/views/adventure-form.vue'
+import PaymentsView from '@/app/payment/components/views/payments-view.vue'
+import { useUserStore } from '@/app/iam/application/user.store'
 
 const routes = [
-  { path: '/', name: 'home', component: Home },
+  // Redirect root to dashboard based on role
+  { 
+    path: '/', 
+    redirect: '/dashboard'
+  },
+  
+  // Dashboard (dinámico según rol)
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: DashboardPage,
+    meta: { requiresAuth: true }
+  },
   
   // Rutas de Autenticación (sin layout principal)
   { 

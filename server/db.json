@@ -33,7 +33,13 @@
         },
         "autoAcceptRentals": false,
         "minimumRentalDays": 1,
-        "instantBooking": false
+        "instantBooking": false,
+        "favoriteDistricts": [],
+        "priceRange": {
+          "min": 0,
+          "max": 100
+        },
+        "preferredTransmission": ""
       },
       "bankAccount": {
         "bankName": "BCP",
@@ -86,7 +92,9 @@
         "favoriteVehicleTypes": [
           "sedan",
           "suv"
-        ]
+        ],
+        "instantBooking": false,
+        "minimumRentalDays": 1
       },
       "bankAccount": null
     }
