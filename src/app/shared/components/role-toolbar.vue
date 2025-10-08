@@ -1,11 +1,12 @@
 <template>
-  <nav class="role-toolbar" v-if="currentRole">
+  <nav class="role-toolbar" v-if="userRole">
     <div class="container">
       <div class="toolbar-content">
         <div class="role-indicator">
-          <span class="role-badge" :class="currentRole">
+          <span class="role-badge" :class="userRole">
             {{ roleLabel }}
           </span>
+          <span class="user-name">{{ userName }}</span>
         </div>
         
         <div class="toolbar-nav">
@@ -20,33 +21,19 @@
             <span class="link-text">{{ link.label }}</span>
           </router-link>
         </div>
-
-        <div class="role-switcher">
-          <button 
-            @click="toggleRole" 
-            class="switch-btn"
-            :title="`Cambiar a ${currentRole === 'renter' ? 'propietario' : 'cliente'}`"
-          >
-            <span class="switch-icon">🔄</span>
-            <span class="switch-text">Cambiar rol</span>
-          </button>
-        </div>
       </div>
     </div>
   </nav>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed } from 'vue'
+import { useUserStore } from '@/app/iam/application/user.store.js'
 
-// En producción, esto vendría del store de autenticación
-const currentRole = ref('renter') // 'renter' | 'owner'
-
-const router = useRouter()
+const { currentUser, userRole, userName } = useUserStore()
 
 const roleLabel = computed(() => {
-  return currentRole.value === 'renter' ? '👤 Cliente' : '🚗 Propietario'
+  return userRole.value === 'renter' ? '👤 Cliente' : '🚗 Propietario'
 })
 
 // Links para clientes (renters)
@@ -67,19 +54,8 @@ const ownerLinks = [
 ]
 
 const currentLinks = computed(() => {
-  return currentRole.value === 'renter' ? renterLinks : ownerLinks
+  return userRole.value === 'renter' ? renterLinks : ownerLinks
 })
-
-function toggleRole() {
-  currentRole.value = currentRole.value === 'renter' ? 'owner' : 'renter'
-  
-  // Redirigir a la página principal del rol
-  const defaultPath = currentRole.value === 'renter' ? '/rentals' : '/my-vehicles'
-  router.push(defaultPath)
-}
-
-// Función para cambiar rol desde fuera del componente
-defineExpose({ setRole: (role) => { currentRole.value = role } })
 </script>
 
 <style scoped>
@@ -109,6 +85,7 @@ defineExpose({ setRole: (role) => { currentRole.value = role } })
 .role-indicator {
   display: flex;
   align-items: center;
+  gap: 0.75rem;
 }
 
 .role-badge {
@@ -124,8 +101,16 @@ defineExpose({ setRole: (role) => { currentRole.value = role } })
 }
 
 .role-badge.owner {
-  background: var(--bg-moveo-orange-light);
-  color: var(--text-primary);
+  background: var(--bg-moveo-orange);
+  color: var(--text-secondary-2);
+}
+
+.user-name {
+  color: var(--text-secondary-2);
+  font-family: var(--font-family-primary);
+  font-weight: 600;
+  font-size: 0.95rem;
+  white-space: nowrap;
 }
 
 /* Toolbar Navigation */
@@ -173,39 +158,6 @@ defineExpose({ setRole: (role) => { currentRole.value = role } })
   display: inline;
 }
 
-/* Role Switcher */
-.role-switcher {
-  display: flex;
-  align-items: center;
-}
-
-.switch-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.5rem 1rem;
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: var(--text-secondary-2);
-  border-radius: 8px;
-  cursor: pointer;
-  font-family: var(--font-family-primary);
-  font-weight: 600;
-  font-size: 0.85rem;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-}
-
-.switch-btn:hover {
-  background: var(--bg-moveo-pink);
-  border-color: var(--brand-pink);
-  transform: scale(1.05);
-}
-
-.switch-icon {
-  font-size: 1rem;
-}
-
 /* Responsive */
 @media (max-width: 968px) {
   .toolbar-content {
@@ -234,13 +186,9 @@ defineExpose({ setRole: (role) => { currentRole.value = role } })
   .toolbar-link {
     padding: 0.5rem 0.75rem;
   }
-
-  .switch-text {
+  
+  .user-name {
     display: none;
-  }
-
-  .switch-btn {
-    padding: 0.5rem 0.75rem;
   }
 }
 </style>

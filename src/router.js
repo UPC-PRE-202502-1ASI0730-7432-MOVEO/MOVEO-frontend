@@ -2,11 +2,41 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/app/shared/views/home.vue'
 import RentalPage from '@/app/rental/presentation/views/rental-page.vue'
-import RegisterPage from '@/app/iam/views/register-page.vue'
 import PageNotFound from '@/app/shared/views/page-not-found.vue'
 
 const routes = [
   { path: '/', name: 'home', component: Home },
+  
+  // Rutas de Autenticación (sin layout principal)
+  { 
+    path: '/login', 
+    name: 'login', 
+    component: () => import('@/app/iam/views/login-page.vue'),
+    meta: { requiresAuth: false, hideLayout: true }
+  },
+  { 
+    path: '/register/select-role', 
+    name: 'register-select-role', 
+    component: () => import('@/app/iam/views/role-selection-page.vue'),
+    meta: { requiresAuth: false, hideLayout: true }
+  },
+  { 
+    path: '/register/renter', 
+    name: 'register-renter', 
+    component: () => import('@/app/iam/views/register-renter-page.vue'),
+    meta: { requiresAuth: false, hideLayout: true }
+  },
+  { 
+    path: '/register/owner', 
+    name: 'register-owner', 
+    component: () => import('@/app/iam/views/register-owner-page.vue'),
+    meta: { requiresAuth: false, hideLayout: true }
+  },
+  // Redirect old register route to new role selection
+  { 
+    path: '/register', 
+    redirect: '/register/select-role'
+  },
   
   // Rutas para Clientes (Renters)
   { path: '/rentals', name: 'rentals', component: RentalPage, meta: { role: 'renter' } },
@@ -20,10 +50,9 @@ const routes = [
   { path: '/rental-requests', name: 'rental-requests', component: () => import('@/app/shared/views/coming-soon.vue'), meta: { role: 'owner' } },
   { path: '/earnings', name: 'earnings', component: () => import('@/app/shared/views/coming-soon.vue'), meta: { role: 'owner' } },
   
-  
+
   // Rutas compartidas
-  { path: '/profile', name: 'profile', component: () => import('@/app/shared/views/coming-soon.vue') },
-  { path: '/register', name: 'register', component: RegisterPage },
+  { path: '/profile', name: 'profile', component: () => import('@/app/iam/views/profile-page.vue') },
   
   // 404
   { path: '/:pathMatch(.*)*', name: 'not-found', component: PageNotFound }
