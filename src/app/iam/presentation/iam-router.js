@@ -8,7 +8,7 @@ export default [
   },
   {
     path: 'register',
-    redirect: 'register/select-role',
+    redirect: '/auth/register/select-role',
     meta: { hideLayout: true }
   },
   {

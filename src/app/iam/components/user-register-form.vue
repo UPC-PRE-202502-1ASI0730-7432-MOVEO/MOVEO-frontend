@@ -40,12 +40,18 @@
       <button class="btn primary" :disabled="submitting">{{ submitting ? 'Enviando...' : 'Registrar' }}</button>
     </div>
     <div v-if="error" class="alert error">{{ error }}</div>
-    <div v-if="created" class="alert success">Usuario creado id {{ created.id }}</div>
+    <div v-if="created" class="alert success">
+      <i class="pi pi-check-circle"></i>
+      Usuario creado exitosamente! Redirigiendo al login...
+    </div>
   </form>
 </template>
 <script setup>
 import { reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { apiClient } from '@/app/shared/infrastructure/apiClient.js'
+
+const router = useRouter()
 
 const form = reactive({
   role: 'renter',
@@ -68,6 +74,11 @@ async function submit() {
     const payload = { ...form, isVerified:false, reputationScore:0, totalReviews:0, joinedAt:new Date().toISOString() }
     const user = await apiClient.post('/users', payload)
     created.value = user
+    
+    // Redireccionar al login después de 2 segundos
+    setTimeout(() => {
+      router.push('/auth/login')
+    }, 2000)
   } catch (e) { error.value = e.message } finally { submitting.value = false }
 }
 </script>

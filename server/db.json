@@ -32,7 +32,7 @@
           "sms": true
         },
         "autoAcceptRentals": false,
-        "minimumRentalDays": 1,
+        "minimumRentalDays": 3,
         "instantBooking": false,
         "favoriteDistricts": [],
         "priceRange": {
@@ -73,7 +73,7 @@
         "canceledRentals": 1
       },
       "preferences": {
-        "language": "en",
+        "language": "es",
         "notifications": {
           "email": true,
           "push": true,
@@ -130,41 +130,41 @@
       "status": "active"
     },
     {
-      "id": 2,
-      "ownerId": 1,
       "brand": "ToyotaXDDDD",
       "model": "Corollaxdxdxdxd",
       "year": 2022,
       "color": "negro",
-      "licensePlate": "ABC-123",
-      "seats": 5,
       "transmission": "automático",
       "fuelType": "gasolina",
-      "dailyPrice": 45,
-      "hourlyPrice": 8,
-      "depositAmount": 200,
+      "seats": 5,
+      "licensePlate": "123456",
       "location": {
         "district": "Miraflores",
         "latitude": -12.0464,
         "longitude": -77.0428,
         "address": "Av. Arequipa 123, Miraflores, Lima"
       },
+      "dailyPrice": 55,
+      "status": "active",
+      "description": "1234",
+      "images": [],
+      "id": 2,
+      "ownerId": 1,
+      "depositAmount": 200,
       "features": [
         "Aire acondicionado",
         "Bluetooth",
         "Cámara de retroceso"
       ],
-      "photos": [
-        "corolla_1.jpg",
-        "corolla_2.jpg"
-      ],
-      "isAvailable": true,
       "restrictions": [
         "No fumar",
         "Mascotas no permitidas"
       ],
-      "createdAt": "2024-03-01T09:00:00Z",
-      "status": "active"
+      "photos": [
+        "corolla_1.jpg",
+        "corolla_2.jpg"
+      ],
+      "updatedAt": "2025-10-09T02:25:46.903Z"
     },
     {
       "id": 3,
@@ -382,6 +382,78 @@
       ],
       "createdAt": "2024-04-01T10:00:00Z",
       "status": "active"
+    },
+    {
+      "brand": "audi",
+      "model": "star",
+      "year": 2025,
+      "color": "Negro",
+      "transmission": "Manual",
+      "fuelType": "Eléctrico",
+      "seats": 4,
+      "licensePlate": "123-345",
+      "location": {
+        "district": "Barranco",
+        "address": "av no se",
+        "lat": -12.0464,
+        "lng": -77.0428
+      },
+      "dailyPrice": 150,
+      "status": {
+        "label": "Activo",
+        "value": "active"
+      },
+      "description": "no se xd ",
+      "images": [],
+      "ownerId": 1,
+      "createdAt": "2025-10-09T01:51:33.952Z",
+      "id": 9
+    },
+    {
+      "brand": "toyota",
+      "model": "nose",
+      "year": 2025,
+      "color": "Negro",
+      "transmission": "Automática",
+      "fuelType": "Diésel",
+      "seats": 5,
+      "licensePlate": "aaaaaa",
+      "location": {
+        "district": "San Isidro",
+        "address": "aaa",
+        "lat": -12.0464,
+        "lng": -77.0428
+      },
+      "dailyPrice": 150,
+      "status": "active",
+      "description": "aa",
+      "images": [],
+      "ownerId": 1,
+      "createdAt": "2025-10-09T02:02:15.518Z",
+      "id": 10
+    },
+    {
+      "brand": "1234",
+      "model": "1234",
+      "year": 2025,
+      "color": "Rojo",
+      "transmission": "Manual",
+      "fuelType": "Eléctrico",
+      "seats": 4,
+      "licensePlate": "1233333",
+      "location": {
+        "district": "Surquillo",
+        "address": "12345",
+        "lat": -12.0464,
+        "lng": -77.0428
+      },
+      "dailyPrice": 150,
+      "status": "paused",
+      "description": "auto nuevo",
+      "images": [],
+      "ownerId": 1,
+      "createdAt": "2025-10-09T02:26:51.546Z",
+      "id": 11
     }
   ],
   "rentals": [
@@ -438,11 +510,12 @@
       "startDate": "2025-10-09T10:00:00Z",
       "endDate": "2025-10-11T20:00:00Z",
       "totalPrice": 180,
-      "status": "pending",
+      "status": "accepted",
       "pickupLocation": "Av. Grau 123, Barranco",
       "returnLocation": "Av. Grau 123, Barranco",
       "notes": "Solicitud pendiente de aprobación del dueño.",
-      "createdAt": "2025-10-08T09:00:00Z"
+      "createdAt": "2025-10-08T09:00:00Z",
+      "respondedAt": "2025-10-09T02:27:34.844Z"
     },
     {
       "vehicleId": 8,
@@ -451,12 +524,13 @@
       "startDate": "2025-10-15",
       "endDate": "2025-11-05",
       "totalPrice": 672,
-      "status": "pending",
+      "status": "accepted",
       "pickupLocation": "Av. Tomás Marsano 789, Surco, Lima",
       "returnLocation": "Av. Tomás Marsano 789, Surco, Lima",
       "notes": "Reserva realizada. Método de pago: cash",
       "createdAt": "2025-10-09T00:52:17.213Z",
-      "id": 5
+      "id": 5,
+      "respondedAt": "2025-10-09T02:27:37.628Z"
     },
     {
       "vehicleId": 4,
@@ -465,12 +539,13 @@
       "startDate": "2025-10-09",
       "endDate": "2025-10-25",
       "totalPrice": 640,
-      "status": "pending",
+      "status": "accepted",
       "pickupLocation": "Av. Benavides 567, Surco, Lima",
       "returnLocation": "Av. Benavides 567, Surco, Lima",
       "notes": "Reserva realizada. Método de pago: cash",
       "createdAt": "2025-10-09T00:56:23.332Z",
-      "id": 6
+      "id": 6,
+      "respondedAt": "2025-10-09T02:27:14.984Z"
     }
   ],
   "payments": [

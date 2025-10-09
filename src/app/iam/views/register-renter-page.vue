@@ -334,8 +334,13 @@ const handleSubmit = async () => {
 
     await register(userData)
 
-    // Redirect to rentals page with full page reload to ensure layout is shown
-    window.location.href = '/rentals'
+    // Show success message
+    alert('✅ Cuenta creada exitosamente! Redirigiendo al login...')
+
+    // Redirect to login page
+    setTimeout(() => {
+      router.push('/auth/login')
+    }, 1500)
   } catch (error) {
     console.error('Error creating account:', error)
     alert('Hubo un error al crear tu cuenta. Por favor intenta nuevamente.')

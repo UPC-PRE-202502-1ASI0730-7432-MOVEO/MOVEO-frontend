@@ -114,7 +114,7 @@ function formatDate(dateString) {
     <div class="section">
       <div class="section-header">
         <h2>Solicitudes Pendientes</h2>
-        <router-link to="/rental-requests" class="link">Ver todas →</router-link>
+        <router-link to="/rental/rental-requests" class="link">Ver todas →</router-link>
       </div>
       <div class="empty-state" v-if="pendingRequests.length === 0">
         <p>No tienes solicitudes pendientes</p>
@@ -122,7 +122,7 @@ function formatDate(dateString) {
       <div v-else>
         <div class="alert-box">
           <p>⚠️ Tienes <strong>{{ stats.pendingRequests }}</strong> solicitudes esperando tu respuesta</p>
-          <router-link to="/rental-requests" class="btn-primary">Revisar Solicitudes</router-link>
+          <router-link to="/rental/rental-requests" class="btn-primary">Revisar Solicitudes</router-link>
         </div>
         
         <!-- Mostrar últimas 3 solicitudes -->
@@ -167,11 +167,11 @@ function formatDate(dateString) {
     <div class="section">
       <div class="section-header">
         <h2>Mis Vehículos</h2>
-        <router-link to="/add-vehicle" class="btn-secondary">+ Agregar Vehículo</router-link>
+        <router-link to="/rental/add-vehicle" class="btn-secondary">+ Agregar Vehículo</router-link>
       </div>
       <div class="empty-state" v-if="ownerVehicles.length === 0">
         <p>No tienes vehículos publicados</p>
-        <router-link to="/add-vehicle" class="btn-primary">+ Agregar Vehículo</router-link>
+        <router-link to="/rental/add-vehicle" class="btn-primary">+ Agregar Vehículo</router-link>
       </div>
       <div v-else class="vehicles-grid">
         <div 
@@ -198,7 +198,7 @@ function formatDate(dateString) {
             </div>
           </div>
           <router-link 
-            :to="`/vehicles/${vehicle.id}`" 
+            :to="`/rental/vehicles/${vehicle.id}`" 
             class="btn-view-vehicle"
           >
             Ver Detalles
@@ -207,7 +207,7 @@ function formatDate(dateString) {
         
         <router-link 
           v-if="ownerVehicles.length > 4" 
-          to="/my-vehicles" 
+          to="/rental/my-vehicles" 
           class="view-all-card"
         >
           <i class="pi pi-arrow-right"></i>
@@ -221,7 +221,7 @@ function formatDate(dateString) {
       <h2>Historial de Ganancias</h2>
       <div class="empty-state">
         <p>Aún no tienes transacciones completadas</p>
-        <router-link to="/earnings" class="link">Ver Detalles →</router-link>
+        <router-link to="/rental/earnings" class="link">Ver Detalles →</router-link>
       </div>
     </div>
   </div>
