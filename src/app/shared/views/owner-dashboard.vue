@@ -198,7 +198,7 @@ function formatDate(dateString) {
             </div>
           </div>
           <router-link 
-            :to="`/my-vehicles`" 
+            :to="`/vehicles/${vehicle.id}`" 
             class="btn-view-vehicle"
           >
             Ver Detalles

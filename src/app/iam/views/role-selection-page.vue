@@ -125,17 +125,16 @@ import AuthLayout from '../components/AuthLayout.vue'
 }
 
 .role-selection__title {
-  font-family: var(--font-primary);
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: white;
   margin-bottom: 0.75rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .role-selection__subtitle {
-  font-family: var(--font-secondary);
   font-size: 1.125rem;
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .role-selection__cards {
@@ -168,28 +167,28 @@ import AuthLayout from '../components/AuthLayout.vue'
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, var(--bg-moveo-green) 0%, #059669 100%);
+  background: linear-gradient(135deg, #3A5E5E 0%, #2C5050 100%);
   opacity: 0;
   transition: opacity 0.4s ease;
   z-index: 0;
 }
 
 .role-card--renter::before {
-  background: linear-gradient(135deg, var(--bg-moveo-green) 0%, #059669 100%);
+  background: linear-gradient(135deg, #3A5E5E 0%, #2C5050 100%);
 }
 
 .role-card--owner::before {
-  background: linear-gradient(135deg, var(--bg-moveo-orange) 0%, #ea580c 100%);
+  background: linear-gradient(135deg, #FF6F00 0%, #FF8F00 100%);
 }
 
 .role-card:hover {
   transform: translateY(-12px) scale(1.02);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-  border-color: var(--bg-moveo-green);
+  border-color: #3A5E5E;
 }
 
 .role-card--owner:hover {
-  border-color: var(--bg-moveo-orange);
+  border-color: #FF6F00;
 }
 
 .role-card:hover::before {
@@ -210,47 +209,45 @@ import AuthLayout from '../components/AuthLayout.vue'
   justify-content: center;
   border-radius: 24px;
   margin-bottom: 2rem;
-  background: linear-gradient(135deg, var(--bg-moveo-green) 0%, #059669 100%);
+  background: linear-gradient(135deg, #3A5E5E 0%, #2C5050 100%);
   color: white;
-  box-shadow: 0 8px 24px rgba(74, 222, 128, 0.3);
+  box-shadow: 0 8px 24px rgba(58, 94, 94, 0.3);
   transition: all 0.4s ease;
 }
 
 .role-card--owner .role-card__icon {
-  background: linear-gradient(135deg, var(--bg-moveo-orange) 0%, #ea580c 100%);
-  box-shadow: 0 8px 24px rgba(251, 146, 60, 0.3);
+  background: linear-gradient(135deg, #FF6F00 0%, #FF8F00 100%);
+  box-shadow: 0 8px 24px rgba(255, 111, 0, 0.3);
 }
 
 .role-card:hover .role-card__icon {
   transform: scale(1.1) rotate(5deg);
-  box-shadow: 0 12px 32px rgba(74, 222, 128, 0.4);
+  box-shadow: 0 12px 32px rgba(58, 94, 94, 0.4);
 }
 
 .role-card--owner:hover .role-card__icon {
-  box-shadow: 0 12px 32px rgba(251, 146, 60, 0.4);
+  box-shadow: 0 12px 32px rgba(255, 111, 0, 0.4);
 }
 
 .role-card__title {
-  font-family: var(--font-primary);
   font-size: 2rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: #2C3E50;
   margin-bottom: 1rem;
   transition: color 0.3s ease;
 }
 
 .role-card:hover .role-card__title {
-  color: var(--bg-moveo-green);
+  color: #3A5E5E;
 }
 
 .role-card--owner:hover .role-card__title {
-  color: var(--bg-moveo-orange);
+  color: #FF6F00;
 }
 
 .role-card__description {
-  font-family: var(--font-secondary);
   font-size: 1rem;
-  color: var(--text-secondary);
+  color: #666;
   line-height: 1.7;
   margin-bottom: 1.75rem;
   min-height: 60px;
@@ -267,20 +264,19 @@ import AuthLayout from '../components/AuthLayout.vue'
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  font-family: var(--font-secondary);
   font-size: 0.9375rem;
-  color: var(--text-secondary);
+  color: #666;
   margin-bottom: 0.875rem;
   line-height: 1.5;
 }
 
 .role-card__features li svg {
   flex-shrink: 0;
-  color: var(--bg-moveo-green);
+  color: #3A5E5E;
 }
 
 .role-card--owner .role-card__features li svg {
-  color: var(--bg-moveo-orange);
+  color: #FF6F00;
 }
 
 .role-card__button {
@@ -289,28 +285,27 @@ import AuthLayout from '../components/AuthLayout.vue'
   justify-content: center;
   gap: 0.75rem;
   padding: 1.125rem 1.5rem;
-  background: linear-gradient(135deg, var(--bg-moveo-green) 0%, #059669 100%);
+  background: linear-gradient(135deg, #3A5E5E 0%, #2C5050 100%);
   color: white;
   border-radius: 14px;
-  font-family: var(--font-primary);
   font-size: 1.0625rem;
   font-weight: 700;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 16px rgba(74, 222, 128, 0.3);
+  box-shadow: 0 4px 16px rgba(58, 94, 94, 0.3);
 }
 
 .role-card--owner .role-card__button {
-  background: linear-gradient(135deg, var(--bg-moveo-orange) 0%, #ea580c 100%);
-  box-shadow: 0 4px 16px rgba(251, 146, 60, 0.3);
+  background: linear-gradient(135deg, #FF6F00 0%, #FF8F00 100%);
+  box-shadow: 0 4px 16px rgba(255, 111, 0, 0.3);
 }
 
 .role-card:hover .role-card__button {
   transform: scale(1.05);
-  box-shadow: 0 8px 24px rgba(74, 222, 128, 0.4);
+  box-shadow: 0 8px 24px rgba(58, 94, 94, 0.4);
 }
 
 .role-card--owner:hover .role-card__button {
-  box-shadow: 0 8px 24px rgba(251, 146, 60, 0.4);
+  box-shadow: 0 8px 24px rgba(255, 111, 0, 0.4);
 }
 
 .role-card__button svg {
@@ -324,24 +319,23 @@ import AuthLayout from '../components/AuthLayout.vue'
 .role-selection__footer {
   text-align: center;
   padding-top: 2rem;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .role-selection__footer p {
-  font-family: var(--font-secondary);
   font-size: 0.9375rem;
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .link {
-  color: var(--bg-moveo-green);
+  color: #FFB74D;
   text-decoration: none;
   font-weight: 600;
   transition: color 0.2s ease;
 }
 
 .link:hover {
-  color: var(--bg-moveo-orange);
+  color: #FF6F00;
   text-decoration: underline;
 }
 

@@ -16,6 +16,7 @@ const renterLinks = [
   { path: '/dashboard', icon: 'pi-home', label: 'Dashboard' },
   { path: '/rentals', icon: 'pi-car', label: 'Explorar' },
   { path: '/my-rentals', icon: 'pi-list', label: 'Mis Alquileres' },
+  { path: '/my-payments', icon: 'pi-wallet', label: 'Mis Pagos' },
   { path: '/favorites', icon: 'pi-heart', label: 'Favoritos' },
   { path: '/profile', icon: 'pi-user', label: 'Perfil' }
 ]
@@ -25,6 +26,7 @@ const ownerLinks = [
   { path: '/my-vehicles', icon: 'pi-car', label: 'Mis Vehículos' },
   { path: '/add-vehicle', icon: 'pi-plus-circle', label: 'Agregar Vehículo' },
   { path: '/rental-requests', icon: 'pi-inbox', label: 'Solicitudes' },
+  { path: '/my-payments', icon: 'pi-wallet', label: 'Mis Pagos' },
   { path: '/earnings', icon: 'pi-dollar', label: 'Ganancias' },
   { path: '/profile', icon: 'pi-user', label: 'Perfil' }
 ]
