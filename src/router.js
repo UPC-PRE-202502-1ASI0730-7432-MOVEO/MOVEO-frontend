@@ -60,8 +60,19 @@ const routes = [
   { path: '/favorites', name: 'favorites', component: () => import('@/app/shared/views/coming-soon.vue'), meta: { role: 'renter' } },
   
   // Rutas para Propietarios (Owners)
-  { path: '/my-vehicles', name: 'my-vehicles', component: () => import('@/app/rental/presentation/views/my-vehicles-page.vue'), meta: { role: 'owner' } },
-  { path: '/vehicles/:id', name: 'vehicle-detail', component: () => import('@/app/rental/presentation/views/vehicle-detail-page.vue'), props: true, meta: { requiresAuth: true } },
+  { 
+    path: '/my-vehicles', 
+    name: 'my-vehicles', 
+    component: () => import('@/app/rental/presentation/views/my-vehicles-page.vue'), 
+    meta: { role: 'owner' } 
+  },
+  { 
+    path: '/vehicles/:id', 
+    name: 'vehicle-detail', 
+    component: () => import('@/app/rental/presentation/views/vehicle-detail-page.vue'), 
+    props: true, 
+    meta: { requiresAuth: true } 
+  },
   { path: '/add-vehicle', name: 'add-vehicle', component: () => import('@/app/shared/views/coming-soon.vue'), meta: { role: 'owner' } },
   { path: '/rental-requests', name: 'rental-requests', component: () => import('@/app/shared/views/coming-soon.vue'), meta: { role: 'owner' } },
   { path: '/earnings', name: 'earnings', component: () => import('@/app/shared/views/coming-soon.vue'), meta: { role: 'owner' } },
