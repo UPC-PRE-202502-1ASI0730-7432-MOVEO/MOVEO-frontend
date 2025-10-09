@@ -1,374 +1,689 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import usePaymentsStore from "../../application/payment.store.js";
-import { Button, InputText } from "primevue";
+import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import usePaymentsStore from '../../application/payment.store.js'
+import { useUserStore } from '@/app/iam/application/user.store.js'
 
-const store = usePaymentsStore();
-const { payments, fetchPayments, addPayment, deletePayment } = store;
+const router = useRouter()
+const paymentsStore = usePaymentsStore()
+const userStore = useUserStore()
 
-const newPayment = ref({
-  userId: "",
-  amount: "",
-  method: null,
-  status: "pendiente",
-});
+const { payments, fetchPayments } = paymentsStore
+const currentUser = userStore.currentUser
 
-const selectedMethod = ref(null);
+// Filters
+const searchQuery = ref('')
+const selectedStatus = ref('all')
+const selectedMethod = ref('all')
 
-// 💳 Información de la tarjeta
-const cardInfo = ref({
-  number: "",
-  name: "",
-  expiry: "",
-  ccv: "",
-});
+// Computed filtered payments based on user role
+const filteredPayments = computed(() => {
+  if (!payments.value || payments.value.length === 0) return []
+  
+  let filtered = [...payments.value]
+  
+  // Filter by current user (clients see payments made, owners see payments received)
+  if (currentUser.value?.id) {
+    filtered = filtered.filter(p => p.userId === currentUser.value.id)
+  }
+  
+  // Search filter
+  if (searchQuery.value) {
+    const query = searchQuery.value.toLowerCase()
+    filtered = filtered.filter(p => 
+      p.id.toString().includes(query) ||
+      p.method?.toLowerCase().includes(query) ||
+      p.amount?.toString().includes(query)
+    )
+  }
+  
+  // Status filter
+  if (selectedStatus.value !== 'all') {
+    filtered = filtered.filter(p => p.status === selectedStatus.value)
+  }
+  
+  // Method filter
+  if (selectedMethod.value !== 'all') {
+    filtered = filtered.filter(p => p.method === selectedMethod.value)
+  }
+  
+  // Sort by date (most recent first)
+  return filtered.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))
+})
+
+// Payment statistics
+const paymentStats = computed(() => {
+  const total = filteredPayments.value.reduce((sum, p) => sum + (parseFloat(p.amount) || 0), 0)
+  const completed = filteredPayments.value.filter(p => p.status === 'completado').length
+  const pending = filteredPayments.value.filter(p => p.status === 'pendiente').length
+  
+  return {
+    total: total.toFixed(2),
+    count: filteredPayments.value.length,
+    completed,
+    pending
+  }
+})
 
 onMounted(() => {
-  fetchPayments();
-});
+  fetchPayments()
+})
 
-function handleAddPayment() {
-  if (!newPayment.value.userId || !newPayment.value.amount || !selectedMethod.value) {
-    alert("Completa todos los campos y selecciona un método de pago.");
-    return;
+function getMethodIcon(method) {
+  const icons = {
+    'card': 'pi-credit-card',
+    'yape': 'pi-mobile',
+    'cash': 'pi-money-bill',
+    'tarjeta': 'pi-credit-card'
   }
-
-  newPayment.value.method = selectedMethod.value;
-
-  addPayment({ ...newPayment.value });
-  newPayment.value = { userId: "", amount: "", method: null, status: "pendiente" };
-  selectedMethod.value = null;
-  cardInfo.value = { number: "", name: "", expiry: "", ccv: "" }; // limpia los campos
+  return icons[method] || 'pi-wallet'
 }
 
-function handleDelete(payment) {
-  if (confirm("¿Eliminar este pago?")) {
-    deletePayment(payment);
+function getMethodName(method) {
+  const names = {
+    'card': 'Tarjeta',
+    'yape': 'Yape',
+    'cash': 'Efectivo',
+    'tarjeta': 'Tarjeta'
   }
+  return names[method] || method
 }
 
-function selectMethod(method) {
-  selectedMethod.value = method;
+function getStatusClass(status) {
+  const classes = {
+    'completado': 'status-completed',
+    'pendiente': 'status-pending',
+    'cancelado': 'status-cancelled'
+  }
+  return classes[status] || 'status-pending'
+}
+
+function formatDate(date) {
+  if (!date) return 'N/A'
+  return new Date(date).toLocaleDateString('es-ES', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  })
 }
 </script>
 
 <template>
-  <div class="payments-container">
-    <h1>Gestión de Pagos</h1>
-
-    <div class="form-section">
-      <h2>Registrar Pago</h2>
-
-      <div class="form-group">
-        <label for="userId">Usuario</label>
-        <InputText id="userId" v-model="newPayment.userId" placeholder="Ej. 123" />
+  <div class="payments-history">
+    <!-- Header Section -->
+    <div class="page-header">
+      <div class="header-content">
+        <h1 class="page-title">
+          <i class="pi pi-wallet"></i>
+          Historial de Pagos
+        </h1>
+        <p class="page-subtitle">Gestiona y visualiza tus transacciones</p>
       </div>
-
-      <div class="form-group">
-        <label for="amount">Monto</label>
-        <InputText id="amount" v-model="newPayment.amount" placeholder="Ej. 50.00" />
-      </div>
-
-      <div class="form-group">
-        <label>Método de Pago</label>
-        <div class="method-buttons">
-          <button
-              type="button"
-              :class="{ active: selectedMethod === 'tarjeta' }"
-              @click="selectMethod('tarjeta')"
-          >
-            💳 Tarjeta
-          </button>
-
-          <button
-              type="button"
-              :class="{ active: selectedMethod === 'yape' }"
-              @click="selectMethod('yape')"
-          >
-            📱 Yape
-          </button>
-        </div>
-      </div>
-
-      <!-- TARJETA INTERACTIVA -->
-      <div v-if="selectedMethod === 'tarjeta'" class="card-form">
-        <div class="credit-card-display">
-          <div class="card-number">
-            {{ cardInfo.number || "XXXX XXXX XXXX XXXX" }}
-          </div>
-          <div class="card-holder">
-            {{ cardInfo.name || "NOMBRE DEL TITULAR" }}
-          </div>
-          <div class="card-expiry">
-            {{ cardInfo.expiry || "MM/AA" }}
-          </div>
-        </div>
-
-        <div class="card-inputs">
-          <label>Número de Tarjeta:</label>
-          <input
-              type="text"
-              v-model="cardInfo.number"
-              placeholder="XXXX XXXX XXXX XXXX"
-          />
-
-          <label>Nombre del Titular:</label>
-          <input
-              type="text"
-              v-model="cardInfo.name"
-              placeholder="Nombre Apellido"
-          />
-
-          <label>Fecha de Expiración (MM/AA):</label>
-          <input type="text" v-model="cardInfo.expiry" placeholder="MM/AA" />
-
-          <label>CCV:</label>
-          <input type="text" v-model="cardInfo.ccv" placeholder="123" />
-        </div>
-      </div>
-
-      <!-- YAPE -->
-      <div v-if="selectedMethod === 'yape'" class="yape-form">
-        <p><strong>Escanea este QR con tu app de Yape:</strong></p>
-        <img
-            src=""
-            alt="Código QR de Yape"
-            class="yape-qr"
-        />
-        <p>Sube la captura de tu Yapeo:</p>
-        <input type="file" />
-      </div>
-
-      <Button label="Agregar Pago" icon="pi pi-check" class="btn-save" @click="handleAddPayment" />
     </div>
 
-    <div class="table-section">
-      <h2>Pagos Registrados</h2>
-      <table>
-        <thead>
-        <tr>
-          <th>ID</th>
-          <th>Usuario</th>
-          <th>Monto</th>
-          <th>Método</th>
-          <th>Estado</th>
-          <th>Acciones</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="p in payments" :key="p.id">
-          <td>{{ p.id }}</td>
-          <td>{{ p.userId }}</td>
-          <td>S/. {{ p.amount }}</td>
-          <td>{{ p.method }}</td>
-          <td>{{ p.status }}</td>
-          <td>
-            <Button
-                icon="pi pi-trash"
-                class="btn-delete"
-                severity="danger"
-                @click="handleDelete(p)"
-            />
-          </td>
-        </tr>
-        <tr v-if="payments.length === 0">
-          <td colspan="6" class="empty">No hay pagos registrados.</td>
-        </tr>
-        </tbody>
-      </table>
+    <!-- Statistics Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon total">
+          <i class="pi pi-dollar"></i>
+        </div>
+        <div class="stat-info">
+          <p class="stat-label">Total</p>
+          <p class="stat-value">S/. {{ paymentStats.total }}</p>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon count">
+          <i class="pi pi-list"></i>
+        </div>
+        <div class="stat-info">
+          <p class="stat-label">Transacciones</p>
+          <p class="stat-value">{{ paymentStats.count }}</p>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon completed">
+          <i class="pi pi-check-circle"></i>
+        </div>
+        <div class="stat-info">
+          <p class="stat-label">Completados</p>
+          <p class="stat-value">{{ paymentStats.completed }}</p>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon pending">
+          <i class="pi pi-clock"></i>
+        </div>
+        <div class="stat-info">
+          <p class="stat-label">Pendientes</p>
+          <p class="stat-value">{{ paymentStats.pending }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filters Section -->
+    <div class="filters-section">
+      <div class="search-box">
+        <i class="pi pi-search"></i>
+        <input
+          v-model="searchQuery"
+          type="text"
+          placeholder="Buscar por ID, método o monto..."
+          class="search-input"
+        />
+      </div>
+
+      <div class="filter-group">
+        <div class="filter-item">
+          <label for="status-filter">Estado</label>
+          <select id="status-filter" v-model="selectedStatus" class="filter-select">
+            <option value="all">Todos</option>
+            <option value="completado">Completado</option>
+            <option value="pendiente">Pendiente</option>
+            <option value="cancelado">Cancelado</option>
+          </select>
+        </div>
+
+        <div class="filter-item">
+          <label for="method-filter">Método</label>
+          <select id="method-filter" v-model="selectedMethod" class="filter-select">
+            <option value="all">Todos</option>
+            <option value="card">Tarjeta</option>
+            <option value="yape">Yape</option>
+            <option value="cash">Efectivo</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payments List -->
+    <div class="payments-list">
+      <div v-if="filteredPayments.length === 0" class="empty-state">
+        <i class="pi pi-inbox"></i>
+        <h3>No se encontraron pagos</h3>
+        <p>No hay transacciones que coincidan con los filtros seleccionados.</p>
+      </div>
+
+      <div v-else class="payment-cards">
+        <div
+          v-for="payment in filteredPayments"
+          :key="payment.id"
+          class="payment-card"
+        >
+          <div class="payment-header">
+            <div class="payment-method">
+              <i :class="`pi ${getMethodIcon(payment.method)}`"></i>
+              <span>{{ getMethodName(payment.method) }}</span>
+            </div>
+            <span :class="['status-badge', getStatusClass(payment.status)]">
+              {{ payment.status }}
+            </span>
+          </div>
+
+          <div class="payment-body">
+            <div class="payment-amount">
+              <span class="amount-label">Monto</span>
+              <span class="amount-value">S/. {{ parseFloat(payment.amount).toFixed(2) }}</span>
+            </div>
+
+            <div class="payment-details">
+              <div class="detail-row">
+                <span class="detail-label">
+                  <i class="pi pi-hashtag"></i>
+                  ID Transacción
+                </span>
+                <span class="detail-value">#{{ payment.id }}</span>
+              </div>
+
+              <div class="detail-row">
+                <span class="detail-label">
+                  <i class="pi pi-calendar"></i>
+                  Fecha
+                </span>
+                <span class="detail-value">{{ formatDate(payment.createdAt) }}</span>
+              </div>
+
+              <div v-if="payment.description" class="detail-row">
+                <span class="detail-label">
+                  <i class="pi pi-info-circle"></i>
+                  Descripción
+                </span>
+                <span class="detail-value">{{ payment.description }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.payments-container {
-  max-width: 900px;
-  margin: 2rem auto;
-  background: var(--bg-moveo-orange-light);
+.payments-history {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   padding: 2rem;
-  border-radius: 12px;
 }
 
-h1 {
-  text-align: center;
-  margin-bottom: 1.5rem;
-  color: var(--text-primary);
-}
-
-.form-section {
-  margin-bottom: 2rem;
-  background: var(--bg-muted);
-  padding: 1rem;
-  border-radius: 8px;
-  color: var(--text-primary);
-}
-
-.form-group {
-  margin-bottom: 1rem;
-}
-
-label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 0.3rem;
-  color: var(--text-primary);
-}
-
-.method-buttons {
-  display: flex;
-  gap: 12px;
-}
-
-.method-buttons button {
-  flex: 1;
-  padding: 10px;
-  border: 2px solid transparent;
-  border-radius: 8px;
-  cursor: pointer;
-  background-color: #f1f1f1;
-  font-weight: bold;
-  transition: 0.3s;
-  color: var(--text-primary);
-}
-
-.method-buttons button:hover {
-  background-color: #e0e0e0;
-}
-
-.method-buttons button.active {
-  background-color: #007bff;
-  color: white;
-  border-color: #0056b3;
-}
-
-/* Tarjeta Interactiva */
-.card-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.credit-card-display {
-  width: 350px;
-  height: 200px;
-  background: linear-gradient(135deg, #3f51b5, #5c6bc0);
+/* Header Section */
+.page-header {
+  background: linear-gradient(135deg, #3A5E5E 0%, #2C5050 100%);
   border-radius: 16px;
-  color: white;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-  font-family: 'Courier New', Courier, monospace;
-  position: relative;
-  overflow: hidden;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 20px rgba(58, 94, 94, 0.2);
 }
 
-.credit-card-display::after {
-  content: "";
-  position: absolute;
-  top: -50px;
-  right: -50px;
-  width: 100px;
-  height: 100px;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.card-number {
-  font-size: 20px;
-  letter-spacing: 2px;
-  margin-bottom: 20px;
-}
-
-.card-holder,
-.card-expiry {
-  font-size: 14px;
-  text-transform: uppercase;
-}
-
-.card-holder {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-}
-
-.card-expiry {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-}
-
-.card-inputs {
+.page-title {
+  color: #FFFFFF;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 320px;
+  align-items: center;
+  gap: 0.75rem;
 }
 
-.card-inputs label {
-  font-weight: bold;
-  color: #333;
+.page-title i {
+  font-size: 2rem;
 }
 
-.card-inputs input {
-  padding: 10px;
-  font-size: 14px;
-  border-radius: 6px;
-  border: 1px solid #aaa;
+.page-subtitle {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.1rem;
+  margin: 0;
 }
 
-.card-inputs input:focus {
-  border-color: #335A8E;
-  outline: none;
-  box-shadow: 0 0 5px rgba(51, 90, 142, 0.6);
+/* Statistics Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* Yape */
-.yape-form {
-  text-align: center;
-  margin-top: 1rem;
+.stat-card {
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.yape-qr {
-  width: 220px;
-  margin: 1rem 0;
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
-table {
+.stat-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  color: #FFFFFF;
+}
+
+.stat-icon.total {
+  background: linear-gradient(135deg, #3A5E5E 0%, #2C5050 100%);
+}
+
+.stat-icon.count {
+  background: linear-gradient(135deg, #FF6F00 0%, #FF8F00 100%);
+}
+
+.stat-icon.completed {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+}
+
+.stat-icon.pending {
+  background: linear-gradient(135deg, #FFC107 0%, #FFB300 100%);
+}
+
+.stat-info {
+  flex: 1;
+}
+
+.stat-label {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0 0 0.25rem 0;
+  font-weight: 500;
+}
+
+.stat-value {
+  color: #2C3E50;
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Filters Section */
+.filters-section {
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 2rem;
+}
+
+.search-box {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.search-box i {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.search-input {
   width: 100%;
-  border-collapse: collapse;
-  text-align: left;
-  color: var(--text-primary);
+  padding: 0.875rem 1rem 0.875rem 3rem;
+  font-size: 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  background: #FFFFFF;
+  color: #2C3E50;
+  transition: all 0.3s ease;
 }
 
-h2 {
-  color: var(--text-primary);
+.search-input:focus {
+  outline: none;
+  border-color: #3A5E5E;
+  box-shadow: 0 0 0 3px rgba(58, 94, 94, 0.1);
 }
 
-th, td {
-  padding: 0.75rem;
-  border-bottom: 1px solid #ccc;
-}
-
-th {
-  background: var(--brand-green);
-  color: white;
-}
-
-.empty {
-  text-align: center;
+.search-input::placeholder {
   color: #999;
 }
 
-.btn-save {
-  background-color: var(--brand-green);
-  border: none;
-  color: white;
+.filter-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
 }
 
-.btn-delete {
-  background-color: var(--brand-pink);
-  border: none;
-  color: white;
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filter-item label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #2C3E50;
+}
+
+.filter-select {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  background: #FFFFFF;
+  color: #2C3E50;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: #3A5E5E;
+  box-shadow: 0 0 0 3px rgba(58, 94, 94, 0.1);
+}
+
+.filter-select:hover {
+  border-color: #3A5E5E;
+}
+
+/* Payments List */
+.payments-list {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.empty-state {
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 4rem 2rem;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.empty-state i {
+  font-size: 4rem;
+  color: #ccc;
+  margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+  color: #2C3E50;
+  font-size: 1.5rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.empty-state p {
+  color: #666;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.payment-cards {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.payment-card {
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-left: 4px solid #3A5E5E;
+}
+
+.payment-card:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.payment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.payment-method {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2C3E50;
+}
+
+.payment-method i {
+  font-size: 1.5rem;
+  color: #3A5E5E;
+}
+
+.status-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-completed {
+  background: #E8F5E9;
+  color: #2E7D32;
+}
+
+.status-pending {
+  background: #FFF3E0;
+  color: #F57C00;
+}
+
+.status-cancelled {
+  background: #FFEBEE;
+  color: #C62828;
+}
+
+.payment-body {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.payment-amount {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.amount-label {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.amount-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #3A5E5E;
+}
+
+.payment-details {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.detail-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.detail-label i {
+  color: #3A5E5E;
+}
+
+.detail-value {
+  font-size: 0.95rem;
+  color: #2C3E50;
+  font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .payments-history {
+    padding: 1rem;
+  }
+
+  .page-header {
+    padding: 1.5rem;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+  }
+
+  .page-subtitle {
+    font-size: 1rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .stat-card {
+    padding: 1rem;
+  }
+
+  .stat-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+  }
+
+  .filters-section {
+    padding: 1rem;
+  }
+
+  .filter-group {
+    grid-template-columns: 1fr;
+  }
+
+  .payment-card {
+    padding: 1rem;
+  }
+
+  .payment-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .amount-value {
+    font-size: 1.5rem;
+  }
+
+  .detail-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

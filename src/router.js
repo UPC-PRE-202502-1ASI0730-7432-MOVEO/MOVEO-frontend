@@ -6,7 +6,7 @@ import PageNotFound from '@/app/shared/views/page-not-found.vue'
 import AdventureList from '@/app/adventure/components/views/adventure-list.vue'
 import AdventureForm from '@/app/adventure/components/views/adventure-form.vue'
 import PaymentsView from '@/app/payment/components/views/payments-view.vue'
-import { useUserStore } from '@/app/iam/application/user.store'
+import { useUserStore } from '@/app/iam/application/user.store.js'
 
 const routes = [
   // Redirect root to dashboard based on role
@@ -92,6 +92,12 @@ const routes = [
     name: 'payments',
     component: PaymentsView,
     meta: { title: 'Payment Module' }
+  },
+  {
+    path: '/my-payments',
+    name: 'my-payments',
+    component: PaymentsView,
+    meta: { requiresAuth: true, title: 'Historial de Pagos' }
   },
 
   // Rutas compartidas
