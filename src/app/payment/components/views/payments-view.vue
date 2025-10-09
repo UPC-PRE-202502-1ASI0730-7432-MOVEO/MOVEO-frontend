@@ -22,10 +22,49 @@ const filteredPayments = computed(() => {
   
   let filtered = [...payments.value]
   
-  // Filter by current user (clients see payments made, owners see payments received)
+  console.log('🔍 Filtrando pagos:', {
+    total: payments.value.length,
+    currentUserId: currentUser.value?.id,
+    isRenter: userStore.isRenter,
+    isOwner: userStore.isOwner
+  });
+  
+  // Filter by current user
+  // Renters see payments they made (payerId)
+  // Owners see payments they received (recipientId) or payments related to their vehicles
   if (currentUser.value?.id) {
-    filtered = filtered.filter(p => p.userId === currentUser.value.id)
+    const userId = currentUser.value.id
+    const isRenterRole = userStore.isRenter
+    const isOwnerRole = userStore.isOwner
+    
+    filtered = filtered.filter(p => {
+      // Check multiple possible field names for compatibility
+      const payerId = p.payerId || p.userId
+      const recipientId = p.recipientId || p.ownerId
+      
+      console.log('📋 Evaluando pago:', {
+        paymentId: p.id,
+        payerId,
+        recipientId,
+        userId,
+        isRenterRole,
+        isOwnerRole
+      });
+      
+      if (isRenterRole) {
+        // Renters see payments they made
+        return payerId === userId
+      } else if (isOwnerRole) {
+        // Owners see payments they received
+        return recipientId === userId || payerId === userId
+      }
+      
+      // Fallback: show if any ID matches
+      return payerId === userId || recipientId === userId
+    })
   }
+  
+  console.log('✅ Pagos filtrados por usuario:', filtered.length);
   
   // Search filter
   if (searchQuery.value) {

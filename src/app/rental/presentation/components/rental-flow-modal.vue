@@ -401,35 +401,52 @@ async function confirmRental() {
   
   isConfirming.value = true
   
-  // Simular llamada a API
-  await new Promise(resolve => setTimeout(resolve, 2000))
-  
-  const rentalData = {
-    vehicleId: props.vehicle.id,
-    startDate: startDate.value,
-    endDate: endDate.value,
-    totalPrice: totalPrice.value,
-    paymentMethod: selectedPaymentMethod.value,
-    rentalDays: rentalDays.value
-  }
-  
-  // Guardar el pago usando payment.store.js
   try {
-    await addPayment({
-      userId: 1, // Aquí deberías usar el ID del usuario actual
+    // Guardar el rental en db.json con estado "pending"
+    const rentalData = {
+      vehicleId: props.vehicle.id,
+      renterId: 2, // ID del usuario actual (Ana - renter)
+      ownerId: props.vehicle.ownerId,
+      startDate: startDate.value,
+      endDate: endDate.value,
+      totalPrice: totalPrice.value,
+      status: 'pending', // Estado inicial: pendiente
+      pickupLocation: props.vehicle.location?.address || 'No especificado',
+      returnLocation: props.vehicle.location?.address || 'No especificado',
+      notes: `Reserva realizada. Método de pago: ${selectedPaymentMethod.value}`,
+      createdAt: new Date().toISOString()
+    }
+    
+    // Guardar en la base de datos
+    const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/rentals`, rentalData)
+    console.log('Rental guardado exitosamente:', response.data)
+    
+    // Guardar el pago usando payment.store.js con los campos correctos
+    const paymentData = {
+      rentalId: response.data.id, // ID del rental recién creado
+      payerId: 2, // ID del inquilino que hace el pago
+      recipientId: props.vehicle.ownerId, // ID del propietario que recibe el pago
       amount: totalPrice.value,
-      paymentMethod: selectedPaymentMethod.value,
-      paid: false,
-      dueDate: endDate.value, // Fecha de fin del alquiler
-      description: `Alquiler de ${props.vehicle.brand} ${props.vehicle.model} - ${rentalDays.value} día(s)`
-    })
-    console.log('Pago registrado exitosamente')
+      currency: 'PEN',
+      method: selectedPaymentMethod.value,
+      status: 'pending', // Estado inicial: pendiente
+      transactionId: `txn_${Date.now()}`,
+      type: 'rental_payment',
+      description: `Alquiler de ${props.vehicle.brand} ${props.vehicle.model} - ${rentalDays.value} día(s)`,
+      createdAt: new Date().toISOString()
+    }
+    
+    console.log('💰 Creando pago:', paymentData);
+    await addPayment(paymentData)
+    console.log('✅ Pago creado exitosamente');
+    
+    emit('rental-confirmed', response.data)
   } catch (error) {
-    console.error('Error al guardar el pago:', error)
+    console.error('Error al confirmar el alquiler:', error)
+    alert('Hubo un error al procesar tu reserva. Por favor intenta nuevamente.')
+  } finally {
+    isConfirming.value = false
   }
-  
-  emit('rental-confirmed', rentalData)
-  isConfirming.value = false
 }
 
 // Formateo de fechas
