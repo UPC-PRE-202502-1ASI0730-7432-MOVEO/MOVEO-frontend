@@ -1,0 +1,1 @@
+Estilos para payment-management.vue - agregar después de </template>

@@ -106,36 +106,12 @@
               Método de pago
             </h2>
 
-            <div class="payment-methods">
-              <div 
-                v-for="method in paymentMethods" 
-                :key="method.id"
-                class="payment-method"
-                :class="{ 'selected': selectedPaymentMethod === method.id }"
-                @click="selectedPaymentMethod = method.id"
-              >
-                <div class="method-icon">
-                  <i :class="method.icon"></i>
-                </div>
-                <div class="method-info">
-                  <h4>{{ method.name }}</h4>
-                  <p>{{ method.description }}</p>
-                </div>
-                <div class="method-radio">
-                  <i v-if="selectedPaymentMethod === method.id" class="pi pi-check-circle"></i>
-                  <i v-else class="pi pi-circle"></i>
-                </div>
-              </div>
-            </div>
-
-            <button 
-              class="btn-primary btn-full"
-              :disabled="!selectedPaymentMethod"
-              @click="goToConfirmation"
-            >
-              Continuar
-              <i class="pi pi-arrow-right"></i>
-            </button>
+            <PaymentManagement
+              :amount="totalPrice"
+              :description="`Alquiler de ${vehicle.brand} ${vehicle.model} por ${rentalDays} día${rentalDays > 1 ? 's' : ''}`"
+              @payment-confirmed="handlePaymentConfirmed"
+              @payment-cancelled="currentStep = 'calendar'"
+            />
           </div>
 
           <!-- Paso 3: Confirmación -->
@@ -267,6 +243,7 @@
 import { ref, computed, watch, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import usePaymentsStore from '@/app/payment/application/payment.store.js'
+import PaymentManagement from '@/app/payment/components/views/payment-management.vue'
 import axios from 'axios'
 
 const props = defineProps({
@@ -389,8 +366,15 @@ const paymentMethods = ref([
 ])
 
 const selectedPaymentMethodName = computed(() => {
-  const method = paymentMethods.value.find(m => m.id === selectedPaymentMethod.value)
-  return method ? method.name : ''
+  if (!selectedPaymentMethod.value) return ''
+  
+  const methodNames = {
+    'card': 'Tarjeta de crédito/débito',
+    'yape': 'Yape',
+    'cash': 'Efectivo'
+  }
+  
+  return methodNames[selectedPaymentMethod.value] || selectedPaymentMethod.value
 })
 
 // Funciones de navegación
@@ -400,10 +384,11 @@ function goToPayment() {
   }
 }
 
-function goToConfirmation() {
-  if (selectedPaymentMethod.value) {
-    currentStep.value = 'confirmation'
-  }
+function handlePaymentConfirmed(paymentData) {
+  // Guardar los datos del pago para usarlos en la confirmación
+  selectedPaymentMethod.value = paymentData.method
+  // Pasar a confirmación
+  currentStep.value = 'confirmation'
 }
 
 function close() {
