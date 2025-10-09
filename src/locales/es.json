@@ -62,5 +62,50 @@
   },
   "errors": {
     "ocurred": "Ocurrieron errores"
+  },
+  "sidebar": {
+    "owner": {
+      "dashboard": "Panel",
+      "vehicles": "Mis Vehículos",
+      "addVehicle": "Agregar Vehículo",
+      "requests": "Solicitudes",
+      "earnings": "Ganancias",
+      "profile": "Perfil"
+    },
+    "renter": {
+      "dashboard": "Panel",
+      "browse": "Explorar",
+      "myRentals": "Mis Alquileres",
+      "myPayments": "Mis Pagos",
+      "favorites": "Favoritos",
+      "profile": "Perfil"
+    }
+  },
+  "dashboard": {
+    "renter": {
+      "welcome": "Bienvenido, {name}",
+      "summary": "Aquí está el resumen de tu actividad",
+      "activity": "Actividad reciente",
+      "noActivity": "No hay actividad reciente",
+      "findTrip": "Encuentra tu próximo viaje",
+      "activeRentals": "Alquileres Activos",
+      "completedTrips": "Viajes Completados",
+      "totalSpent": "Total Gastado",
+      "favorites": "Favoritos",
+      "upcomingTrips": "Próximos Viajes",
+      "status": {
+        "active": "Activo",
+        "confirmed": "Confirmado",
+        "pending": "Pendiente"
+      },
+      "total": "Total",
+      "viewDetails": "Ver Detalles",
+      "noUpcomingTrips": "No tienes viajes programados",
+      "exploreVehicles": "Explorar Vehículos",
+      "myFavorites": "Mis Favoritos",
+      "noFavorites": "Aún no tienes vehículos favoritos",
+      "viewCatalog": "Ver Catálogo",
+      "active": "Activo"
+    }
   }
 }

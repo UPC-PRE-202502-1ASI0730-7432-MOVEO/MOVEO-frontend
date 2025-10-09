@@ -60,10 +60,10 @@ function getVehicleData(vehicleId) {
 // Formatear fecha
 function formatDate(dateString) {
   const date = new Date(dateString)
-  return date.toLocaleDateString('es-ES', { 
-    day: '2-digit', 
-    month: 'short', 
-    year: 'numeric' 
+  return date.toLocaleDateString('es-ES', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric'
   })
 }
 </script>
@@ -124,12 +124,12 @@ function formatDate(dateString) {
           <p>⚠️ Tienes <strong>{{ stats.pendingRequests }}</strong> solicitudes esperando tu respuesta</p>
           <router-link to="/rental/rental-requests" class="btn-primary">Revisar Solicitudes</router-link>
         </div>
-        
+
         <!-- Mostrar últimas 3 solicitudes -->
         <div class="requests-grid">
-          <div 
-            v-for="rental in pendingRequests.slice(0, 3)" 
-            :key="rental.id" 
+          <div
+            v-for="rental in pendingRequests.slice(0, 3)"
+            :key="rental.id"
             class="request-card"
           >
             <div class="request-header">
@@ -174,9 +174,9 @@ function formatDate(dateString) {
         <router-link to="/rental/add-vehicle" class="btn-primary">+ Agregar Vehículo</router-link>
       </div>
       <div v-else class="vehicles-grid">
-        <div 
-          v-for="vehicle in ownerVehicles.slice(0, 4)" 
-          :key="vehicle.id" 
+        <div
+          v-for="vehicle in ownerVehicles.slice(0, 4)"
+          :key="vehicle.id"
           class="vehicle-card"
         >
           <div class="vehicle-image-placeholder">
@@ -197,17 +197,17 @@ function formatDate(dateString) {
               {{ vehicle.status === 'active' ? '✓ Activo' : '⏸ Pausado' }}
             </div>
           </div>
-          <router-link 
-            :to="`/rental/vehicles/${vehicle.id}`" 
+          <router-link
+            :to="`/rental/vehicles/${vehicle.id}`"
             class="btn-view-vehicle"
           >
             Ver Detalles
           </router-link>
         </div>
-        
-        <router-link 
-          v-if="ownerVehicles.length > 4" 
-          to="/rental/my-vehicles" 
+
+        <router-link
+          v-if="ownerVehicles.length > 4"
+          to="/rental/my-vehicles"
           class="view-all-card"
         >
           <i class="pi pi-arrow-right"></i>

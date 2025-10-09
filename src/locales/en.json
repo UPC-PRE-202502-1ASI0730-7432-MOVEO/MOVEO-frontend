@@ -62,5 +62,49 @@
   },
   "errors": {
     "ocurred": "Errors occurred"
+  },
+  "sidebar": {
+    "owner": {
+      "dashboard": "Dashboard",
+      "vehicles": "My Vehicles",
+      "addVehicle": "Add Vehicle",
+      "requests": "Requests",
+      "earnings": "Earnings",
+      "profile": "Profile"
+    },
+    "renter": {
+      "dashboard": "Dashboard",
+      "browse": "Browse",
+      "myRentals": "My Rentals",
+      "myPayments": "My Payments",
+      "favorites": "Favorites",
+      "profile": "Profile"
+    }
+  },
+  "dashboard": {
+    "renter": {
+      "welcome": "Welcome, {name}",
+      "summary": "Here is a summary of your activity",
+      "activity": "Recent activity",
+      "noActivity": "No recent activity",
+      "findTrip": "Find your next trip",
+      "activeRentals": "Active Rentals",
+      "completedTrips": "Completed Trips",
+      "totalSpent": "Total Spent",
+      "favorites": "Favorites",
+      "upcomingTrips": "Upcoming Trips",
+      "status": {
+        "active": "Active",
+        "confirmed": "Confirmed",
+        "pending": "Pending"
+      },
+      "total": "Total",
+      "viewDetails": "View Details",
+      "noUpcomingTrips": "You have no scheduled trips",
+      "exploreVehicles": "Explore Vehicles",
+      "myFavorites": "My Favorites",
+      "noFavorites": "You have no favorite vehicles yet",
+      "viewCatalog": "View Catalog"
+    }
   }
 }

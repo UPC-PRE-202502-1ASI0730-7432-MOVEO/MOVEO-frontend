@@ -2,6 +2,9 @@
 import { computed, onMounted } from 'vue'
 import { useUserStore } from '@/app/iam/application/user.store'
 import { useRentalStore } from '@/app/rental/application/rental.store'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const userStore = useUserStore()
 const rentalStore = useRentalStore()
@@ -66,8 +69,8 @@ function formatDate(dateString) {
 <template>
   <div class="renter-dashboard">
     <div class="dashboard-header">
-      <h1>Bienvenido, {{ user?.firstName }} 👋</h1>
-      <p>Aquí está el resumen de tu actividad</p>
+      <h1>{{ t('dashboard.renter.welcome', { name: user?.firstName }) }} 👋</h1>
+      <p>{{ t('dashboard.renter.summary') }}</p>
     </div>
 
     <!-- Stats Grid -->
@@ -76,7 +79,7 @@ function formatDate(dateString) {
         <div class="stat-icon">🚗</div>
         <div class="stat-content">
           <h3>{{ stats.activeRentals }}</h3>
-          <p>Alquileres Activos</p>
+          <p>{{ t('dashboard.renter.activeRentals') }}</p>
         </div>
       </div>
 
@@ -84,7 +87,7 @@ function formatDate(dateString) {
         <div class="stat-icon">✅</div>
         <div class="stat-content">
           <h3>{{ stats.completedRentals }}</h3>
-          <p>Viajes Completados</p>
+          <p>{{ t('dashboard.renter.completedTrips') }}</p>
         </div>
       </div>
 
@@ -92,7 +95,7 @@ function formatDate(dateString) {
         <div class="stat-icon">💰</div>
         <div class="stat-content">
           <h3>${{ stats.totalSpent.toFixed(2) }}</h3>
-          <p>Total Gastado</p>
+          <p>{{ t('dashboard.renter.totalSpent') }}</p>
         </div>
       </div>
 
@@ -100,17 +103,17 @@ function formatDate(dateString) {
         <div class="stat-icon">❤️</div>
         <div class="stat-content">
           <h3>{{ stats.favorites }}</h3>
-          <p>Favoritos</p>
+          <p>{{ t('dashboard.renter.favorites') }}</p>
         </div>
       </div>
     </div>
 
     <!-- Próximos Viajes -->
     <div class="section">
-      <h2>Próximos Viajes</h2>
+      <h2>{{ t('dashboard.renter.upcomingTrips') }}</h2>
       <div class="empty-state" v-if="activeRentals.length === 0">
-        <p>No tienes viajes programados</p>
-        <router-link to="/rentals" class="btn-primary">Explorar Vehículos</router-link>
+        <p>{{ t('dashboard.renter.noUpcomingTrips') }}</p>
+        <router-link to="/rentals" class="btn-primary">{{ t('dashboard.renter.exploreVehicles') }}</router-link>
       </div>
       <div v-else class="rentals-grid">
         <div 
@@ -119,7 +122,7 @@ function formatDate(dateString) {
           class="rental-card"
         >
           <div class="rental-status" :class="rental.status">
-            {{ rental.status === 'pending' ? '⏳ Pendiente' : rental.status === 'confirmed' ? '✅ Confirmado' : '🚗 Activo' }}
+            {{ rental.status === 'pending' ? t('dashboard.renter.status.pending') : rental.status === 'confirmed' ? t('dashboard.renter.status.confirmed') : t('dashboard.renter.status.active') }}
           </div>
           <div class="vehicle-info">
             <h3>{{ getVehicleData(rental.vehicleId)?.brand }} {{ getVehicleData(rental.vehicleId)?.model }}</h3>
@@ -138,13 +141,13 @@ function formatDate(dateString) {
           </div>
           <div class="rental-price">
             <span class="price">${{ rental.totalPrice }}</span>
-            <span class="price-label">Total</span>
+            <span class="price-label">{{ t('dashboard.renter.total') }}</span>
           </div>
           <router-link 
             :to="`/my-rentals`" 
             class="btn-view"
           >
-            Ver Detalles
+            {{ t('dashboard.renter.viewDetails') }}
           </router-link>
         </div>
       </div>
@@ -152,10 +155,9 @@ function formatDate(dateString) {
 
     <!-- Mis Favoritos -->
     <div class="section">
-      <h2>Mis Favoritos</h2>
+      <h2>{{ t('dashboard.renter.myFavorites') }}</h2>
       <div class="empty-state">
-        <p>Aún no tienes vehículos favoritos</p>
-        <router-link to="/rentals" class="btn-secondary">Ver Catálogo</router-link>
+        <p>{{ t('dashboard.renter.noFavorites') }}</p>
       </div>
     </div>
   </div>
