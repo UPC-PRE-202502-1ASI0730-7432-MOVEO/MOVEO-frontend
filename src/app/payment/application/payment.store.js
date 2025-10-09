@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import { Payment } from "../domain/model/payment.model.js";
+import { PaymentApi } from "../infrastructure/payment-api.js";
 
 export default function usePaymentsStore() {
     const payments = ref([]);
@@ -9,7 +9,9 @@ export default function usePaymentsStore() {
     function loadFromLocalStorage() {
         const data = localStorage.getItem("payments");
         if (data) {
-            payments.value = JSON.parse(data).map(p => new Payment(p));
+            const parsed = JSON.parse(data);
+            // Los datos ya vienen como objetos Payment del assembler
+            payments.value = parsed;
         }
     }
 
@@ -18,28 +20,34 @@ export default function usePaymentsStore() {
         localStorage.setItem("payments", JSON.stringify(payments.value));
     }
 
-    // 🔹 Obtener todos los pagos (ya cargados localmente)
+    // 🔹 Obtener todos los pagos desde la API
     async function fetchPayments() {
         try {
-            loadFromLocalStorage();
+            console.log('🔄 Cargando pagos desde API...');
+            payments.value = await PaymentApi.listPayments();
+            console.log('✅ Pagos cargados:', payments.value);
+            // Guardar en localStorage como cache
+            saveToLocalStorage();
         } catch (err) {
+            // Si hay error en la API, intentar cargar desde localStorage
+            console.error("❌ Error al cargar pagos desde API:", err.message);
+            console.log('🔄 Intentando cargar desde localStorage...');
+            loadFromLocalStorage();
             errors.value.push(err);
-            console.error("Error al obtener pagos:", err);
         }
     }
 
     // 🔹 Agregar nuevo pago
     async function addPayment(paymentData) {
         try {
-            const newPayment = new Payment({
-                id: Date.now(),
-                ...paymentData,
-            });
+            const newPayment = await PaymentApi.createPayment(paymentData);
             payments.value.push(newPayment);
             saveToLocalStorage();
+            return newPayment;
         } catch (err) {
             errors.value.push(err);
             console.error("Error al agregar pago:", err);
+            throw err;
         }
     }
 

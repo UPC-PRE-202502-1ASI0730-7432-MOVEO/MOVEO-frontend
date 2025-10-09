@@ -1,6 +1,7 @@
 <template>
   <AuthLayout>
-    <div class="login-form">
+    <div class="auth-card">
+      <div class="login-form">
       <div class="login-form__header">
         <h1 class="login-form__title">Bienvenido a MOVEO</h1>
         <p class="login-form__subtitle">Inicia sesión para continuar</p>
@@ -107,6 +108,7 @@
           Crear cuenta nueva
         </router-link>
       </form>
+    </div>
     </div>
   </AuthLayout>
 </template>
@@ -448,6 +450,34 @@ const handleSubmit = async () => {
   color: white;
   transform: translateY(-2px);
   box-shadow: 0 8px 16px rgba(74, 222, 128, 0.2);
+}
+
+/* Auth Card Wrapper */
+.auth-card {
+  background: white;
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 111, 0, 0.1);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+  max-width: 480px;
+  width: 100%;
+}
+
+.auth-card::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(135deg, #FF6F00 0%, #FF8F00 100%);
+  border-radius: 20px;
+  z-index: -1;
+  opacity: 0.3;
 }
 
 .link {

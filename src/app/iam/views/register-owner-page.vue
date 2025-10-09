@@ -1,10 +1,11 @@
 <template>
   <AuthLayout>
-    <div class="register-form">
-      <div class="register-form__header">
-        <h1 class="register-form__title">Regístrate como Propietario</h1>
-        <p class="register-form__subtitle">Empieza a ganar dinero con tus vehículos</p>
-      </div>
+    <div class="auth-card">
+      <div class="register-form">
+        <div class="register-form__header">
+          <h1 class="register-form__title">Regístrate como Propietario</h1>
+          <p class="register-form__subtitle">Empieza a ganar dinero con tus vehículos</p>
+        </div>
 
       <form @submit.prevent="handleSubmit" class="form">
         <!-- Personal Information -->
@@ -281,6 +282,7 @@
         </div>
       </form>
     </div>
+    </div>
   </AuthLayout>
 </template>
 
@@ -449,10 +451,80 @@ const handleSubmit = async () => {
 </script>
 
 <style scoped>
+.auth-card {
+  background: white;
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 111, 0, 0.1);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+  max-width: 600px;
+  width: 100%;
+  animation: cardEntry 0.6s ease;
+}
+
+@keyframes cardEntry {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.auth-card::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(135deg, #FF6F00 0%, #FF8F00 50%, #FF6F00 100%);
+  border-radius: 20px;
+  z-index: -1;
+  opacity: 0.5;
+  animation: borderGlow 3s ease-in-out infinite;
+}
+
+@keyframes borderGlow {
+  0%, 100% {
+    opacity: 0.5;
+    filter: blur(0px);
+  }
+  50% {
+    opacity: 0.8;
+    filter: blur(2px);
+  }
+}
+
+.auth-card::after {
+  content: '';
+  position: absolute;
+  inset: -10px;
+  background: radial-gradient(circle at top right, rgba(255, 111, 0, 0.15), transparent 70%);
+  border-radius: 30px;
+  z-index: -2;
+  animation: halo 4s ease-in-out infinite;
+}
+
+@keyframes halo {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.6;
+  }
+}
+
 .register-form {
   width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
 }
 
 .register-form__header {
@@ -461,17 +533,18 @@ const handleSubmit = async () => {
 }
 
 .register-form__title {
-  font-family: var(--font-primary);
   font-size: 2rem;
   font-weight: 700;
-  color: var(--text-primary);
+  background: linear-gradient(135deg, #FF6F00 0%, #FF8F00 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
   margin-bottom: 0.5rem;
 }
 
 .register-form__subtitle {
-  font-family: var(--font-secondary);
   font-size: 1rem;
-  color: var(--text-secondary);
+  color: #666;
 }
 
 .form__section {
@@ -479,19 +552,17 @@ const handleSubmit = async () => {
 }
 
 .form__section-title {
-  font-family: var(--font-primary);
   font-size: 1.125rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #2C3E50;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid var(--bg-moveo-orange);
+  border-bottom: 2px solid #FF6F00;
 }
 
 .form__section-description {
-  font-family: var(--font-secondary);
   font-size: 0.875rem;
-  color: var(--text-secondary);
+  color: #666;
   margin-bottom: 1rem;
   line-height: 1.5;
 }
@@ -508,10 +579,9 @@ const handleSubmit = async () => {
 
 .form__label {
   display: block;
-  font-family: var(--font-secondary);
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #2C3E50;
   margin-bottom: 0.5rem;
 }
 
@@ -522,19 +592,18 @@ const handleSubmit = async () => {
 .form__input {
   width: 100%;
   padding: 0.75rem 1rem;
-  font-family: var(--font-secondary);
   font-size: 0.9375rem;
-  color: var(--text-primary);
+  color: #2C3E50;
   background: white;
-  border: 2px solid var(--border-color);
+  border: 2px solid #e0e0e0;
   border-radius: 8px;
   transition: all 0.2s ease;
 }
 
 .form__input:focus {
   outline: none;
-  border-color: var(--bg-moveo-orange);
-  box-shadow: 0 0 0 3px rgba(251, 146, 60, 0.1);
+  border-color: #FF6F00;
+  box-shadow: 0 0 0 3px rgba(255, 111, 0, 0.1);
 }
 
 .form__input--error {
@@ -557,7 +626,7 @@ const handleSubmit = async () => {
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--text-secondary);
+  color: #666;
   padding: 0;
   display: flex;
   align-items: center;
@@ -566,12 +635,11 @@ const handleSubmit = async () => {
 }
 
 .form__input-icon:hover {
-  color: var(--text-primary);
+  color: #2C3E50;
 }
 
 .form__error {
   display: block;
-  font-family: var(--font-secondary);
   font-size: 0.8125rem;
   color: #ef4444;
   margin-top: 0.375rem;
@@ -583,21 +651,20 @@ const handleSubmit = async () => {
   gap: 0.75rem;
   padding: 1rem;
   background: #eff6ff;
-  border-left: 3px solid var(--bg-moveo-orange);
+  border-left: 3px solid #FF6F00;
   border-radius: 8px;
   margin-top: 1rem;
 }
 
 .form__info svg {
   flex-shrink: 0;
-  color: var(--bg-moveo-orange);
+  color: #FF6F00;
   margin-top: 0.125rem;
 }
 
 .form__info p {
-  font-family: var(--font-secondary);
   font-size: 0.875rem;
-  color: var(--text-secondary);
+  color: #666;
   line-height: 1.5;
   margin: 0;
 }
@@ -622,20 +689,18 @@ const handleSubmit = async () => {
 }
 
 .form__checkbox span {
-  font-family: var(--font-secondary);
   font-size: 0.875rem;
-  color: var(--text-secondary);
+  color: #666;
   line-height: 1.5;
 }
 
 .form__submit {
   width: 100%;
   padding: 1rem;
-  font-family: var(--font-primary);
   font-size: 1rem;
   font-weight: 600;
   color: white;
-  background: var(--bg-moveo-orange);
+  background: linear-gradient(135deg, #FF6F00 0%, #FF8F00 100%);
   border: none;
   border-radius: 12px;
   cursor: pointer;
@@ -644,7 +709,7 @@ const handleSubmit = async () => {
 
 .form__submit:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(251, 146, 60, 0.3);
+  box-shadow: 0 8px 16px rgba(255, 111, 0, 0.3);
 }
 
 .form__submit:disabled {
@@ -656,29 +721,32 @@ const handleSubmit = async () => {
   text-align: center;
   margin-top: 1.5rem;
   padding-top: 1.5rem;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid #e0e0e0;
 }
 
 .form__footer p {
-  font-family: var(--font-secondary);
   font-size: 0.9375rem;
-  color: var(--text-secondary);
+  color: #666;
 }
 
 .link {
-  color: var(--bg-moveo-orange);
+  color: #FF6F00;
   text-decoration: none;
   font-weight: 600;
   transition: color 0.2s ease;
 }
 
 .link:hover {
-  color: var(--bg-moveo-green);
+  color: #3A5E5E;
   text-decoration: underline;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
+  .auth-card {
+    padding: 2rem;
+  }
+
   .register-form__title {
     font-size: 1.75rem;
   }

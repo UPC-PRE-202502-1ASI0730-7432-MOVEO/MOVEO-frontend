@@ -33,7 +33,13 @@
         },
         "autoAcceptRentals": false,
         "minimumRentalDays": 1,
-        "instantBooking": false
+        "instantBooking": false,
+        "favoriteDistricts": [],
+        "priceRange": {
+          "min": 0,
+          "max": 100
+        },
+        "preferredTransmission": ""
       },
       "bankAccount": {
         "bankName": "BCP",
@@ -67,26 +73,20 @@
         "canceledRentals": 1
       },
       "preferences": {
-        "language": "es",
+        "language": "en",
         "notifications": {
           "email": true,
           "push": true,
           "sms": false
         },
-        "favoriteDistricts": [
-          "Miraflores",
-          "San Isidro",
-          "Barranco"
-        ],
+        "favoriteDistricts": [],
         "priceRange": {
-          "min": 30,
-          "max": 70
+          "min": 0,
+          "max": 100
         },
-        "preferredTransmission": "automático",
-        "favoriteVehicleTypes": [
-          "sedan",
-          "suv"
-        ]
+        "preferredTransmission": "",
+        "instantBooking": false,
+        "minimumRentalDays": 1
       },
       "bankAccount": null
     }
@@ -443,6 +443,34 @@
       "returnLocation": "Av. Grau 123, Barranco",
       "notes": "Solicitud pendiente de aprobación del dueño.",
       "createdAt": "2025-10-08T09:00:00Z"
+    },
+    {
+      "vehicleId": 8,
+      "renterId": 2,
+      "ownerId": 1,
+      "startDate": "2025-10-15",
+      "endDate": "2025-11-05",
+      "totalPrice": 672,
+      "status": "pending",
+      "pickupLocation": "Av. Tomás Marsano 789, Surco, Lima",
+      "returnLocation": "Av. Tomás Marsano 789, Surco, Lima",
+      "notes": "Reserva realizada. Método de pago: cash",
+      "createdAt": "2025-10-09T00:52:17.213Z",
+      "id": 5
+    },
+    {
+      "vehicleId": 4,
+      "renterId": 2,
+      "ownerId": 1,
+      "startDate": "2025-10-09",
+      "endDate": "2025-10-25",
+      "totalPrice": 640,
+      "status": "pending",
+      "pickupLocation": "Av. Benavides 567, Surco, Lima",
+      "returnLocation": "Av. Benavides 567, Surco, Lima",
+      "notes": "Reserva realizada. Método de pago: cash",
+      "createdAt": "2025-10-09T00:56:23.332Z",
+      "id": 6
     }
   ],
   "payments": [
@@ -481,6 +509,20 @@
       "type": "partial_refund",
       "reason": "Daño menor no justifica retención total",
       "createdAt": "2024-07-15T11:00:00Z"
+    },
+    {
+      "rentalId": 6,
+      "payerId": 2,
+      "recipientId": 1,
+      "amount": 640,
+      "currency": "PEN",
+      "method": "cash",
+      "status": "pending",
+      "transactionId": "txn_1759971383370",
+      "type": "rental_payment",
+      "description": "Alquiler de Nissan Versa - 16 día(s)",
+      "createdAt": "2025-10-09T00:56:23.370Z",
+      "id": 4
     }
   ],
   "reviews": [
