@@ -34,14 +34,21 @@ export default [
   {
     path: 'add-vehicle',
     name: 'add-vehicle',
-    component: () => import('../../shared/views/coming-soon.vue'),
-    meta: { title: 'Add Vehicle', role: 'owner' }
+    component: () => import('./views/add-vehicle-page.vue'),
+    meta: { title: 'Add Vehicle', role: 'owner', requiresAuth: true }
+  },
+  {
+    path: 'edit-vehicle/:id',
+    name: 'edit-vehicle',
+    component: () => import('./views/edit-vehicle-page.vue'),
+    props: true,
+    meta: { title: 'Edit Vehicle', role: 'owner', requiresAuth: true }
   },
   {
     path: 'rental-requests',
     name: 'rental-requests',
-    component: () => import('../../shared/views/coming-soon.vue'),
-    meta: { title: 'Rental Requests', role: 'owner' }
+    component: () => import('./views/rental-requests-page.vue'),
+    meta: { title: 'Rental Requests', role: 'owner', requiresAuth: true }
   },
   {
     path: 'earnings',

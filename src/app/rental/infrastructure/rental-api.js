@@ -42,6 +42,23 @@ export const RentalApi = {
     return toVehicleEntity(data)
   },
 
+  // Crear un nuevo vehículo
+  async createVehicle(payload) {
+    const data = await apiClient.post('/vehicles', payload)
+    return toVehicleEntity(data)
+  },
+
+  // Actualizar un vehículo existente
+  async updateVehicle(id, payload) {
+    const data = await apiClient.put(`/vehicles/${id}`, payload)
+    return toVehicleEntity(data)
+  },
+
+  // Eliminar un vehículo
+  async deleteVehicle(id) {
+    await apiClient.delete(`/vehicles/${id}`)
+  },
+
   // Listar todos los rentals
   async listRentals() {
     const data = await apiClient.get('/rentals')

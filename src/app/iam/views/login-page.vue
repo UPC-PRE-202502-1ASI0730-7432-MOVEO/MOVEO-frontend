@@ -98,7 +98,7 @@
           <span>o</span>
         </div>
 
-        <router-link to="/register/select-role" class="form__register-link">
+        <router-link to="/auth/register/select-role" class="form__register-link">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
             <circle cx="9" cy="7" r="4"></circle>
@@ -182,11 +182,13 @@ const handleSubmit = async () => {
     // Llamar a la función login del store (valida contra la API)
     const user = await login(formData.email.toLowerCase().trim(), formData.password)
 
-    // Redirect based on role with full page reload to ensure layout is shown
+    // Redirect based on role
     if (user.role === 'renter') {
-      window.location.href = '/rentals'
+      router.push('/rental/browse')
     } else if (user.role === 'owner') {
-      window.location.href = '/my-vehicles'
+      router.push('/rental/my-vehicles')
+    } else {
+      router.push('/dashboard')
     }
   } catch (error) {
     console.error('Error logging in:', error)

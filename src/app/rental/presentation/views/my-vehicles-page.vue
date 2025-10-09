@@ -30,11 +30,16 @@ async function loadVehicles() {
 }
 
 function viewVehicleDetail(vehicleId) {
-  router.push(`/vehicles/${vehicleId}`)
+  router.push(`/rental/vehicles/${vehicleId}`)
+}
+
+function editVehicle(vehicleId, event) {
+  event.stopPropagation()
+  router.push(`/rental/edit-vehicle/${vehicleId}`)
 }
 
 function goToAddVehicle() {
-  router.push('/add-vehicle')
+  router.push('/rental/add-vehicle')
 }
 </script>
 
@@ -108,6 +113,10 @@ function goToAddVehicle() {
         </div>
 
         <div class="vehicle-actions">
+          <button @click="editVehicle(vehicle.id, $event)" class="btn-edit">
+            <i class="pi pi-pencil"></i>
+            Editar
+          </button>
           <button class="btn-view">
             Ver Detalles
             <i class="pi pi-arrow-right"></i>
@@ -355,10 +364,33 @@ function goToAddVehicle() {
 
 .vehicle-actions {
   padding: 0 1.5rem 1.5rem;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn-edit {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: transparent;
+  color: #3B82F6;
+  border: 2px solid #3B82F6;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-edit:hover {
+  background: #3B82F6;
+  color: white;
 }
 
 .btn-view {
-  width: 100%;
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;

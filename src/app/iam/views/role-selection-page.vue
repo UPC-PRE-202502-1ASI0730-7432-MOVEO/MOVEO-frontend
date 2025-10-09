@@ -8,7 +8,7 @@
 
       <div class="role-selection__cards">
         <!-- Renter Card -->
-        <router-link to="/register/renter" class="role-card role-card--renter">
+        <router-link to="/auth/register/renter" class="role-card role-card--renter">
           <div class="role-card__icon">
             <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="11" cy="11" r="8"></circle>
@@ -55,7 +55,7 @@
         </router-link>
 
         <!-- Owner Card -->
-        <router-link to="/register/owner" class="role-card role-card--owner">
+        <router-link to="/auth/register/owner" class="role-card role-card--owner">
           <div class="role-card__icon">
             <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect width="18" height="18" x="3" y="3" rx="2"></rect>
@@ -104,7 +104,7 @@
       </div>
 
       <div class="role-selection__footer">
-        <p>¿Ya tienes una cuenta? <router-link to="/login" class="link">Inicia sesión</router-link></p>
+        <p>¿Ya tienes una cuenta? <router-link to="/auth/login" class="link">Inicia sesión</router-link></p>
       </div>
     </div>
   </AuthLayout>
