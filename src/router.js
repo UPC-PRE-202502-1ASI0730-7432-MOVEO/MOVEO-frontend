@@ -1,116 +1,100 @@
-// Configuración básica de enrutador
+// Main Router Configuration with Nested Routes
 import { createRouter, createWebHistory } from 'vue-router'
 import DashboardPage from '@/app/shared/views/dashboard-page.vue'
-import RentalPage from '@/app/rental/presentation/views/rental-page.vue'
 import PageNotFound from '@/app/shared/views/page-not-found.vue'
-import AdventureList from '@/app/adventure/components/views/adventure-list.vue'
-import AdventureForm from '@/app/adventure/components/views/adventure-form.vue'
-import PaymentsView from '@/app/payment/components/views/payments-view.vue'
 import { useUserStore } from '@/app/iam/application/user.store.js'
 
+// Import nested route modules
+import iamRoutes from '@/app/iam/presentation/iam-router.js'
+import rentalRoutes from '@/app/rental/presentation/rental-router.js'
+import adventureRoutes from '@/app/adventure/presentation/adventure-router.js'
+import paymentRoutes from '@/app/payment/presentation/payment-router.js'
+
 const routes = [
-  // Redirect root to dashboard based on role
+  // Root redirect
   { 
     path: '/', 
-    redirect: '/dashboard'
+    redirect: '/dashboard',
+    meta: { title: 'MOVEO' }
   },
   
-  // Dashboard (dinámico según rol)
+  // Dashboard
   {
     path: '/dashboard',
     name: 'dashboard',
     component: DashboardPage,
-    meta: { requiresAuth: true }
+    meta: { title: 'Dashboard', requiresAuth: true }
   },
   
-  // Rutas de Autenticación (sin layout principal)
-  { 
-    path: '/login', 
-    name: 'login', 
-    component: () => import('@/app/iam/views/login-page.vue'),
-    meta: { requiresAuth: false, hideLayout: true }
-  },
-  { 
-    path: '/register/select-role', 
-    name: 'register-select-role', 
-    component: () => import('@/app/iam/views/role-selection-page.vue'),
-    meta: { requiresAuth: false, hideLayout: true }
-  },
-  { 
-    path: '/register/renter', 
-    name: 'register-renter', 
-    component: () => import('@/app/iam/views/register-renter-page.vue'),
-    meta: { requiresAuth: false, hideLayout: true }
-  },
-  { 
-    path: '/register/owner', 
-    name: 'register-owner', 
-    component: () => import('@/app/iam/views/register-owner-page.vue'),
-    meta: { requiresAuth: false, hideLayout: true }
-  },
-  // Redirect old register route to new role selection
-  { 
-    path: '/register', 
-    redirect: '/register/select-role'
+  // IAM Module (Identity and Access Management) - Auth routes
+  {
+    path: '/auth',
+    children: iamRoutes
   },
   
-  // Rutas para Clientes (Renters)
-  { path: '/rentals', name: 'rentals', component: RentalPage, meta: { role: 'renter' } },
-  { path: '/my-rentals', name: 'my-rentals', component: () => import('@/app/rental/presentation/views/my-rentals-page.vue'), meta: { role: 'renter' } },
-  { path: '/favorites', name: 'favorites', component: () => import('@/app/shared/views/coming-soon.vue'), meta: { role: 'renter' } },
+  // Rental Module - Vehicle browsing and rental management
+  {
+    path: '/rental',
+    children: rentalRoutes
+  },
   
-  // Rutas para Propietarios (Owners)
-  { path: '/my-vehicles', name: 'my-vehicles', component: () => import('@/app/rental/presentation/views/my-vehicles-page.vue'), meta: { role: 'owner' } },
-  { path: '/vehicles/:id', name: 'vehicle-detail', component: () => import('@/app/rental/presentation/views/vehicle-detail-page.vue'), props: true, meta: { requiresAuth: true } },
-  { path: '/add-vehicle', name: 'add-vehicle', component: () => import('@/app/shared/views/coming-soon.vue'), meta: { role: 'owner' } },
-  { path: '/rental-requests', name: 'rental-requests', component: () => import('@/app/shared/views/coming-soon.vue'), meta: { role: 'owner' } },
-  { path: '/earnings', name: 'earnings', component: () => import('@/app/shared/views/coming-soon.vue'), meta: { role: 'owner' } },
-  
-  // Rutas de Adventures
+  // Adventure Module
   {
     path: '/adventures',
-    name: 'adventures',
-    component: AdventureList,
-    meta: { title: 'Adventure List' }
+    children: adventureRoutes
   },
-  {
-    path: '/adventures/new',
-    name: 'adventure-new',
-    component: AdventureForm,
-    meta: { title: 'New Adventure' }
-  },
-  {
-    path: '/adventures/edit/:id',
-    name: 'adventure-edit',
-    component: AdventureForm,
-    props: true,
-    meta: { title: 'Edit Adventure' }
-  },
-
-  // Rutas de Payments
+  
+  // Payment Module
   {
     path: '/payments',
-    name: 'payments',
-    component: PaymentsView,
-    meta: { title: 'Payment Module' }
+    children: paymentRoutes
   },
-  {
-    path: '/my-payments',
-    name: 'my-payments',
-    component: PaymentsView,
-    meta: { requiresAuth: true, title: 'Historial de Pagos' }
-  },
-
-  // Rutas compartidas
-  { path: '/profile', name: 'profile', component: () => import('@/app/iam/views/profile-page.vue') },
   
-  // 404
-  { path: '/:pathMatch(.*)*', name: 'not-found', component: PageNotFound }
+  // Legacy routes redirects for backwards compatibility
+  { path: '/login', redirect: '/auth/login' },
+  { path: '/register', redirect: '/auth/register' },
+  { path: '/profile', redirect: '/auth/profile' },
+  { path: '/rentals', redirect: '/rental/browse' },
+  { path: '/my-rentals', redirect: '/rental/my-rentals' },
+  { path: '/favorites', redirect: '/rental/favorites' },
+  { path: '/my-vehicles', redirect: '/rental/my-vehicles' },
+  { path: '/add-vehicle', redirect: '/rental/add-vehicle' },
+  { path: '/rental-requests', redirect: '/rental/rental-requests' },
+  { path: '/earnings', redirect: '/rental/earnings' },
+  { path: '/my-payments', redirect: '/payments/my-payments' },
+  
+  // 404 Not Found
+  { 
+    path: '/:pathMatch(.*)*', 
+    name: 'not-found', 
+    component: PageNotFound,
+    meta: { title: 'Page Not Found' }
+  }
 ]
 
-export const router = createRouter({
-  history: createWebHistory(),
-  routes,
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes
+})
+
+// Navigation guard - similar to your professor's example
+router.beforeEach((to, from, next) => {
+  console.log(`🚀 Navigation from ${from.name || 'unknown'} to ${to.name || to.path}`)
+  
+  // Set page title
+  const baseTitle = 'MOVEO'
+  document.title = to.meta?.title ? `${baseTitle} - ${to.meta.title}` : baseTitle
+  
+  // Check authentication
+  const userStore = useUserStore()
+  const requiresAuth = to.meta?.requiresAuth
+  
+  if (requiresAuth && !userStore.isAuthenticated) {
+    console.warn('⚠️ Authentication required, redirecting to login')
+    next({ name: 'login', query: { redirect: to.fullPath } })
+  } else {
+    next()
+  }
 })
 
 export default router
