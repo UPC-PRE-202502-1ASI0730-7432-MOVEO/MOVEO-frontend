@@ -14,21 +14,21 @@ const isOwner = computed(() => userStore.isOwner.value)
 
 const renterLinks = [
   { path: '/dashboard', icon: 'pi-home', label: 'Dashboard' },
-  { path: '/rentals', icon: 'pi-car', label: 'Explorar' },
-  { path: '/my-rentals', icon: 'pi-list', label: 'Mis Alquileres' },
-  { path: '/my-payments', icon: 'pi-wallet', label: 'Mis Pagos' },
-  { path: '/favorites', icon: 'pi-heart', label: 'Favoritos' },
-  { path: '/profile', icon: 'pi-user', label: 'Perfil' }
+  { path: '/rental/browse', icon: 'pi-car', label: 'Explorar' },
+  { path: '/rental/my-rentals', icon: 'pi-list', label: 'Mis Alquileres' },
+  { path: '/payments/my-payments', icon: 'pi-wallet', label: 'Mis Pagos' },
+  { path: '/rental/favorites', icon: 'pi-heart', label: 'Favoritos' },
+  { path: '/auth/profile', icon: 'pi-user', label: 'Perfil' }
 ]
 
 const ownerLinks = [
   { path: '/dashboard', icon: 'pi-home', label: 'Dashboard' },
-  { path: '/my-vehicles', icon: 'pi-car', label: 'Mis Vehículos' },
-  { path: '/add-vehicle', icon: 'pi-plus-circle', label: 'Agregar Vehículo' },
-  { path: '/rental-requests', icon: 'pi-inbox', label: 'Solicitudes' },
-  { path: '/my-payments', icon: 'pi-wallet', label: 'Mis Pagos' },
-  { path: '/earnings', icon: 'pi-dollar', label: 'Ganancias' },
-  { path: '/profile', icon: 'pi-user', label: 'Perfil' }
+  { path: '/rental/my-vehicles', icon: 'pi-car', label: 'Mis Vehículos' },
+  { path: '/rental/add-vehicle', icon: 'pi-plus-circle', label: 'Agregar Vehículo' },
+  { path: '/rental/rental-requests', icon: 'pi-inbox', label: 'Solicitudes' },
+  { path: '/payments/my-payments', icon: 'pi-wallet', label: 'Mis Pagos' },
+  { path: '/rental/earnings', icon: 'pi-dollar', label: 'Ganancias' },
+  { path: '/auth/profile', icon: 'pi-user', label: 'Perfil' }
 ]
 
 const currentLinks = computed(() => isRenter.value ? renterLinks : ownerLinks)
@@ -39,7 +39,7 @@ const isActive = (path) => {
 
 const handleLogout = () => {
   userStore.logout()
-  router.push('/login')
+  router.push('/auth/login')
 }
 </script>
 
