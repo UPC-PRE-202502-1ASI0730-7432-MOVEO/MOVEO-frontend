@@ -89,6 +89,40 @@
         "minimumRentalDays": 1
       },
       "bankAccount": null
+    },
+    {
+      "role": "renter",
+      "firstName": "abel",
+      "lastName": "perez",
+      "email": "perez@123.com",
+      "phone": "1234567689",
+      "dni": "12345678",
+      "licenseNumber": "Q12345678",
+      "avatar": null,
+      "verified": {
+        "email": false,
+        "phone": false,
+        "dni": false,
+        "license": false
+      },
+      "stats": {
+        "totalRentals": 0,
+        "totalSpent": 0,
+        "totalEarned": 0,
+        "activeRentals": 0,
+        "completedRentals": 0,
+        "canceledRentals": 0
+      },
+      "preferences": {
+        "language": "es",
+        "notifications": {
+          "email": true,
+          "push": true,
+          "sms": false
+        }
+      },
+      "bankAccount": null,
+      "id": 3
     }
   ],
   "vehicles": [
@@ -546,6 +580,81 @@
       "createdAt": "2025-10-09T00:56:23.332Z",
       "id": 6,
       "respondedAt": "2025-10-09T02:27:14.984Z"
+    },
+    {
+      "vehicleId": 5,
+      "renterId": 2,
+      "ownerId": 1,
+      "startDate": "2025-10-09T08:00:00Z",
+      "endDate": "2025-10-12T18:00:00Z",
+      "totalPrice": 270,
+      "status": "confirmed",
+      "pickupLocation": "Av. La Marina 456, San Miguel, Lima",
+      "returnLocation": "Av. La Marina 456, San Miguel, Lima",
+      "notes": "Necesito el auto para un viaje familiar. Soy cliente responsable.",
+      "createdAt": "2025-10-08T15:30:00Z",
+      "id": 7,
+      "acceptedAt": "2025-10-09T02:34:39.821Z"
+    },
+    {
+      "vehicleId": 8,
+      "renterId": 2,
+      "ownerId": 1,
+      "startDate": "2025-10-09",
+      "endDate": "2025-10-11",
+      "totalPrice": 64,
+      "status": "active",
+      "pickupLocation": "Av. Tomás Marsano 789, Surco, Lima",
+      "returnLocation": "Av. Tomás Marsano 789, Surco, Lima",
+      "notes": "Reserva realizada. Método de pago: cash",
+      "createdAt": "2025-10-09T02:33:39.395Z",
+      "id": 8,
+      "acceptedAt": "2025-10-09T02:34:33.585Z"
+    },
+    {
+      "vehicleId": 1,
+      "renterId": 2,
+      "ownerId": 1,
+      "startDate": "2025-10-09",
+      "endDate": "2025-10-10",
+      "totalPrice": 45,
+      "status": "active",
+      "pickupLocation": "Av. Arequipa 123, Miraflores, Lima",
+      "returnLocation": "Av. Arequipa 123, Miraflores, Lima",
+      "notes": "Reserva realizada. Método de pago: cash",
+      "createdAt": "2025-10-09T02:37:36.269Z",
+      "id": 9,
+      "acceptedAt": "2025-10-09T02:40:15.487Z"
+    },
+    {
+      "vehicleId": 2,
+      "renterId": 2,
+      "ownerId": 1,
+      "startDate": "2025-10-11",
+      "endDate": "2025-10-12",
+      "totalPrice": 55,
+      "status": "rejected",
+      "pickupLocation": "Av. Arequipa 123, Miraflores, Lima",
+      "returnLocation": "Av. Arequipa 123, Miraflores, Lima",
+      "notes": "Reserva realizada. Método de pago: cash",
+      "createdAt": "2025-10-09T02:38:19.068Z",
+      "id": 10,
+      "respondedAt": "2025-10-09T02:42:15.086Z"
+    },
+    {
+      "vehicleId": 3,
+      "renterId": 2,
+      "ownerId": 1,
+      "startDate": "2025-10-17",
+      "endDate": "2025-10-19",
+      "totalPrice": 100,
+      "status": "confirmed",
+      "pickupLocation": "Av. Javier Prado 234, San Isidro, Lima",
+      "returnLocation": "Av. Javier Prado 234, San Isidro, Lima",
+      "notes": "Reserva realizada. Método de pago: cash",
+      "createdAt": "2025-10-09T02:38:32.562Z",
+      "id": 11,
+      "acceptedAt": "2025-10-09T02:39:58.582Z"
     }
   ],
   "payments": [
@@ -598,6 +707,62 @@
       "description": "Alquiler de Nissan Versa - 16 día(s)",
       "createdAt": "2025-10-09T00:56:23.370Z",
       "id": 4
+    },
+    {
+      "rentalId": 8,
+      "payerId": 2,
+      "recipientId": 1,
+      "amount": 64,
+      "currency": "PEN",
+      "method": "cash",
+      "status": "pending",
+      "transactionId": "txn_1759977219442",
+      "type": "rental_payment",
+      "description": "Alquiler de Chevrolet Sail - 2 día(s)",
+      "createdAt": "2025-10-09T02:33:39.442Z",
+      "id": 5
+    },
+    {
+      "rentalId": 9,
+      "payerId": 2,
+      "recipientId": 1,
+      "amount": 45,
+      "currency": "PEN",
+      "method": "cash",
+      "status": "pending",
+      "transactionId": "txn_1759977456313",
+      "type": "rental_payment",
+      "description": "Alquiler de Toyota Corolla - 1 día(s)",
+      "createdAt": "2025-10-09T02:37:36.313Z",
+      "id": 6
+    },
+    {
+      "rentalId": 10,
+      "payerId": 2,
+      "recipientId": 1,
+      "amount": 55,
+      "currency": "PEN",
+      "method": "cash",
+      "status": "pending",
+      "transactionId": "txn_1759977499107",
+      "type": "rental_payment",
+      "description": "Alquiler de ToyotaXDDDD Corollaxdxdxdxd - 1 día(s)",
+      "createdAt": "2025-10-09T02:38:19.107Z",
+      "id": 7
+    },
+    {
+      "rentalId": 11,
+      "payerId": 2,
+      "recipientId": 1,
+      "amount": 100,
+      "currency": "PEN",
+      "method": "cash",
+      "status": "pending",
+      "transactionId": "txn_1759977512590",
+      "type": "rental_payment",
+      "description": "Alquiler de Honda Civic - 2 día(s)",
+      "createdAt": "2025-10-09T02:38:32.590Z",
+      "id": 8
     }
   ],
   "reviews": [

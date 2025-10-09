@@ -1,2 +1,0 @@
-// Archivo mínimo para domain
-

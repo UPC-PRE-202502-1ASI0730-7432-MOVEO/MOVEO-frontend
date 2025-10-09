@@ -130,9 +130,19 @@
 
           <div class="card-footer" v-else>
             <small>
-              <i class="pi pi-clock"></i>
-              {{ request.status === 'accepted' ? 'Aceptada' : 'Rechazada' }} el 
-              {{ formatDate(request.respondedAt) }}
+              <i class="pi pi-info-circle"></i>
+              <template v-if="request.status === 'confirmed'">
+                Confirmada el {{ formatDate(request.acceptedAt) }}
+              </template>
+              <template v-else-if="request.status === 'active'">
+                Alquiler en curso desde {{ formatDate(request.startDate) }}
+              </template>
+              <template v-else-if="request.status === 'completed'">
+                Completada el {{ formatDate(request.endDate) }}
+              </template>
+              <template v-else-if="request.status === 'rejected'">
+                Rechazada el {{ formatDate(request.respondedAt) }}
+              </template>
             </small>
           </div>
         </div>
@@ -155,15 +165,19 @@ const processingId = ref(null)
 const tabs = [
   { label: 'Todas', value: 'all', icon: 'pi pi-list' },
   { label: 'Pendientes', value: 'pending', icon: 'pi pi-clock' },
-  { label: 'Aceptadas', value: 'accepted', icon: 'pi pi-check-circle' },
+  { label: 'Confirmadas', value: 'confirmed', icon: 'pi pi-check-circle' },
+  { label: 'Activas', value: 'active', icon: 'pi pi-play-circle' },
+  { label: 'Completadas', value: 'completed', icon: 'pi pi-check' },
   { label: 'Rechazadas', value: 'rejected', icon: 'pi pi-times-circle' }
 ]
 
 const statusLabels = {
   all: '',
-  pending: 'pendientes',
-  accepted: 'aceptadas',
-  rejected: 'rechazadas'
+  pending: 'Pendiente',
+  confirmed: 'Confirmada',
+  active: 'Activa',
+  completed: 'Completada',
+  rejected: 'Rechazada'
 }
 
 const filteredRequests = computed(() => {
@@ -201,19 +215,32 @@ async function handleAccept(request) {
   try {
     processingId.value = request.id
     
+    // Determinar el estado según si el alquiler ya empezó
+    const now = new Date()
+    const startDate = new Date(request.startDate)
+    const endDate = new Date(request.endDate)
+    
+    let newStatus = 'confirmed' // Por defecto, alquiler confirmado para el futuro
+    
+    // Si la fecha de inicio ya pasó y aún no terminó, está activo
+    if (now >= startDate && now <= endDate) {
+      newStatus = 'active'
+    }
+    
     await apiClient.patch(`/rentals/${request.id}`, {
-      status: 'accepted',
-      respondedAt: new Date().toISOString()
+      status: newStatus,
+      acceptedAt: new Date().toISOString()
     })
     
     // Actualizar localmente
     const idx = requests.value.findIndex(r => r.id === request.id)
     if (idx !== -1) {
-      requests.value[idx].status = 'accepted'
-      requests.value[idx].respondedAt = new Date().toISOString()
+      requests.value[idx].status = newStatus
+      requests.value[idx].acceptedAt = new Date().toISOString()
     }
     
-    alert('Solicitud aceptada exitosamente')
+    const statusMessage = newStatus === 'active' ? 'activado' : 'confirmado'
+    alert(`✅ Solicitud aceptada y alquiler ${statusMessage} exitosamente`)
   } catch (error) {
     console.error('Error accepting request:', error)
     alert('Error al aceptar la solicitud')
@@ -575,9 +602,19 @@ onMounted(() => {
   color: #F57C00;
 }
 
-.status-badge.status-accepted {
+.status-badge.status-confirmed {
+  background: #E3F2FD;
+  color: #1565C0;
+}
+
+.status-badge.status-active {
   background: #E8F5E9;
   color: #2E7D32;
+}
+
+.status-badge.status-completed {
+  background: #F3E5F5;
+  color: #6A1B9A;
 }
 
 .status-badge.status-rejected {
