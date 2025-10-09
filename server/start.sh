@@ -1,1 +1,1 @@
-npx json-server --watch db.json --routes routes.json --port $PORT
+npx json-server --watch db.json --routes routes.json --port $PORT --host 0.0.0.0
