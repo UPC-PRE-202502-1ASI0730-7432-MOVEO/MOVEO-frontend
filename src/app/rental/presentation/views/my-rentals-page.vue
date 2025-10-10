@@ -83,11 +83,11 @@
       <!-- Empty State -->
       <div v-else class="empty-state">
         <div class="empty-icon">📋</div>
-        <h3 class="empty-title">No tienes alquileres {{ statusLabel }}</h3>
-        <p class="empty-message">Cuando realices un alquiler, aparecerá aquí.</p>
+        <h3 class="empty-title">{{ t('rental.myRentals.empty.title') }}</h3>
+        <p class="empty-message">{{ t('rental.myRentals.empty.message') }}</p>
         <router-link to="/rentals" class="btn btn-primary">
           <span class="icon">🔍</span>
-          Buscar Vehículos
+          {{ t('rental.myRentals.empty.searchVehicles') }}
         </router-link>
       </div>
     </div>

@@ -389,7 +389,11 @@
       "subtitle": "Publica tu vehículo y comienza a generar ingresos",
       "sections": {
         "basicInfo": "Información Básica",
-        "specifications": "Especificaciones",
+        "basicInfoDesc": "Datos generales del vehículo",
+        "specifications": "Especificaciones Técnicas",
+        "specificationsDesc": "Detalles importantes del vehículo",
+        "location": "Ubicación y Precio",
+        "locationDesc": "Dónde está y cuánto cuesta",
         "pricing": "Precio y Disponibilidad",
         "description": "Descripción",
         "photos": "Fotografías"
@@ -400,23 +404,27 @@
         "model": "Modelo",
         "modelPlaceholder": "ej., Corolla, Civic",
         "year": "Año",
-        "yearPlaceholder": "2024",
+        "yearPlaceholder": "2020",
         "licensePlate": "Placa",
         "licensePlatePlaceholder": "ABC-123",
         "color": "Color",
-        "colorPlaceholder": "Blanco, Negro, Rojo",
+        "colorPlaceholder": "Selecciona un color",
         "transmission": "Transmisión",
         "transmissionPlaceholder": "Selecciona transmisión",
         "fuelType": "Tipo de Combustible",
-        "fuelTypePlaceholder": "Selecciona tipo de combustible",
+        "fuelTypePlaceholder": "Selecciona combustible",
         "seats": "Número de Asientos",
         "seatsPlaceholder": "5",
+        "district": "Distrito",
+        "districtPlaceholder": "Selecciona un distrito",
+        "address": "Dirección",
+        "addressPlaceholder": "Av. Ejemplo 123 (opcional)",
         "dailyPrice": "Precio por Día (S/)",
         "dailyPricePlaceholder": "150.00",
         "status": "Estado",
         "statusPlaceholder": "Estado del vehículo",
         "description": "Descripción del Vehículo",
-        "descriptionPlaceholder": "Describe las características especiales, condiciones y ventajas de tu vehículo...",
+        "descriptionPlaceholder": "Ejemplo: Auto en excelente estado, recién mantenido, aire acondicionado, bluetooth...",
         "photos": "Fotos del Vehículo",
         "uploadPhotos": "Subir Fotos"
       },
@@ -575,7 +583,13 @@
     "header": {
       "notifications": "Notificaciones",
       "profile": "Perfil",
-      "settings": "Configuración"
+      "settings": "Configuración",
+      "renter": {
+        "title": "Encuentra tu próximo viaje"
+      },
+      "owner": {
+        "title": "Gestiona tu flota"
+      }
     },
     "footer": {
       "profile": "Perfil",

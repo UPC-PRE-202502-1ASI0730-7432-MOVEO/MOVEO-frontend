@@ -28,33 +28,35 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useUserStore } from '@/app/iam/application/user.store.js'
 
+const { t } = useI18n()
 const { currentUser, userRole, userName } = useUserStore()
 
 const roleLabel = computed(() => {
-  return userRole.value === 'renter' ? '👤 Cliente' : '🚗 Propietario'
+  return userRole.value === 'renter' ? '👤 ' + t('iam.register.roleSelection.roles.renter') : '🚗 ' + t('iam.register.roleSelection.roles.owner')
 })
 
 // Links para clientes (renters)
-const renterLinks = [
-  { path: '/rentals', label: 'Buscar Vehículos', icon: '🔍' },
-  { path: '/my-rentals', label: 'Mis Alquileres', icon: '📋' },
-  { path: '/favorites', label: 'Favoritos', icon: '❤️' },
-  { path: '/profile', label: 'Mi Perfil', icon: '👤' }
-]
+const renterLinks = computed(() => [
+  { path: '/rentals', label: t('shared.sidebar.renter.explore'), icon: '🔍' },
+  { path: '/my-rentals', label: t('shared.sidebar.renter.myRentals'), icon: '📋' },
+  { path: '/favorites', label: t('shared.sidebar.renter.favorites'), icon: '❤️' },
+  { path: '/profile', label: t('shared.sidebar.renter.profile'), icon: '👤' }
+])
 
 // Links para propietarios (owners)
-const ownerLinks = [
-  { path: '/my-vehicles', label: 'Mis Vehículos', icon: '🚗' },
-  { path: '/add-vehicle', label: 'Publicar Vehículo', icon: '➕' },
-  { path: '/rental-requests', label: 'Solicitudes', icon: '📩' },
-  { path: '/earnings', label: 'Ganancias', icon: '💰' },
-  { path: '/profile', label: 'Mi Perfil', icon: '👤' }
-]
+const ownerLinks = computed(() => [
+  { path: '/my-vehicles', label: t('shared.sidebar.owner.myVehicles'), icon: '🚗' },
+  { path: '/add-vehicle', label: t('rental.myVehicles.addVehicle'), icon: '➕' },
+  { path: '/rental-requests', label: t('shared.sidebar.owner.rentalRequests'), icon: '📩' },
+  { path: '/earnings', label: t('shared.sidebar.owner.earnings'), icon: '💰' },
+  { path: '/profile', label: t('shared.sidebar.owner.profile'), icon: '👤' }
+])
 
 const currentLinks = computed(() => {
-  return userRole.value === 'renter' ? renterLinks : ownerLinks
+  return userRole.value === 'renter' ? renterLinks.value : ownerLinks.value
 })
 </script>
 

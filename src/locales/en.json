@@ -388,7 +388,11 @@
       "subtitle": "Publish your vehicle and start earning",
       "sections": {
         "basicInfo": "Basic Information",
-        "specifications": "Specifications",
+        "basicInfoDesc": "General vehicle details",
+        "specifications": "Technical Specifications",
+        "specificationsDesc": "Important vehicle details",
+        "location": "Location & Pricing",
+        "locationDesc": "Where it is and how much it costs",
         "pricing": "Pricing & Availability",
         "description": "Description",
         "photos": "Photos"
@@ -399,23 +403,27 @@
         "model": "Model",
         "modelPlaceholder": "e.g., Corolla, Civic",
         "year": "Year",
-        "yearPlaceholder": "2024",
+        "yearPlaceholder": "2020",
         "licensePlate": "License Plate",
         "licensePlatePlaceholder": "ABC-123",
         "color": "Color",
-        "colorPlaceholder": "White, Black, Red",
+        "colorPlaceholder": "Select a color",
         "transmission": "Transmission",
         "transmissionPlaceholder": "Select transmission",
         "fuelType": "Fuel Type",
         "fuelTypePlaceholder": "Select fuel type",
         "seats": "Number of Seats",
         "seatsPlaceholder": "5",
+        "district": "District",
+        "districtPlaceholder": "Select a district",
+        "address": "Address",
+        "addressPlaceholder": "123 Example Ave (optional)",
         "dailyPrice": "Daily Price (S/)",
         "dailyPricePlaceholder": "150.00",
         "status": "Status",
         "statusPlaceholder": "Vehicle status",
         "description": "Vehicle Description",
-        "descriptionPlaceholder": "Describe special features, conditions and advantages of your vehicle...",
+        "descriptionPlaceholder": "Example: Car in excellent condition, recently serviced, air conditioning, bluetooth...",
         "photos": "Vehicle Photos",
         "uploadPhotos": "Upload Photos"
       },
@@ -574,7 +582,13 @@
     "header": {
       "notifications": "Notifications",
       "profile": "Profile",
-      "settings": "Settings"
+      "settings": "Settings",
+      "renter": {
+        "title": "Find your next trip"
+      },
+      "owner": {
+        "title": "Manage your fleet"
+      }
     },
     "footer": {
       "profile": "Profile",
