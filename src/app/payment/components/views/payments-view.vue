@@ -11,7 +11,6 @@ const paymentsStore = usePaymentsStore()
 const userStore = useUserStore()
 
 const { payments, fetchPayments } = paymentsStore
-const currentUser = userStore.currentUser
 
 // Filters
 const searchQuery = ref('')
@@ -20,24 +19,33 @@ const selectedMethod = ref('all')
 
 // Computed filtered payments based on user role
 const filteredPayments = computed(() => {
-  if (!payments.value || payments.value.length === 0) return []
+  console.log('🔄 Recalculando filteredPayments...')
+  
+  if (!payments.value || payments.value.length === 0) {
+    console.log('⚠️ No hay pagos disponibles:', payments.value)
+    return []
+  }
   
   let filtered = [...payments.value]
   
   console.log('🔍 Filtrando pagos:', {
     total: payments.value.length,
-    currentUserId: currentUser.value?.id,
-    isRenter: userStore.isRenter,
-    isOwner: userStore.isOwner
+    pagos: payments.value,
+    currentUser: userStore.currentUser.value,
+    currentUserId: userStore.currentUser.value?.id,
+    isRenter: userStore.isRenter.value,
+    isOwner: userStore.isOwner.value
   });
   
   // Filter by current user
   // Renters see payments they made (payerId)
   // Owners see payments they received (recipientId) or payments related to their vehicles
-  if (currentUser.value?.id) {
-    const userId = currentUser.value.id
-    const isRenterRole = userStore.isRenter
-    const isOwnerRole = userStore.isOwner
+  if (userStore.currentUser.value?.id) {
+    const userId = userStore.currentUser.value.id
+    const isRenterRole = userStore.isRenter.value
+    const isOwnerRole = userStore.isOwner.value
+    
+    console.log('🎯 Filtrando por usuario ID:', userId, 'Rol:', isRenterRole ? 'renter' : isOwnerRole ? 'owner' : 'unknown')
     
     filtered = filtered.filter(p => {
       // Check multiple possible field names for compatibility
@@ -50,23 +58,33 @@ const filteredPayments = computed(() => {
         recipientId,
         userId,
         isRenterRole,
-        isOwnerRole
+        isOwnerRole,
+        matchesPayer: payerId === userId,
+        matchesRecipient: recipientId === userId
       });
       
       if (isRenterRole) {
         // Renters see payments they made
-        return payerId === userId
+        const matches = payerId === userId
+        console.log(`  → Renter check: ${matches ? '✅ INCLUIR' : '❌ EXCLUIR'}`)
+        return matches
       } else if (isOwnerRole) {
         // Owners see payments they received
-        return recipientId === userId || payerId === userId
+        const matches = recipientId === userId || payerId === userId
+        console.log(`  → Owner check: ${matches ? '✅ INCLUIR' : '❌ EXCLUIR'}`)
+        return matches
       }
       
       // Fallback: show if any ID matches
-      return payerId === userId || recipientId === userId
+      const matches = payerId === userId || recipientId === userId
+      console.log(`  → Fallback check: ${matches ? '✅ INCLUIR' : '❌ EXCLUIR'}`)
+      return matches
     })
+  } else {
+    console.log('⚠️ No hay usuario logueado')
   }
   
-  console.log('✅ Pagos filtrados por usuario:', filtered.length);
+  console.log('✅ Pagos filtrados por usuario:', filtered.length, filtered);
   
   // Search filter
   if (searchQuery.value) {
@@ -107,37 +125,71 @@ const paymentStats = computed(() => {
 })
 
 onMounted(() => {
+  console.log('🚀 Componente payments-view montado')
+  console.log('👤 Usuario actual:', userStore.currentUser.value)
+  console.log('📊 Pagos iniciales:', payments.value)
   fetchPayments()
 })
 
 function getMethodIcon(method) {
+  if (!method) return 'pi-wallet' // Valor por defecto
+  
   const icons = {
     'card': 'pi-credit-card',
     'yape': 'pi-mobile',
     'cash': 'pi-money-bill',
-    'tarjeta': 'pi-credit-card'
+    'tarjeta': 'pi-credit-card',
+    'credit_card': 'pi-credit-card'
   }
-  return icons[method] || 'pi-wallet'
+  return icons[method.toLowerCase()] || 'pi-wallet'
 }
 
 function getMethodName(method) {
+  if (!method) return t('payment.history.methods.cash') // Valor por defecto
+  
   const methodKey = method.toLowerCase()
   const methodMap = {
     'card': 'payment.history.methods.card',
     'yape': 'payment.history.methods.yape',
     'cash': 'payment.history.methods.cash',
-    'tarjeta': 'payment.history.methods.card'
+    'tarjeta': 'payment.history.methods.card',
+    'credit_card': 'payment.history.methods.card'
   }
-  return t(methodMap[methodKey] || methodKey)
+  return t(methodMap[methodKey] || 'payment.history.methods.cash')
 }
 
 function getStatusClass(status) {
+  if (!status) return 'status-pending' // Valor por defecto
+  
   const classes = {
     'completado': 'status-completed',
+    'completed': 'status-completed',
     'pendiente': 'status-pending',
-    'cancelado': 'status-cancelled'
+    'pending': 'status-pending',
+    'cancelado': 'status-cancelled',
+    'cancelled': 'status-cancelled',
+    'held': 'status-pending',
+    'refunded': 'status-completed'
   }
-  return classes[status] || 'status-pending'
+  return classes[status.toLowerCase()] || 'status-pending'
+}
+
+function getStatusName(status) {
+  if (!status) return t('payment.history.status.pending')
+  
+  const statusMap = {
+    'completado': 'completed',
+    'completed': 'completed',
+    'pendiente': 'pending',
+    'pending': 'pending',
+    'cancelado': 'cancelled',
+    'cancelled': 'cancelled',
+    'held': 'pending',
+    'refunded': 'completed'
+  }
+  
+  const mappedStatus = statusMap[status.toLowerCase()] || 'pending'
+  return t(`payment.history.status.${mappedStatus}`)
 }
 
 function formatDate(date) {

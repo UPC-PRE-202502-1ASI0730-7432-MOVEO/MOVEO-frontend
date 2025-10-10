@@ -24,15 +24,19 @@ export default function usePaymentsStore() {
     async function fetchPayments() {
         try {
             console.log('🔄 Cargando pagos desde API...');
-            payments.value = await PaymentApi.listPayments();
-            console.log('✅ Pagos cargados:', payments.value);
+            const result = await PaymentApi.listPayments();
+            console.log('✅ Pagos recibidos de la API:', result);
+            payments.value = result;
+            console.log('✅ Pagos guardados en store:', payments.value);
             // Guardar en localStorage como cache
             saveToLocalStorage();
+            return result;
         } catch (err) {
             // Si hay error en la API, intentar cargar desde localStorage
             console.error("❌ Error al cargar pagos desde API:", err.message);
             console.log('🔄 Intentando cargar desde localStorage...');
             loadFromLocalStorage();
+            console.log('📦 Pagos cargados desde localStorage:', payments.value);
             errors.value.push(err);
         }
     }
