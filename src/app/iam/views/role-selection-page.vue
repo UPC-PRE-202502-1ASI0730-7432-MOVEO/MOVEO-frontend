@@ -1,9 +1,25 @@
 <template>
   <AuthLayout>
     <div class="role-selection">
+      <!-- Language Selector -->
+      <div class="language-selector">
+        <button 
+          @click="changeLanguage('es')" 
+          :class="['language-btn', { active: currentLocale === 'es' }]"
+        >
+          🇪🇸 ES
+        </button>
+        <button 
+          @click="changeLanguage('en')" 
+          :class="['language-btn', { active: currentLocale === 'en' }]"
+        >
+          🇺🇸 EN
+        </button>
+      </div>
+      
       <div class="role-selection__header">
-        <h1 class="role-selection__title">Únete a MOVEO</h1>
-        <p class="role-selection__subtitle">Selecciona cómo quieres usar nuestra plataforma</p>
+        <h1 class="role-selection__title">{{ t('iam.register.title') }}</h1>
+        <p class="role-selection__subtitle">{{ t('iam.register.selectRole.subtitle') }}</p>
       </div>
 
       <div class="role-selection__cards">
@@ -15,38 +31,38 @@
               <path d="m21 21-4.35-4.35"></path>
             </svg>
           </div>
-          <h2 class="role-card__title">Soy Cliente</h2>
+          <h2 class="role-card__title">{{ t('iam.register.selectRole.renter.title') }}</h2>
           <p class="role-card__description">
-            Busca y alquila vehículos de manera fácil y segura. Encuentra el auto perfecto para tu próxima aventura.
+            {{ t('iam.register.selectRole.renter.description') }}
           </p>
           <ul class="role-card__features">
             <li>
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="20 6 9 17 4 12"></polyline>
               </svg>
-              Búsqueda avanzada de vehículos
+              {{ t('iam.register.selectRole.renter.feature1') }}
             </li>
             <li>
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="20 6 9 17 4 12"></polyline>
               </svg>
-              Reservas instantáneas
+              {{ t('iam.register.selectRole.renter.feature2') }}
             </li>
             <li>
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="20 6 9 17 4 12"></polyline>
               </svg>
-              Historial de alquileres
+              {{ t('iam.register.selectRole.renter.feature3') }}
             </li>
             <li>
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="20 6 9 17 4 12"></polyline>
               </svg>
-              Soporte 24/7
+              {{ t('iam.register.selectRole.renter.feature4') }}
             </li>
           </ul>
           <div class="role-card__button">
-            Registrarme como Cliente
+            {{ t('iam.register.selectRole.renter.button') }}
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M5 12h14"></path>
               <path d="m12 5 7 7-7 7"></path>
@@ -63,38 +79,38 @@
               <path d="M9 21V9"></path>
             </svg>
           </div>
-          <h2 class="role-card__title">Soy Propietario</h2>
+          <h2 class="role-card__title">{{ t('iam.register.selectRole.owner.title') }}</h2>
           <p class="role-card__description">
-            Publica tus vehículos y genera ingresos extra. Gestiona tus autos de forma simple y eficiente.
+            {{ t('iam.register.selectRole.owner.description') }}
           </p>
           <ul class="role-card__features">
             <li>
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="20 6 9 17 4 12"></polyline>
               </svg>
-              Publicación ilimitada de vehículos
+              {{ t('iam.register.selectRole.owner.feature1') }}
             </li>
             <li>
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="20 6 9 17 4 12"></polyline>
               </svg>
-              Panel de control completo
+              {{ t('iam.register.selectRole.owner.feature2') }}
             </li>
             <li>
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="20 6 9 17 4 12"></polyline>
               </svg>
-              Gestión de reservas
+              {{ t('iam.register.selectRole.owner.feature3') }}
             </li>
             <li>
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="20 6 9 17 4 12"></polyline>
               </svg>
-              Ingresos garantizados
+              {{ t('iam.register.selectRole.owner.feature4') }}
             </li>
           </ul>
           <div class="role-card__button">
-            Registrarme como Propietario
+            {{ t('iam.register.selectRole.owner.button') }}
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M5 12h14"></path>
               <path d="m12 5 7 7-7 7"></path>
@@ -104,19 +120,71 @@
       </div>
 
       <div class="role-selection__footer">
-        <p>¿Ya tienes una cuenta? <router-link to="/auth/login" class="link">Inicia sesión</router-link></p>
+        <p>{{ t('iam.register.selectRole.footer') }} <router-link to="/auth/login" class="link">{{ t('iam.register.selectRole.login') }}</router-link></p>
       </div>
     </div>
   </AuthLayout>
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import AuthLayout from '../components/AuthLayout.vue'
+
+const { t, locale } = useI18n()
+
+const currentLocale = computed(() => locale.value)
+
+const changeLanguage = (lang) => {
+  locale.value = lang
+  localStorage.setItem('user-locale', lang)
+}
 </script>
 
 <style scoped>
 .role-selection {
   width: 100%;
+}
+
+/* Language Selector */
+.language-selector {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.language-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 1rem;
+  font-family: var(--font-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+
+.language-btn:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  color: white;
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
+}
+
+.language-btn.active {
+  background: var(--bg-moveo-green);
+  border-color: var(--bg-moveo-green);
+  color: white;
+  box-shadow: 0 4px 12px rgba(74, 222, 128, 0.4);
 }
 
 .role-selection__header {

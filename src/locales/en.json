@@ -106,5 +106,149 @@
       "noFavorites": "You have no favorite vehicles yet",
       "viewCatalog": "View Catalog"
     }
+  },
+  "iam": {
+    "login": {
+      "title": "Welcome Back",
+      "subtitle": "Sign in to your MOVEO account",
+      "email": "Email",
+      "emailPlaceholder": "Enter your email",
+      "password": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?",
+      "submit": "Sign In",
+      "submitting": "Signing in...",
+      "noAccount": "Don't have an account?",
+      "createAccount": "Create new account",
+      "demoUsers": "Demo Users",
+      "testAs": "Test as",
+      "errors": {
+        "emailRequired": "Email is required",
+        "emailInvalid": "Please enter a valid email",
+        "passwordRequired": "Password is required",
+        "passwordLength": "Password must be at least 6 characters",
+        "invalidCredentials": "Incorrect email or password"
+      }
+    },
+    "register": {
+      "title": "Create Account",
+      "subtitle": "Join MOVEO and start your journey",
+      "selectRole": {
+        "title": "Select Your Role",
+        "subtitle": "How would you like to use MOVEO?",
+        "renter": {
+          "title": "I'm a Client",
+          "description": "Search and rent vehicles easily and safely. Find the perfect car for your next adventure.",
+          "feature1": "Advanced vehicle search",
+          "feature2": "Instant bookings",
+          "feature3": "Rental history",
+          "feature4": "24/7 Support",
+          "button": "Register as Client"
+        },
+        "owner": {
+          "title": "I'm an Owner",
+          "description": "List your vehicles and generate extra income. Manage your cars simply and efficiently.",
+          "feature1": "Unlimited vehicle listings",
+          "feature2": "Complete control panel",
+          "feature3": "Booking management",
+          "feature4": "Guaranteed income",
+          "button": "Register as Owner"
+        },
+        "footer": "Already have an account?",
+        "login": "Sign in"
+      },
+      "common": {
+        "firstName": "First Name",
+        "firstNamePlaceholder": "Enter your first name",
+        "lastName": "Last Name",
+        "lastNamePlaceholder": "Enter your last name",
+        "email": "Email",
+        "emailPlaceholder": "Enter your email",
+        "phone": "Phone",
+        "phonePlaceholder": "+51 999 999 999",
+        "dni": "DNI",
+        "dniPlaceholder": "12345678",
+        "password": "Password",
+        "passwordPlaceholder": "Create a secure password",
+        "confirmPassword": "Confirm Password",
+        "confirmPasswordPlaceholder": "Confirm your password",
+        "termsAccept": "I accept the",
+        "termsLink": "terms and conditions",
+        "submit": "Create Account",
+        "submitting": "Creating account...",
+        "backToLogin": "Back to login",
+        "hasAccount": "Already have an account?"
+      },
+      "renter": {
+        "title": "Client Registration",
+        "subtitle": "Complete your information to rent vehicles",
+        "licenseNumber": "Driver's License",
+        "licenseNumberPlaceholder": "License number"
+      },
+      "owner": {
+        "title": "Owner Registration",
+        "subtitle": "Complete your information to rent out vehicles",
+        "licenseNumber": "Driver's License",
+        "licenseNumberPlaceholder": "License number",
+        "bankInfo": "Banking Information",
+        "bankName": "Bank",
+        "bankNamePlaceholder": "Select your bank",
+        "accountType": "Account Type",
+        "accountTypePlaceholder": "Select type",
+        "accountNumber": "Account Number",
+        "accountNumberPlaceholder": "Enter account number",
+        "accountTypes": {
+          "savings": "Savings",
+          "checking": "Checking"
+        }
+      },
+      "errors": {
+        "firstNameRequired": "First name is required",
+        "firstNameLength": "First name must be at least 2 characters",
+        "lastNameRequired": "Last name is required",
+        "lastNameLength": "Last name must be at least 2 characters",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Please enter a valid email",
+        "phoneRequired": "Phone is required",
+        "phoneInvalid": "Please enter a valid phone number",
+        "dniRequired": "DNI is required",
+        "dniInvalid": "DNI must be 8 digits",
+        "licenseRequired": "Driver's license is required",
+        "passwordRequired": "Password is required",
+        "passwordLength": "Password must be at least 6 characters",
+        "confirmPasswordRequired": "Please confirm your password",
+        "passwordMismatch": "Passwords do not match",
+        "termsRequired": "You must accept the terms and conditions",
+        "bankNameRequired": "Bank name is required",
+        "accountTypeRequired": "Account type is required",
+        "accountNumberRequired": "Account number is required",
+        "accountNumberInvalid": "Please enter a valid account number"
+      },
+      "success": {
+        "title": "Account Created!",
+        "message": "Your account has been successfully created",
+        "redirecting": "Redirecting to login..."
+      }
+    },
+    "profile": {
+      "title": "My Profile",
+      "personalInfo": "Personal Information",
+      "preferences": "Preferences",
+      "security": "Security",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "dni": "DNI",
+      "license": "Driver's License",
+      "memberSince": "Member since",
+      "verified": "Verified",
+      "notVerified": "Not verified",
+      "editProfile": "Edit Profile",
+      "changePassword": "Change Password",
+      "switchAccount": "Switch Account",
+      "switchTo": "Switch to",
+      "logout": "Sign Out"
+    }
   }
 }

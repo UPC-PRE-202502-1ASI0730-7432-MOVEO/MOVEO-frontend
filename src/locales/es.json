@@ -107,5 +107,149 @@
       "viewCatalog": "Ver Catálogo",
       "active": "Activo"
     }
+  },
+  "iam": {
+    "login": {
+      "title": "Bienvenido de Nuevo",
+      "subtitle": "Inicia sesión en tu cuenta de MOVEO",
+      "email": "Correo Electrónico",
+      "emailPlaceholder": "Ingresa tu correo electrónico",
+      "password": "Contraseña",
+      "passwordPlaceholder": "Ingresa tu contraseña",
+      "rememberMe": "Recuérdame",
+      "forgotPassword": "¿Olvidaste tu contraseña?",
+      "submit": "Iniciar Sesión",
+      "submitting": "Iniciando sesión...",
+      "noAccount": "¿No tienes una cuenta?",
+      "createAccount": "Crear nueva cuenta",
+      "demoUsers": "Usuarios Demo",
+      "testAs": "Probar como",
+      "errors": {
+        "emailRequired": "El correo electrónico es obligatorio",
+        "emailInvalid": "Por favor ingresa un correo electrónico válido",
+        "passwordRequired": "La contraseña es obligatoria",
+        "passwordLength": "La contraseña debe tener al menos 6 caracteres",
+        "invalidCredentials": "Correo o contraseña incorrectos"
+      }
+    },
+    "register": {
+      "title": "Crear Cuenta",
+      "subtitle": "Únete a MOVEO y comienza tu viaje",
+      "selectRole": {
+        "title": "Selecciona tu Rol",
+        "subtitle": "¿Cómo te gustaría usar MOVEO?",
+        "renter": {
+          "title": "Soy Cliente",
+          "description": "Busca y alquila vehículos de manera fácil y segura. Encuentra el auto perfecto para tu próxima aventura.",
+          "feature1": "Búsqueda avanzada de vehículos",
+          "feature2": "Reservas instantáneas",
+          "feature3": "Historial de alquileres",
+          "feature4": "Soporte 24/7",
+          "button": "Registrarme como Cliente"
+        },
+        "owner": {
+          "title": "Soy Propietario",
+          "description": "Publica tus vehículos y genera ingresos extra. Gestiona tus autos de forma simple y eficiente.",
+          "feature1": "Publicación ilimitada de vehículos",
+          "feature2": "Panel de control completo",
+          "feature3": "Gestión de reservas",
+          "feature4": "Ingresos garantizados",
+          "button": "Registrarme como Propietario"
+        },
+        "footer": "¿Ya tienes una cuenta?",
+        "login": "Inicia sesión"
+      },
+      "common": {
+        "firstName": "Nombre",
+        "firstNamePlaceholder": "Ingresa tu nombre",
+        "lastName": "Apellido",
+        "lastNamePlaceholder": "Ingresa tu apellido",
+        "email": "Correo Electrónico",
+        "emailPlaceholder": "Ingresa tu correo electrónico",
+        "phone": "Teléfono",
+        "phonePlaceholder": "+51 999 999 999",
+        "dni": "DNI",
+        "dniPlaceholder": "12345678",
+        "password": "Contraseña",
+        "passwordPlaceholder": "Crea una contraseña segura",
+        "confirmPassword": "Confirmar Contraseña",
+        "confirmPasswordPlaceholder": "Confirma tu contraseña",
+        "termsAccept": "Acepto los",
+        "termsLink": "términos y condiciones",
+        "submit": "Crear Cuenta",
+        "submitting": "Creando cuenta...",
+        "backToLogin": "Volver al inicio de sesión",
+        "hasAccount": "¿Ya tienes una cuenta?"
+      },
+      "renter": {
+        "title": "Registro de Cliente",
+        "subtitle": "Completa tu información para alquilar vehículos",
+        "licenseNumber": "Licencia de Conducir",
+        "licenseNumberPlaceholder": "Número de licencia"
+      },
+      "owner": {
+        "title": "Registro de Propietario",
+        "subtitle": "Completa tu información para alquilar tus vehículos",
+        "licenseNumber": "Licencia de Conducir",
+        "licenseNumberPlaceholder": "Número de licencia",
+        "bankInfo": "Información Bancaria",
+        "bankName": "Banco",
+        "bankNamePlaceholder": "Selecciona tu banco",
+        "accountType": "Tipo de Cuenta",
+        "accountTypePlaceholder": "Selecciona el tipo",
+        "accountNumber": "Número de Cuenta",
+        "accountNumberPlaceholder": "Ingresa el número de cuenta",
+        "accountTypes": {
+          "savings": "Ahorros",
+          "checking": "Corriente"
+        }
+      },
+      "errors": {
+        "firstNameRequired": "El nombre es obligatorio",
+        "firstNameLength": "El nombre debe tener al menos 2 caracteres",
+        "lastNameRequired": "El apellido es obligatorio",
+        "lastNameLength": "El apellido debe tener al menos 2 caracteres",
+        "emailRequired": "El correo electrónico es obligatorio",
+        "emailInvalid": "Por favor ingresa un correo electrónico válido",
+        "phoneRequired": "El teléfono es obligatorio",
+        "phoneInvalid": "Por favor ingresa un número de teléfono válido",
+        "dniRequired": "El DNI es obligatorio",
+        "dniInvalid": "El DNI debe tener 8 dígitos",
+        "licenseRequired": "La licencia de conducir es obligatoria",
+        "passwordRequired": "La contraseña es obligatoria",
+        "passwordLength": "La contraseña debe tener al menos 6 caracteres",
+        "confirmPasswordRequired": "Por favor confirma tu contraseña",
+        "passwordMismatch": "Las contraseñas no coinciden",
+        "termsRequired": "Debes aceptar los términos y condiciones",
+        "bankNameRequired": "El nombre del banco es obligatorio",
+        "accountTypeRequired": "El tipo de cuenta es obligatorio",
+        "accountNumberRequired": "El número de cuenta es obligatorio",
+        "accountNumberInvalid": "Por favor ingresa un número de cuenta válido"
+      },
+      "success": {
+        "title": "¡Cuenta Creada!",
+        "message": "Tu cuenta ha sido creada exitosamente",
+        "redirecting": "Redirigiendo al inicio de sesión..."
+      }
+    },
+    "profile": {
+      "title": "Mi Perfil",
+      "personalInfo": "Información Personal",
+      "preferences": "Preferencias",
+      "security": "Seguridad",
+      "name": "Nombre",
+      "email": "Correo Electrónico",
+      "phone": "Teléfono",
+      "dni": "DNI",
+      "license": "Licencia de Conducir",
+      "memberSince": "Miembro desde",
+      "verified": "Verificado",
+      "notVerified": "No verificado",
+      "editProfile": "Editar Perfil",
+      "changePassword": "Cambiar Contraseña",
+      "switchAccount": "Cambiar Cuenta",
+      "switchTo": "Cambiar a",
+      "logout": "Cerrar Sesión"
+    }
   }
 }
