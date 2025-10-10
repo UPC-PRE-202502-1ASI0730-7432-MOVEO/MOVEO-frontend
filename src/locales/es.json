@@ -251,5 +251,90 @@
       "switchTo": "Cambiar a",
       "logout": "Cerrar Sesión"
     }
+  },
+  "payment": {
+    "management": {
+      "summary": {
+        "totalAmount": "Monto total",
+        "concept": "Concepto"
+      },
+      "methods": {
+        "title": "Selecciona tu método de pago",
+        "card": "Tarjeta",
+        "yape": "Yape",
+        "cash": "Efectivo"
+      },
+      "card": {
+        "cardNumber": "Número de Tarjeta",
+        "cardNumberPlaceholder": "1234 5678 9012 3456",
+        "cardHolder": "Nombre del Titular",
+        "cardHolderPlaceholder": "JUAN PÉREZ",
+        "cardHolderDefault": "NOMBRE DEL TITULAR",
+        "expiry": "Vencimiento",
+        "expiryPlaceholder": "MM/AA",
+        "expiryDefault": "MM/AA",
+        "ccv": "CCV",
+        "ccvPlaceholder": "123"
+      },
+      "yape": {
+        "instructions": "Escanea el código QR con tu app de Yape y luego sube el comprobante",
+        "qrCode": "Código QR de Yape",
+        "receipt": "Comprobante de Pago",
+        "selectFile": "Seleccionar archivo"
+      },
+      "cash": {
+        "title": "Pago en Efectivo",
+        "description": "Podrás realizar el pago en efectivo directamente con el propietario al recoger el vehículo.",
+        "note": "El propietario confirmará la recepción del pago."
+      },
+      "actions": {
+        "cancel": "Cancelar",
+        "confirm": "Confirmar Pago"
+      },
+      "alerts": {
+        "selectMethod": "Por favor selecciona un método de pago",
+        "invalidCard": "Por favor ingresa un número de tarjeta válido",
+        "invalidHolder": "Por favor ingresa el nombre del titular",
+        "invalidExpiry": "Por favor ingresa una fecha válida (MM/AA)",
+        "invalidCCV": "Por favor ingresa un CCV válido",
+        "uploadReceipt": "Por favor sube el comprobante de Yape"
+      }
+    },
+    "history": {
+      "title": "Historial de Pagos",
+      "subtitle": "Gestiona y visualiza tus transacciones",
+      "stats": {
+        "total": "Total",
+        "transactions": "Transacciones",
+        "completed": "Completados",
+        "pending": "Pendientes"
+      },
+      "filters": {
+        "searchPlaceholder": "Buscar por ID, método o monto...",
+        "status": "Estado",
+        "method": "Método",
+        "all": "Todos"
+      },
+      "status": {
+        "completed": "completado",
+        "pending": "pendiente",
+        "cancelled": "cancelado"
+      },
+      "methods": {
+        "card": "Tarjeta",
+        "yape": "Yape",
+        "cash": "Efectivo"
+      },
+      "empty": {
+        "title": "No se encontraron pagos",
+        "message": "No hay transacciones que coincidan con los filtros seleccionados."
+      },
+      "details": {
+        "amount": "Monto",
+        "transactionId": "ID Transacción",
+        "date": "Fecha",
+        "description": "Descripción"
+      }
+    }
   }
 }

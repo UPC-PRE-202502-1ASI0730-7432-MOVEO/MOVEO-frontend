@@ -250,5 +250,90 @@
       "switchTo": "Switch to",
       "logout": "Sign Out"
     }
+  },
+  "payment": {
+    "management": {
+      "summary": {
+        "totalAmount": "Total amount",
+        "concept": "Concept"
+      },
+      "methods": {
+        "title": "Select your payment method",
+        "card": "Card",
+        "yape": "Yape",
+        "cash": "Cash"
+      },
+      "card": {
+        "cardNumber": "Card Number",
+        "cardNumberPlaceholder": "1234 5678 9012 3456",
+        "cardHolder": "Cardholder Name",
+        "cardHolderPlaceholder": "JOHN DOE",
+        "cardHolderDefault": "CARDHOLDER NAME",
+        "expiry": "Expiration",
+        "expiryPlaceholder": "MM/YY",
+        "expiryDefault": "MM/YY",
+        "ccv": "CCV",
+        "ccvPlaceholder": "123"
+      },
+      "yape": {
+        "instructions": "Scan the QR code with your Yape app and then upload the receipt",
+        "qrCode": "Yape QR Code",
+        "receipt": "Payment Receipt",
+        "selectFile": "Select file"
+      },
+      "cash": {
+        "title": "Cash Payment",
+        "description": "You can make the payment in cash directly with the owner when picking up the vehicle.",
+        "note": "The owner will confirm receipt of payment."
+      },
+      "actions": {
+        "cancel": "Cancel",
+        "confirm": "Confirm Payment"
+      },
+      "alerts": {
+        "selectMethod": "Please select a payment method",
+        "invalidCard": "Please enter a valid card number",
+        "invalidHolder": "Please enter the cardholder name",
+        "invalidExpiry": "Please enter a valid date (MM/YY)",
+        "invalidCCV": "Please enter a valid CCV",
+        "uploadReceipt": "Please upload the Yape receipt"
+      }
+    },
+    "history": {
+      "title": "Payment History",
+      "subtitle": "Manage and view your transactions",
+      "stats": {
+        "total": "Total",
+        "transactions": "Transactions",
+        "completed": "Completed",
+        "pending": "Pending"
+      },
+      "filters": {
+        "searchPlaceholder": "Search by ID, method or amount...",
+        "status": "Status",
+        "method": "Method",
+        "all": "All"
+      },
+      "status": {
+        "completed": "completed",
+        "pending": "pending",
+        "cancelled": "cancelled"
+      },
+      "methods": {
+        "card": "Card",
+        "yape": "Yape",
+        "cash": "Cash"
+      },
+      "empty": {
+        "title": "No payments found",
+        "message": "There are no transactions matching the selected filters."
+      },
+      "details": {
+        "amount": "Amount",
+        "transactionId": "Transaction ID",
+        "date": "Date",
+        "description": "Description"
+      }
+    }
   }
 }
