@@ -14,20 +14,20 @@
       </div>
 
       <!-- Message -->
-      <h1 class="title">¡Oops! Página no encontrada</h1>
+      <h1 class="title">{{ t('shared.pageNotFound.subtitle') }}</h1>
       <p class="message">
-        Parece que esta página se fue de viaje. No podemos encontrarla por ningún lado.
+        {{ t('shared.pageNotFound.message') }}
       </p>
 
       <!-- Actions -->
       <div class="actions">
         <router-link to="/" class="btn btn-primary">
           <span class="btn-icon">🏠</span>
-          Volver al Inicio
+          {{ t('shared.pageNotFound.backHome') }}
         </router-link>
         <router-link to="/rentals" class="btn btn-secondary">
           <span class="btn-icon">🚗</span>
-          Ver Vehículos
+          {{ t('shared.pageNotFound.viewVehicles') }}
         </router-link>
       </div>
 
@@ -47,7 +47,9 @@
 </template>
 
 <script setup>
-// No props or logic needed
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 </script>
 
 <style scoped>

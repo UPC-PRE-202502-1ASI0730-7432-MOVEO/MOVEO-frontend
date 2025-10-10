@@ -553,5 +553,85 @@
         "status": "Estado"
       }
     }
+  },
+  "shared": {
+    "sidebar": {
+      "renter": {
+        "dashboard": "Inicio",
+        "explore": "Explorar Vehículos",
+        "myRentals": "Mis Alquileres",
+        "favorites": "Favoritos",
+        "profile": "Perfil"
+      },
+      "owner": {
+        "dashboard": "Inicio",
+        "myVehicles": "Mis Vehículos",
+        "rentalRequests": "Solicitudes de Alquiler",
+        "earnings": "Ganancias",
+        "profile": "Perfil"
+      },
+      "logout": "Cerrar Sesión"
+    },
+    "header": {
+      "notifications": "Notificaciones",
+      "profile": "Perfil",
+      "settings": "Configuración"
+    },
+    "footer": {
+      "profile": "Perfil",
+      "dashboard": "Inicio",
+      "explore": "Explorar",
+      "favorites": "Favoritos"
+    },
+    "pageNotFound": {
+      "title": "404",
+      "subtitle": "Página No Encontrada",
+      "message": "Lo sentimos, la página que buscas no existe",
+      "backHome": "Volver al Inicio",
+      "viewVehicles": "Ver Vehículos"
+    },
+    "comingSoon": {
+      "title": "Próximamente",
+      "message": "Esta función está en desarrollo",
+      "backHome": "Volver al Inicio"
+    },
+    "dashboard": {
+      "renter": {
+        "welcome": "Bienvenido, {name}",
+        "summary": "Gestiona tus alquileres y descubre nuevos vehículos",
+        "activeRentals": "Alquileres Activos",
+        "completedTrips": "Viajes Completados",
+        "totalSpent": "Total Gastado",
+        "favorites": "Favoritos",
+        "upcomingTrips": "Próximos Viajes",
+        "noUpcomingTrips": "No tienes viajes próximos",
+        "exploreVehicles": "Explorar Vehículos",
+        "myFavorites": "Mis Favoritos",
+        "noFavorites": "Aún no tienes vehículos favoritos",
+        "viewDetails": "Ver Detalles",
+        "total": "Total",
+        "status": {
+          "pending": "Pendiente",
+          "confirmed": "Confirmado",
+          "active": "Activo"
+        }
+      },
+      "owner": {
+        "welcome": "Bienvenido, {name}",
+        "summary": "Gestiona tus vehículos y solicitudes",
+        "publishedVehicles": "Vehículos Publicados",
+        "totalEarnings": "Ganancias Totales",
+        "activeRentals": "Alquileres Activos",
+        "pendingRequests": "Solicitudes Pendientes",
+        "pendingRequestsTitle": "Solicitudes Pendientes",
+        "noPendingRequests": "No tienes solicitudes pendientes",
+        "requestsWaiting": "Tienes {count} solicitudes esperando tu respuesta",
+        "reviewRequests": "Revisar Solicitudes",
+        "myVehicles": "Mis Vehículos",
+        "noVehicles": "No tienes vehículos publicados",
+        "addVehicle": "Agregar Vehículo",
+        "viewAll": "Ver Todos"
+      }
+    }
   }
 }

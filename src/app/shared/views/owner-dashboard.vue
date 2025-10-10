@@ -1,8 +1,10 @@
 <script setup>
 import { computed, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useUserStore } from '@/app/iam/application/user.store'
 import { useRentalStore } from '@/app/rental/application/rental.store'
 
+const { t } = useI18n()
 const userStore = useUserStore()
 const rentalStore = useRentalStore()
 
@@ -71,8 +73,8 @@ function formatDate(dateString) {
 <template>
   <div class="owner-dashboard">
     <div class="dashboard-header">
-      <h1>Panel de Propietario 🚀</h1>
-      <p>Gestiona tus vehículos y solicitudes</p>
+      <h1>{{ t('shared.dashboard.owner.welcome', { name: user?.firstName || 'Propietario' }) }} 🚀</h1>
+      <p>{{ t('shared.dashboard.owner.summary') }}</p>
     </div>
 
     <!-- Stats Grid -->
@@ -81,7 +83,7 @@ function formatDate(dateString) {
         <div class="stat-icon">💵</div>
         <div class="stat-content">
           <h3>${{ stats.totalEarned.toFixed(2) }}</h3>
-          <p>Total Ganado</p>
+          <p>{{ t('shared.dashboard.owner.totalEarnings') }}</p>
         </div>
       </div>
 
@@ -89,7 +91,7 @@ function formatDate(dateString) {
         <div class="stat-icon">🚗</div>
         <div class="stat-content">
           <h3>{{ stats.totalVehicles }}</h3>
-          <p>Vehículos Publicados</p>
+          <p>{{ t('shared.dashboard.owner.publishedVehicles') }}</p>
         </div>
       </div>
 
@@ -97,7 +99,7 @@ function formatDate(dateString) {
         <div class="stat-icon">📋</div>
         <div class="stat-content">
           <h3>{{ stats.activeRentals }}</h3>
-          <p>Alquileres Activos</p>
+          <p>{{ t('shared.dashboard.owner.activeRentals') }}</p>
         </div>
       </div>
 
@@ -105,7 +107,7 @@ function formatDate(dateString) {
         <div class="stat-icon">⏳</div>
         <div class="stat-content">
           <h3>{{ stats.pendingRequests }}</h3>
-          <p>Solicitudes Pendientes</p>
+          <p>{{ t('shared.dashboard.owner.pendingRequests') }}</p>
         </div>
       </div>
     </div>
@@ -113,16 +115,16 @@ function formatDate(dateString) {
     <!-- Solicitudes Pendientes -->
     <div class="section">
       <div class="section-header">
-        <h2>Solicitudes Pendientes</h2>
-        <router-link to="/rental/rental-requests" class="link">Ver todas →</router-link>
+        <h2>{{ t('shared.dashboard.owner.pendingRequestsTitle') }}</h2>
+        <router-link to="/rental/rental-requests" class="link">{{ t('shared.dashboard.owner.viewAll') }} →</router-link>
       </div>
       <div class="empty-state" v-if="pendingRequests.length === 0">
-        <p>No tienes solicitudes pendientes</p>
+        <p>{{ t('shared.dashboard.owner.noPendingRequests') }}</p>
       </div>
       <div v-else>
         <div class="alert-box">
-          <p>⚠️ Tienes <strong>{{ stats.pendingRequests }}</strong> solicitudes esperando tu respuesta</p>
-          <router-link to="/rental/rental-requests" class="btn-primary">Revisar Solicitudes</router-link>
+          <p>⚠️ {{ t('shared.dashboard.owner.requestsWaiting', { count: stats.pendingRequests }) }}</p>
+          <router-link to="/rental/rental-requests" class="btn-primary">{{ t('shared.dashboard.owner.reviewRequests') }}</router-link>
         </div>
 
         <!-- Mostrar últimas 3 solicitudes -->
@@ -166,12 +168,12 @@ function formatDate(dateString) {
     <!-- Mis Vehículos -->
     <div class="section">
       <div class="section-header">
-        <h2>Mis Vehículos</h2>
-        <router-link to="/rental/add-vehicle" class="btn-secondary">+ Agregar Vehículo</router-link>
+        <h2>{{ t('shared.dashboard.owner.myVehicles') }}</h2>
+        <router-link to="/rental/add-vehicle" class="btn-secondary">+ {{ t('shared.dashboard.owner.addVehicle') }}</router-link>
       </div>
       <div class="empty-state" v-if="ownerVehicles.length === 0">
-        <p>No tienes vehículos publicados</p>
-        <router-link to="/rental/add-vehicle" class="btn-primary">+ Agregar Vehículo</router-link>
+        <p>{{ t('shared.dashboard.owner.noVehicles') }}</p>
+        <router-link to="/rental/add-vehicle" class="btn-primary">+ {{ t('shared.dashboard.owner.addVehicle') }}</router-link>
       </div>
       <div v-else class="vehicles-grid">
         <div

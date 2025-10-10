@@ -552,5 +552,85 @@
         "status": "Status"
       }
     }
+  },
+  "shared": {
+    "sidebar": {
+      "renter": {
+        "dashboard": "Dashboard",
+        "explore": "Explore Vehicles",
+        "myRentals": "My Rentals",
+        "favorites": "Favorites",
+        "profile": "Profile"
+      },
+      "owner": {
+        "dashboard": "Dashboard",
+        "myVehicles": "My Vehicles",
+        "rentalRequests": "Rental Requests",
+        "earnings": "Earnings",
+        "profile": "Profile"
+      },
+      "logout": "Sign Out"
+    },
+    "header": {
+      "notifications": "Notifications",
+      "profile": "Profile",
+      "settings": "Settings"
+    },
+    "footer": {
+      "profile": "Profile",
+      "dashboard": "Dashboard",
+      "explore": "Explore",
+      "favorites": "Favorites"
+    },
+    "pageNotFound": {
+      "title": "404",
+      "subtitle": "Page Not Found",
+      "message": "Sorry, the page you're looking for doesn't exist",
+      "backHome": "Back to Home",
+      "viewVehicles": "View Vehicles"
+    },
+    "comingSoon": {
+      "title": "Coming Soon",
+      "message": "This feature is under development",
+      "backHome": "Back to Home"
+    },
+    "dashboard": {
+      "renter": {
+        "welcome": "Welcome, {name}",
+        "summary": "Manage your rentals and discover new vehicles",
+        "activeRentals": "Active Rentals",
+        "completedTrips": "Completed Trips",
+        "totalSpent": "Total Spent",
+        "favorites": "Favorites",
+        "upcomingTrips": "Upcoming Trips",
+        "noUpcomingTrips": "You have no upcoming trips",
+        "exploreVehicles": "Explore Vehicles",
+        "myFavorites": "My Favorites",
+        "noFavorites": "You have no favorite vehicles yet",
+        "viewDetails": "View Details",
+        "total": "Total",
+        "status": {
+          "pending": "Pending",
+          "confirmed": "Confirmed",
+          "active": "Active"
+        }
+      },
+      "owner": {
+        "welcome": "Welcome, {name}",
+        "summary": "Manage your vehicles and requests",
+        "publishedVehicles": "Published Vehicles",
+        "totalEarnings": "Total Earnings",
+        "activeRentals": "Active Rentals",
+        "pendingRequests": "Pending Requests",
+        "pendingRequestsTitle": "Pending Requests",
+        "noPendingRequests": "You have no pending requests",
+        "requestsWaiting": "You have {count} requests waiting for your response",
+        "reviewRequests": "Review Requests",
+        "myVehicles": "My Vehicles",
+        "noVehicles": "You have no published vehicles",
+        "addVehicle": "Add Vehicle",
+        "viewAll": "View All"
+      }
+    }
   }
 }

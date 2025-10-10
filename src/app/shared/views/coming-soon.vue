@@ -2,13 +2,13 @@
   <div class="coming-soon-page">
     <div class="content">
       <div class="icon">🚧</div>
-      <h1 class="title">Próximamente</h1>
-      <p class="message">Esta funcionalidad estará disponible muy pronto.</p>
+      <h1 class="title">{{ t('shared.comingSoon.title') }}</h1>
+      <p class="message">{{ t('shared.comingSoon.message') }}</p>
       <p class="hint">Estamos trabajando para ofrecerte la mejor experiencia.</p>
       <div class="actions">
         <router-link to="/" class="btn btn-primary">
           <span class="icon">🏠</span>
-          Volver al Inicio
+          {{ t('shared.comingSoon.backHome') }}
         </router-link>
         <button @click="$router.back()" class="btn btn-secondary">
           <span class="icon">⬅️</span>
@@ -20,7 +20,9 @@
 </template>
 
 <script setup>
-// No props needed
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 </script>
 
 <style scoped>

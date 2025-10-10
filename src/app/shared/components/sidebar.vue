@@ -15,21 +15,21 @@ const isRenter = computed(() => userStore.isRenter.value)
 const isOwner = computed(() => userStore.isOwner.value)
 
 const renterLinks = computed(() => [
-  { path: '/dashboard', icon: 'pi-home', label: t('sidebar.renter.dashboard') },
-  { path: '/rental/browse', icon: 'pi-car', label: t('sidebar.renter.browse') },
-  { path: '/rental/my-rentals', icon: 'pi-list', label: t('sidebar.renter.myRentals') },
-  { path: '/payments/my-payments', icon: 'pi-wallet', label: t('sidebar.renter.myPayments') },
-  { path: '/rental/favorites', icon: 'pi-heart', label: t('sidebar.renter.favorites') },
-  { path: '/auth/profile', icon: 'pi-user', label: t('sidebar.renter.profile') }
+  { path: '/dashboard', icon: 'pi-home', label: t('shared.sidebar.renter.dashboard') },
+  { path: '/rental/browse', icon: 'pi-car', label: t('shared.sidebar.renter.explore') },
+  { path: '/rental/my-rentals', icon: 'pi-list', label: t('shared.sidebar.renter.myRentals') },
+  { path: '/payments/my-payments', icon: 'pi-wallet', label: t('payment.history.title') },
+  { path: '/rental/favorites', icon: 'pi-heart', label: t('shared.sidebar.renter.favorites') },
+  { path: '/auth/profile', icon: 'pi-user', label: t('shared.sidebar.renter.profile') }
 ])
 
 const ownerLinks = computed(() => [
-  { path: '/dashboard', icon: 'pi-home', label: t('sidebar.owner.dashboard') },
-  { path: '/rental/my-vehicles', icon: 'pi-car', label: t('sidebar.owner.vehicles') },
-  { path: '/rental/add-vehicle', icon: 'pi-plus-circle', label: t('sidebar.owner.addVehicle') },
-  { path: '/rental/rental-requests', icon: 'pi-inbox', label: t('sidebar.owner.requests') },
-  { path: '/rental/earnings', icon: 'pi-dollar', label: t('sidebar.owner.earnings') },
-  { path: '/auth/profile', icon: 'pi-user', label: t('sidebar.owner.profile') }
+  { path: '/dashboard', icon: 'pi-home', label: t('shared.sidebar.owner.dashboard') },
+  { path: '/rental/my-vehicles', icon: 'pi-car', label: t('shared.sidebar.owner.myVehicles') },
+  { path: '/rental/add-vehicle', icon: 'pi-plus-circle', label: t('rental.myVehicles.addVehicle') },
+  { path: '/rental/rental-requests', icon: 'pi-inbox', label: t('shared.sidebar.owner.rentalRequests') },
+  { path: '/rental/earnings', icon: 'pi-dollar', label: t('shared.sidebar.owner.earnings') },
+  { path: '/auth/profile', icon: 'pi-user', label: t('shared.sidebar.owner.profile') }
 ])
 
 const currentLinks = computed(() => isRenter.value ? renterLinks.value : ownerLinks.value)
@@ -88,7 +88,7 @@ const handleLogout = () => {
     <!-- Logout -->
     <button @click="handleLogout" class="logout-btn">
       <i class="pi pi-sign-out nav-icon"></i>
-      <span class="nav-label">Cerrar Sesión</span>
+      <span class="nav-label">{{ t('shared.sidebar.logout') }}</span>
     </button>
   </aside>
 </template>
