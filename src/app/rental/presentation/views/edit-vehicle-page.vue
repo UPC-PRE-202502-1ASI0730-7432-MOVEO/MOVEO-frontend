@@ -3,25 +3,25 @@
     <div class="page-header">
       <button @click="goBack" class="btn-back">
         <i class="pi pi-arrow-left"></i>
-        Volver
+        {{ t('rental.editVehicle.actions.cancel') }}
       </button>
       <h1>
         <i class="pi pi-pencil"></i>
-        Editar Vehículo
+        {{ t('rental.editVehicle.title') }}
       </h1>
-      <p class="subtitle">Actualiza la información de tu vehículo</p>
+      <p class="subtitle">{{ t('rental.editVehicle.subtitle') }}</p>
     </div>
 
     <div v-if="loading" class="loading-container">
       <i class="pi pi-spin pi-spinner"></i>
-      <p>Cargando información del vehículo...</p>
+      <p>{{ t('rental.editVehicle.loading') }}</p>
     </div>
 
     <div v-else-if="!vehicle" class="error-container">
       <i class="pi pi-exclamation-triangle"></i>
-      <h2>Vehículo no encontrado</h2>
-      <p>No se pudo cargar la información del vehículo</p>
-      <pv-button label="Volver" @click="goBack" />
+      <h2>{{ t('rental.editVehicle.notFound.title') }}</h2>
+      <p>{{ t('rental.editVehicle.notFound.message') }}</p>
+      <pv-button :label="t('rental.editVehicle.actions.cancel')" @click="goBack" />
     </div>
 
     <div v-else class="form-container">
@@ -36,22 +36,22 @@
 
           <div class="form-row">
             <div class="form-field">
-              <label for="brand">Marca <span class="required">*</span></label>
+              <label for="brand">{{ t('rental.addVehicle.fields.brand') }} <span class="required">*</span></label>
               <pv-input-text 
                 id="brand"
                 v-model="formData.brand" 
-                placeholder="Ej: Toyota, Honda, Ford"
+                :placeholder="t('rental.addVehicle.fields.brandPlaceholder')"
                 :class="{ 'p-invalid': errors.brand }"
               />
               <small v-if="errors.brand" class="error-message">{{ errors.brand }}</small>
             </div>
 
             <div class="form-field">
-              <label for="model">Modelo <span class="required">*</span></label>
+              <label for="model">{{ t('rental.addVehicle.fields.model') }} <span class="required">*</span></label>
               <pv-input-text 
                 id="model"
                 v-model="formData.model" 
-                placeholder="Ej: Corolla, Civic, Mustang"
+                :placeholder="t('rental.addVehicle.fields.modelPlaceholder')"
                 :class="{ 'p-invalid': errors.model }"
               />
               <small v-if="errors.model" class="error-message">{{ errors.model }}</small>
@@ -60,11 +60,11 @@
 
           <div class="form-row">
             <div class="form-field">
-              <label for="year">Año <span class="required">*</span></label>
+              <label for="year">{{ t('rental.addVehicle.fields.year') }} <span class="required">*</span></label>
               <pv-input-number 
                 id="year"
                 v-model="formData.year" 
-                placeholder="2020"
+                :placeholder="t('rental.addVehicle.fields.yearPlaceholder')"
                 :min="1990"
                 :max="2025"
                 :use-grouping="false"
@@ -74,12 +74,12 @@
             </div>
 
             <div class="form-field">
-              <label for="color">Color <span class="required">*</span></label>
+              <label for="color">{{ t('rental.addVehicle.fields.color') }} <span class="required">*</span></label>
               <pv-select 
                 id="color"
                 v-model="formData.color" 
                 :options="colorOptions"
-                placeholder="Selecciona un color"
+                :placeholder="t('rental.addVehicle.fields.colorPlaceholder')"
                 :class="{ 'p-invalid': errors.color }"
               />
               <small v-if="errors.color" class="error-message">{{ errors.color }}</small>
@@ -91,29 +91,29 @@
         <div class="form-section">
           <div class="section-header">
             <i class="pi pi-cog"></i>
-            <h2>Especificaciones Técnicas</h2>
+            <h2>{{ t('rental.addVehicle.sections.specifications') }}</h2>
           </div>
 
           <div class="form-row">
             <div class="form-field">
-              <label for="transmission">Transmisión <span class="required">*</span></label>
+              <label for="transmission">{{ t('rental.addVehicle.fields.transmission') }} <span class="required">*</span></label>
               <pv-select 
                 id="transmission"
                 v-model="formData.transmission" 
                 :options="transmissionOptions"
-                placeholder="Selecciona transmisión"
+                :placeholder="t('rental.addVehicle.fields.transmissionPlaceholder')"
                 :class="{ 'p-invalid': errors.transmission }"
               />
               <small v-if="errors.transmission" class="error-message">{{ errors.transmission }}</small>
             </div>
 
             <div class="form-field">
-              <label for="fuelType">Tipo de Combustible <span class="required">*</span></label>
+              <label for="fuelType">{{ t('rental.addVehicle.fields.fuelType') }} <span class="required">*</span></label>
               <pv-select 
                 id="fuelType"
                 v-model="formData.fuelType" 
                 :options="fuelTypeOptions"
-                placeholder="Selecciona combustible"
+                :placeholder="t('rental.addVehicle.fields.fuelTypePlaceholder')"
                 :class="{ 'p-invalid': errors.fuelType }"
               />
               <small v-if="errors.fuelType" class="error-message">{{ errors.fuelType }}</small>
@@ -122,11 +122,11 @@
 
           <div class="form-row">
             <div class="form-field">
-              <label for="seats">Número de Asientos <span class="required">*</span></label>
+              <label for="seats">{{ t('rental.addVehicle.fields.seats') }} <span class="required">*</span></label>
               <pv-input-number 
                 id="seats"
                 v-model="formData.seats" 
-                placeholder="4"
+                :placeholder="t('rental.addVehicle.fields.seatsPlaceholder')"
                 :min="2"
                 :max="9"
                 :class="{ 'p-invalid': errors.seats }"
@@ -135,11 +135,11 @@
             </div>
 
             <div class="form-field">
-              <label for="licensePlate">Placa <span class="required">*</span></label>
+              <label for="licensePlate">{{ t('rental.addVehicle.fields.licensePlate') }} <span class="required">*</span></label>
               <pv-input-text 
                 id="licensePlate"
                 v-model="formData.licensePlate" 
-                placeholder="ABC-123"
+                :placeholder="t('rental.addVehicle.fields.licensePlatePlaceholder')"
                 :class="{ 'p-invalid': errors.licensePlate }"
               />
               <small v-if="errors.licensePlate" class="error-message">{{ errors.licensePlate }}</small>
@@ -151,28 +151,28 @@
         <div class="form-section">
           <div class="section-header">
             <i class="pi pi-map-marker"></i>
-            <h2>Ubicación</h2>
+            <h2>{{ t('rental.addVehicle.sections.location') }}</h2>
           </div>
 
           <div class="form-row">
             <div class="form-field">
-              <label for="district">Distrito <span class="required">*</span></label>
+              <label for="district">{{ t('rental.addVehicle.fields.district') }} <span class="required">*</span></label>
               <pv-select 
                 id="district"
                 v-model="formData.location.district" 
                 :options="districtOptions"
-                placeholder="Selecciona un distrito"
+                :placeholder="t('rental.addVehicle.fields.districtPlaceholder')"
                 :class="{ 'p-invalid': errors.district }"
               />
               <small v-if="errors.district" class="error-message">{{ errors.district }}</small>
             </div>
 
             <div class="form-field">
-              <label for="address">Dirección</label>
+              <label for="address">{{ t('rental.addVehicle.fields.address') }}</label>
               <pv-input-text 
                 id="address"
                 v-model="formData.location.address" 
-                placeholder="Av. Ejemplo 123 (opcional)"
+                :placeholder="t('rental.addVehicle.fields.addressPlaceholder')"
               />
             </div>
           </div>
@@ -182,12 +182,12 @@
         <div class="form-section">
           <div class="section-header">
             <i class="pi pi-dollar"></i>
-            <h2>Precio y Disponibilidad</h2>
+            <h2>{{ t('rental.addVehicle.sections.pricing') }}</h2>
           </div>
 
           <div class="form-row">
             <div class="form-field">
-              <label for="dailyPrice">Precio por Día (S/) <span class="required">*</span></label>
+              <label for="dailyPrice">{{ t('rental.addVehicle.fields.dailyPrice') }} <span class="required">*</span></label>
               <pv-input-number 
                 id="dailyPrice"
                 v-model="formData.dailyPrice" 
@@ -196,21 +196,21 @@
                 locale="es-PE"
                 :min="50"
                 :max="10000"
-                placeholder="150.00"
+                :placeholder="t('rental.addVehicle.fields.dailyPricePlaceholder')"
                 :class="{ 'p-invalid': errors.dailyPrice }"
               />
               <small v-if="errors.dailyPrice" class="error-message">{{ errors.dailyPrice }}</small>
             </div>
 
             <div class="form-field">
-              <label for="status">Estado</label>
+              <label for="status">{{ t('rental.addVehicle.fields.status') }}</label>
               <pv-select 
                 id="status"
                 v-model="formData.status" 
                 :options="statusOptions"
                 option-label="label"
                 option-value="value"
-                placeholder="Estado del vehículo"
+                :placeholder="t('rental.addVehicle.fields.statusPlaceholder')"
               />
             </div>
           </div>
@@ -220,16 +220,16 @@
         <div class="form-section">
           <div class="section-header">
             <i class="pi pi-align-left"></i>
-            <h2>Descripción</h2>
+            <h2>{{ t('rental.addVehicle.sections.description') }}</h2>
           </div>
 
           <div class="form-field full-width">
-            <label for="description">Descripción del Vehículo</label>
+            <label for="description">{{ t('rental.addVehicle.fields.description') }}</label>
             <pv-textarea 
               id="description"
               v-model="formData.description" 
               rows="5"
-              placeholder="Describe las características especiales, condiciones y ventajas de tu vehículo..."
+              :placeholder="t('rental.addVehicle.fields.descriptionPlaceholder')"
             />
           </div>
         </div>
@@ -238,11 +238,11 @@
         <div class="form-section">
           <div class="section-header">
             <i class="pi pi-images"></i>
-            <h2>Imágenes</h2>
+            <h2>{{ t('rental.addVehicle.fields.photos') }}</h2>
           </div>
 
           <div class="form-field full-width">
-            <label>Fotos del Vehículo</label>
+            <label>{{ t('rental.addVehicle.fields.uploadPhotos') }}</label>
             <div class="image-upload-area">
               <pv-file-upload 
                 name="images"
@@ -306,9 +306,11 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { useUserStore } from '@/app/iam/application/user.store'
 import { RentalApi } from '@/app/rental/infrastructure/rental-api.js'
 
+const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
 const userStore = useUserStore()

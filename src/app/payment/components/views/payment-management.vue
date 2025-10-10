@@ -1,5 +1,8 @@
 <script setup>
 import { ref, computed } from "vue";
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 // Props para recibir datos del modal
 const props = defineProps({
@@ -46,19 +49,19 @@ function selectMethod(method) {
 
 function validateCardPayment() {
   if (!cardInfo.value.number || cardInfo.value.number.length < 16) {
-    alert('Por favor ingresa un número de tarjeta válido');
+    alert(t('payment.management.alerts.invalidCard'))
     return false;
   }
   if (!cardInfo.value.name || cardInfo.value.name.trim().length < 3) {
-    alert('Por favor ingresa el nombre del titular');
+    alert(t('payment.management.alerts.invalidHolder'))
     return false;
   }
   if (!cardInfo.value.expiry || !/^\d{2}\/\d{2}$/.test(cardInfo.value.expiry)) {
-    alert('Por favor ingresa una fecha válida (MM/AA)');
+    alert(t('payment.management.alerts.invalidExpiry'))
     return false;
   }
   if (!cardInfo.value.ccv || cardInfo.value.ccv.length < 3) {
-    alert('Por favor ingresa un CCV válido');
+    alert(t('payment.management.alerts.invalidCCV'))
     return false;
   }
   return true;
@@ -66,7 +69,7 @@ function validateCardPayment() {
 
 function confirmPayment() {
   if (!selectedMethod.value) {
-    alert('Por favor selecciona un método de pago');
+    alert(t('payment.management.alerts.selectMethod'))
     return;
   }
 
@@ -76,7 +79,7 @@ function confirmPayment() {
   }
 
   if (selectedMethod.value === 'yape' && !yapeReceipt.value) {
-    alert('Por favor sube el comprobante de Yape');
+    alert(t('payment.management.alerts.uploadReceipt'))
     return;
   }
 
@@ -129,11 +132,11 @@ function formatCCV(event) {
     <!-- Resumen del pago -->
     <div class="payment-summary">
       <div class="summary-item">
-        <span class="summary-label">Monto total:</span>
+        <span class="summary-label">{{ t('payment.management.summary.totalAmount') }}:</span>
         <span class="summary-value">S/. {{ amount.toFixed(2) }}</span>
       </div>
       <div class="summary-item">
-        <span class="summary-label">Concepto:</span>
+        <span class="summary-label">{{ t('payment.management.summary.concept') }}:</span>
         <span class="summary-description">{{ description }}</span>
       </div>
     </div>
@@ -142,7 +145,7 @@ function formatCCV(event) {
     <div class="payment-methods">
       <h3 class="methods-title">
         <i class="pi pi-credit-card"></i>
-        Selecciona tu método de pago
+        {{ t('payment.management.methods.title') }}
       </h3>
       
       <div class="method-buttons">
@@ -153,7 +156,7 @@ function formatCCV(event) {
           @click="selectMethod('card')"
         >
           <i class="pi pi-credit-card"></i>
-          <span>Tarjeta</span>
+          <span>{{ t('payment.management.methods.card') }}</span>
         </button>
 
         <button
@@ -163,7 +166,7 @@ function formatCCV(event) {
           @click="selectMethod('yape')"
         >
           <i class="pi pi-mobile"></i>
-          <span>Yape</span>
+          <span>{{ t('payment.management.methods.yape') }}</span>
         </button>
 
         <button
@@ -173,7 +176,7 @@ function formatCCV(event) {
           @click="selectMethod('cash')"
         >
           <i class="pi pi-money-bill"></i>
-          <span>Efectivo</span>
+          <span>{{ t('payment.management.methods.cash') }}</span>
         </button>
       </div>
     </div>
@@ -184,8 +187,8 @@ function formatCCV(event) {
         <div class="card-chip"></div>
         <div class="card-number">{{ formattedCardNumber }}</div>
         <div class="card-info">
-          <div class="card-holder">{{ cardInfo.name || 'NOMBRE DEL TITULAR' }}</div>
-          <div class="card-expiry">{{ cardInfo.expiry || 'MM/AA' }}</div>
+          <div class="card-holder">{{ cardInfo.name || t('payment.management.card.cardHolderDefault') }}</div>
+          <div class="card-expiry">{{ cardInfo.expiry || t('payment.management.card.expiryDefault') }}</div>
         </div>
         <div class="card-brand">VISA</div>
       </div>
@@ -194,14 +197,14 @@ function formatCCV(event) {
         <div class="form-field">
           <label class="form-label">
             <i class="pi pi-credit-card"></i>
-            Número de Tarjeta
+            {{ t('payment.management.card.cardNumber') }}
           </label>
           <input
             type="text"
             class="form-input"
             v-model="cardInfo.number"
             @input="formatCardNumber"
-            placeholder="1234 5678 9012 3456"
+            :placeholder="t('payment.management.card.cardNumberPlaceholder')"
             maxlength="16"
           />
         </div>
@@ -209,13 +212,13 @@ function formatCCV(event) {
         <div class="form-field">
           <label class="form-label">
             <i class="pi pi-user"></i>
-            Nombre del Titular
+            {{ t('payment.management.card.cardHolder') }}
           </label>
           <input
             type="text"
             class="form-input"
             v-model="cardInfo.name"
-            placeholder="JUAN PÉREZ"
+            :placeholder="t('payment.management.card.cardHolderPlaceholder')"
             style="text-transform: uppercase"
           />
         </div>
@@ -224,14 +227,14 @@ function formatCCV(event) {
           <div class="form-field">
             <label class="form-label">
               <i class="pi pi-calendar"></i>
-              Vencimiento
+              {{ t('payment.management.card.expiry') }}
             </label>
             <input
               type="text"
               class="form-input"
               v-model="cardInfo.expiry"
               @input="formatExpiry"
-              placeholder="MM/AA"
+              :placeholder="t('payment.management.card.expiryPlaceholder')"
               maxlength="5"
             />
           </div>
@@ -239,14 +242,14 @@ function formatCCV(event) {
           <div class="form-field">
             <label class="form-label">
               <i class="pi pi-lock"></i>
-              CCV
+              {{ t('payment.management.card.ccv') }}
             </label>
             <input
               type="text"
               class="form-input"
               v-model="cardInfo.ccv"
               @input="formatCCV"
-              placeholder="123"
+              :placeholder="t('payment.management.card.ccvPlaceholder')"
               maxlength="4"
             />
           </div>
@@ -258,13 +261,13 @@ function formatCCV(event) {
     <div v-if="selectedMethod === 'yape'" class="payment-form yape-payment">
       <div class="yape-instructions">
         <i class="pi pi-info-circle"></i>
-        <p>Escanea el código QR con tu app de Yape y luego sube el comprobante</p>
+        <p>{{ t('payment.management.yape.instructions') }}</p>
       </div>
 
       <div class="yape-qr-container">
         <div class="qr-placeholder">
           <i class="pi pi-qrcode"></i>
-          <p>Código QR de Yape</p>
+          <p>{{ t('payment.management.yape.qrCode') }}</p>
           <span class="qr-amount">S/. {{ amount.toFixed(2) }}</span>
         </div>
       </div>
@@ -272,7 +275,7 @@ function formatCCV(event) {
       <div class="form-field">
         <label class="form-label">
           <i class="pi pi-upload"></i>
-          Comprobante de Pago
+          {{ t('payment.management.yape.receipt') }}
         </label>
         <div class="file-upload">
           <input
@@ -284,7 +287,7 @@ function formatCCV(event) {
           />
           <label for="yape-receipt" class="file-label">
             <i class="pi pi-cloud-upload"></i>
-            <span v-if="!yapeReceiptName">Seleccionar archivo</span>
+            <span v-if="!yapeReceiptName">{{ t('payment.management.yape.selectFile') }}</span>
             <span v-else class="file-name">{{ yapeReceiptName }}</span>
           </label>
         </div>
@@ -296,11 +299,11 @@ function formatCCV(event) {
       <div class="cash-info">
         <i class="pi pi-info-circle"></i>
         <div>
-          <h4>Pago en Efectivo</h4>
-          <p>Podrás realizar el pago en efectivo directamente con el propietario al recoger el vehículo.</p>
+          <h4>{{ t('payment.management.cash.title') }}</h4>
+          <p>{{ t('payment.management.cash.description') }}</p>
           <p class="cash-note">
             <i class="pi pi-exclamation-triangle"></i>
-            El propietario confirmará la recepción del pago.
+            {{ t('payment.management.cash.note') }}
           </p>
         </div>
       </div>
@@ -314,7 +317,7 @@ function formatCCV(event) {
         @click="cancelPayment"
       >
         <i class="pi pi-times"></i>
-        Cancelar
+        {{ t('payment.management.actions.cancel') }}
       </button>
       
       <button
@@ -324,7 +327,7 @@ function formatCCV(event) {
         :disabled="!selectedMethod"
       >
         <i class="pi pi-check"></i>
-        Confirmar Pago
+        {{ t('payment.management.actions.confirm') }}
       </button>
     </div>
   </div>

@@ -1,10 +1,12 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import usePaymentsStore from '../../application/payment.store.js'
 import { useUserStore } from '@/app/iam/application/user.store.js'
 
 const router = useRouter()
+const { t } = useI18n()
 const paymentsStore = usePaymentsStore()
 const userStore = useUserStore()
 
@@ -119,13 +121,14 @@ function getMethodIcon(method) {
 }
 
 function getMethodName(method) {
-  const names = {
-    'card': 'Tarjeta',
-    'yape': 'Yape',
-    'cash': 'Efectivo',
-    'tarjeta': 'Tarjeta'
+  const methodKey = method.toLowerCase()
+  const methodMap = {
+    'card': 'payment.history.methods.card',
+    'yape': 'payment.history.methods.yape',
+    'cash': 'payment.history.methods.cash',
+    'tarjeta': 'payment.history.methods.card'
   }
-  return names[method] || method
+  return t(methodMap[methodKey] || methodKey)
 }
 
 function getStatusClass(status) {
@@ -154,9 +157,9 @@ function formatDate(date) {
       <div class="header-content">
         <h1 class="page-title">
           <i class="pi pi-wallet"></i>
-          Historial de Pagos
+          {{ t('payment.history.title') }}
         </h1>
-        <p class="page-subtitle">Gestiona y visualiza tus transacciones</p>
+        <p class="page-subtitle">{{ t('payment.history.subtitle') }}</p>
       </div>
     </div>
 
@@ -167,7 +170,7 @@ function formatDate(date) {
           <i class="pi pi-dollar"></i>
         </div>
         <div class="stat-info">
-          <p class="stat-label">Total</p>
+          <p class="stat-label">{{ t('payment.history.stats.total') }}</p>
           <p class="stat-value">S/. {{ paymentStats.total }}</p>
         </div>
       </div>
@@ -177,7 +180,7 @@ function formatDate(date) {
           <i class="pi pi-list"></i>
         </div>
         <div class="stat-info">
-          <p class="stat-label">Transacciones</p>
+          <p class="stat-label">{{ t('payment.history.stats.transactions') }}</p>
           <p class="stat-value">{{ paymentStats.count }}</p>
         </div>
       </div>
@@ -187,7 +190,7 @@ function formatDate(date) {
           <i class="pi pi-check-circle"></i>
         </div>
         <div class="stat-info">
-          <p class="stat-label">Completados</p>
+          <p class="stat-label">{{ t('payment.history.stats.completed') }}</p>
           <p class="stat-value">{{ paymentStats.completed }}</p>
         </div>
       </div>
@@ -197,7 +200,7 @@ function formatDate(date) {
           <i class="pi pi-clock"></i>
         </div>
         <div class="stat-info">
-          <p class="stat-label">Pendientes</p>
+          <p class="stat-label">{{ t('payment.history.stats.pending') }}</p>
           <p class="stat-value">{{ paymentStats.pending }}</p>
         </div>
       </div>
@@ -210,29 +213,29 @@ function formatDate(date) {
         <input
           v-model="searchQuery"
           type="text"
-          placeholder="Buscar por ID, método o monto..."
+          :placeholder="t('payment.history.filters.searchPlaceholder')"
           class="search-input"
         />
       </div>
 
       <div class="filter-group">
         <div class="filter-item">
-          <label for="status-filter">Estado</label>
+          <label for="status-filter">{{ t('payment.history.filters.status') }}</label>
           <select id="status-filter" v-model="selectedStatus" class="filter-select">
-            <option value="all">Todos</option>
-            <option value="completado">Completado</option>
-            <option value="pendiente">Pendiente</option>
-            <option value="cancelado">Cancelado</option>
+            <option value="all">{{ t('payment.history.filters.all') }}</option>
+            <option value="completado">{{ t('payment.history.stats.completed') }}</option>
+            <option value="pendiente">{{ t('payment.history.stats.pending') }}</option>
+            <option value="cancelado">{{ t('payment.history.status.cancelled') }}</option>
           </select>
         </div>
 
         <div class="filter-item">
-          <label for="method-filter">Método</label>
+          <label for="method-filter">{{ t('payment.history.filters.method') }}</label>
           <select id="method-filter" v-model="selectedMethod" class="filter-select">
-            <option value="all">Todos</option>
-            <option value="card">Tarjeta</option>
-            <option value="yape">Yape</option>
-            <option value="cash">Efectivo</option>
+            <option value="all">{{ t('payment.history.filters.all') }}</option>
+            <option value="card">{{ t('payment.history.methods.card') }}</option>
+            <option value="yape">{{ t('payment.history.methods.yape') }}</option>
+            <option value="cash">{{ t('payment.history.methods.cash') }}</option>
           </select>
         </div>
       </div>
@@ -242,8 +245,8 @@ function formatDate(date) {
     <div class="payments-list">
       <div v-if="filteredPayments.length === 0" class="empty-state">
         <i class="pi pi-inbox"></i>
-        <h3>No se encontraron pagos</h3>
-        <p>No hay transacciones que coincidan con los filtros seleccionados.</p>
+        <h3>{{ t('payment.history.empty.title') }}</h3>
+        <p>{{ t('payment.history.empty.message') }}</p>
       </div>
 
       <div v-else class="payment-cards">
@@ -258,13 +261,13 @@ function formatDate(date) {
               <span>{{ getMethodName(payment.method) }}</span>
             </div>
             <span :class="['status-badge', getStatusClass(payment.status)]">
-              {{ payment.status }}
+              {{ t(`payment.history.status.${payment.status}`) }}
             </span>
           </div>
 
           <div class="payment-body">
             <div class="payment-amount">
-              <span class="amount-label">Monto</span>
+              <span class="amount-label">{{ t('payment.history.details.amount') }}</span>
               <span class="amount-value">S/. {{ parseFloat(payment.amount).toFixed(2) }}</span>
             </div>
 
@@ -272,7 +275,7 @@ function formatDate(date) {
               <div class="detail-row">
                 <span class="detail-label">
                   <i class="pi pi-hashtag"></i>
-                  ID Transacción
+                  {{ t('payment.history.details.transactionId') }}
                 </span>
                 <span class="detail-value">#{{ payment.id }}</span>
               </div>
@@ -280,7 +283,7 @@ function formatDate(date) {
               <div class="detail-row">
                 <span class="detail-label">
                   <i class="pi pi-calendar"></i>
-                  Fecha
+                  {{ t('payment.history.details.date') }}
                 </span>
                 <span class="detail-value">{{ formatDate(payment.createdAt) }}</span>
               </div>
@@ -288,7 +291,7 @@ function formatDate(date) {
               <div v-if="payment.description" class="detail-row">
                 <span class="detail-label">
                   <i class="pi pi-info-circle"></i>
-                  Descripción
+                  {{ t('payment.history.details.description') }}
                 </span>
                 <span class="detail-value">{{ payment.description }}</span>
               </div>

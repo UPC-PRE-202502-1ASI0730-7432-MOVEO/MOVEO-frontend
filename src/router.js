@@ -11,10 +11,10 @@ import adventureRoutes from '@/app/adventure/presentation/adventure-router.js'
 import paymentRoutes from '@/app/payment/presentation/payment-router.js'
 
 const routes = [
-  // Root redirect
+  // Root redirect - Start at login page
   { 
     path: '/', 
-    redirect: '/dashboard',
+    redirect: '/auth/login',
     meta: { title: 'MOVEO' }
   },
   

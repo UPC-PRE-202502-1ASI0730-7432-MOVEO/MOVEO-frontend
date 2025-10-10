@@ -14,15 +14,15 @@
       <div class="footer-links">
         <router-link to="/profile" class="footer-link">
           <i class="pi pi-user"></i>
-          Perfil
+          {{ t('shared.footer.profile') }}
         </router-link>
         <router-link to="/dashboard" class="footer-link">
           <i class="pi pi-home"></i>
-          Dashboard
+          {{ t('shared.footer.dashboard') }}
         </router-link>
         <a href="mailto:support@moveo.com" class="footer-link">
           <i class="pi pi-envelope"></i>
-          Soporte
+          {{ t('footer.support') }}
         </a>
       </div>
     </div>
@@ -31,7 +31,9 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const currentYear = computed(() => new Date().getFullYear())
 </script>
 

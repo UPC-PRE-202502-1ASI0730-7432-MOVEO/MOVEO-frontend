@@ -1,9 +1,11 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { RentalApi } from '@/app/rental/infrastructure/rental-api.js'
 import VehicleRentalHistory from '../components/vehicle-rental-history.vue'
 
+const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 
@@ -37,7 +39,7 @@ function goBack() {
     <!-- Loading -->
     <div v-if="loading" class="loading-container">
       <i class="pi pi-spin pi-spinner"></i>
-      <p>Cargando vehículo...</p>
+      <p>{{ t('rental.vehicleDetail.loading') }}</p>
     </div>
 
     <!-- Content -->
@@ -46,7 +48,7 @@ function goBack() {
       <div class="page-header">
         <button @click="goBack" class="btn-back">
           <i class="pi pi-arrow-left"></i>
-          Volver a Mis Vehículos
+          {{ t('rental.vehicleDetail.backToMyVehicles') }}
         </button>
       </div>
 
@@ -60,7 +62,7 @@ function goBack() {
           <div class="vehicle-header">
             <h1>{{ vehicle.brand }} {{ vehicle.model }}</h1>
             <span :class="['status-badge', vehicle.status]">
-              {{ vehicle.status === 'active' ? 'Activo' : 'Pausado' }}
+              {{ vehicle.status === 'active' ? t('rental.myVehicles.vehicleCard.available') : t('rental.myVehicles.vehicleCard.unavailable') }}
             </span>
           </div>
           
@@ -75,7 +77,7 @@ function goBack() {
             </div>
             <div class="spec-item">
               <i class="pi pi-users"></i>
-              <span>{{ vehicle.seats }} asientos</span>
+              <span>{{ vehicle.seats }} {{ t('rental.vehicleDetail.features.seats') }}</span>
             </div>
             <div class="spec-item">
               <i class="pi pi-cog"></i>
@@ -89,11 +91,11 @@ function goBack() {
 
           <div class="pricing">
             <div class="price-item">
-              <span class="label">Precio por día:</span>
+              <span class="label">{{ t('rental.vehicleDetail.pricePerDay') }}:</span>
               <span class="price">S/ {{ vehicle.dailyPrice }}</span>
             </div>
             <div class="price-item">
-              <span class="label">Depósito:</span>
+              <span class="label">{{ t('rental.addVehicle.fields.dailyPrice') }}:</span>
               <span class="price">S/ {{ vehicle.depositAmount }}</span>
             </div>
           </div>

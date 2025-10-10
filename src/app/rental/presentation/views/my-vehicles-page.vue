@@ -1,9 +1,11 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { useUserStore } from '@/app/iam/application/user.store'
 import { RentalApi } from '@/app/rental/infrastructure/rental-api.js'
 
+const { t } = useI18n()
 const router = useRouter()
 const userStore = useUserStore()
 
@@ -47,29 +49,29 @@ function goToAddVehicle() {
   <div class="my-vehicles-page">
     <div class="page-header">
       <div>
-        <h1>Mis Vehículos</h1>
-        <p>Gestiona tu flota de vehículos</p>
+        <h1>{{ t('rental.myVehicles.title') }}</h1>
+        <p>{{ t('rental.myVehicles.subtitle') }}</p>
       </div>
       <button @click="goToAddVehicle" class="btn-add">
         <i class="pi pi-plus"></i>
-        Agregar Vehículo
+        {{ t('rental.myVehicles.addVehicle') }}
       </button>
     </div>
 
     <!-- Loading -->
     <div v-if="loading" class="loading-container">
       <i class="pi pi-spin pi-spinner"></i>
-      <p>Cargando vehículos...</p>
+      <p>{{ t('rental.myVehicles.loading') }}</p>
     </div>
 
     <!-- Empty State -->
     <div v-else-if="vehicles.length === 0" class="empty-state">
       <i class="pi pi-car"></i>
-      <h2>No tienes vehículos publicados</h2>
-      <p>Empieza a ganar dinero compartiendo tu auto</p>
+      <h2>{{ t('rental.myVehicles.empty.title') }}</h2>
+      <p>{{ t('rental.myVehicles.empty.message') }}</p>
       <button @click="goToAddVehicle" class="btn-primary">
         <i class="pi pi-plus"></i>
-        Agregar mi primer vehículo
+        {{ t('rental.myVehicles.addFirstVehicle') }}
       </button>
     </div>
 
@@ -89,7 +91,7 @@ function goToAddVehicle() {
           <div class="vehicle-header">
             <h3>{{ vehicle.brand }} {{ vehicle.model }}</h3>
             <span :class="['status-badge', vehicle.status]">
-              {{ vehicle.status === 'active' ? 'Activo' : 'Pausado' }}
+              {{ vehicle.status === 'active' ? t('rental.myVehicles.vehicleCard.available') : t('rental.myVehicles.vehicleCard.unavailable') }}
             </span>
           </div>
           
@@ -108,17 +110,17 @@ function goToAddVehicle() {
 
           <div class="vehicle-price">
             <span class="price">S/ {{ vehicle.dailyPrice }}</span>
-            <span class="price-label">/día</span>
+            <span class="price-label">/{{ t('rental.browse.vehicleCard.perDay') }}</span>
           </div>
         </div>
 
         <div class="vehicle-actions">
           <button @click="editVehicle(vehicle.id, $event)" class="btn-edit">
             <i class="pi pi-pencil"></i>
-            Editar
+            {{ t('rental.myVehicles.vehicleCard.edit') }}
           </button>
           <button class="btn-view">
-            Ver Detalles
+            {{ t('rental.browse.vehicleCard.viewDetails') }}
             <i class="pi pi-arrow-right"></i>
           </button>
         </div>

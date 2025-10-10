@@ -1,29 +1,45 @@
 <template>
   <AuthLayout>
     <div class="auth-card">
+      <!-- Language Selector -->
+      <div class="language-selector">
+        <button 
+          @click="changeLanguage('es')" 
+          :class="['language-btn', { active: currentLocale === 'es' }]"
+        >
+          🇪🇸 ES
+        </button>
+        <button 
+          @click="changeLanguage('en')" 
+          :class="['language-btn', { active: currentLocale === 'en' }]"
+        >
+          🇺🇸 EN
+        </button>
+      </div>
+      
       <div class="login-form">
       <div class="login-form__header">
-        <h1 class="login-form__title">Bienvenido a MOVEO</h1>
-        <p class="login-form__subtitle">Inicia sesión para continuar</p>
+        <h1 class="login-form__title">{{ t('iam.login.title') }}</h1>
+        <p class="login-form__subtitle">{{ t('iam.login.subtitle') }}</p>
       </div>
 
       <form @submit.prevent="handleSubmit" class="form">
         <div class="form__field">
-          <label for="email" class="form__label">Correo Electrónico</label>
+          <label for="email" class="form__label">{{ t('iam.login.email') }}</label>
           <input
             id="email"
             v-model="formData.email"
             type="email"
             class="form__input"
             :class="{ 'form__input--error': errors.email }"
-            placeholder="tu@email.com"
+            :placeholder="t('iam.login.emailPlaceholder')"
             required
           />
           <span v-if="errors.email" class="form__error">{{ errors.email }}</span>
         </div>
 
         <div class="form__field">
-          <label for="password" class="form__label">Contraseña</label>
+          <label for="password" class="form__label">{{ t('iam.login.password') }}</label>
           <div class="form__input-wrapper">
             <input
               id="password"
@@ -31,7 +47,7 @@
               :type="showPassword ? 'text' : 'password'"
               class="form__input"
               :class="{ 'form__input--error': errors.password }"
-              placeholder="Ingresa tu contraseña"
+              :placeholder="t('iam.login.passwordPlaceholder')"
               required
             />
             <button
@@ -57,9 +73,9 @@
         <div class="form__options">
           <label class="form__checkbox">
             <input v-model="formData.rememberMe" type="checkbox" />
-            <span>Recordarme</span>
+            <span>{{ t('iam.login.rememberMe') }}</span>
           </label>
-          <a href="#" class="link">¿Olvidaste tu contraseña?</a>
+          <a href="#" class="link">{{ t('iam.login.forgotPassword') }}</a>
         </div>
 
         <button
@@ -67,8 +83,8 @@
           class="form__submit"
           :disabled="isSubmitting"
         >
-          <span v-if="!isSubmitting">Iniciar sesión</span>
-          <span v-else>Iniciando sesión...</span>
+          <span v-if="!isSubmitting">{{ t('iam.login.submit') }}</span>
+          <span v-else>{{ t('iam.login.submitting') }}</span>
         </button>
 
         <!-- Demo Users Info -->
@@ -79,7 +95,7 @@
               <path d="M12 16v-4"></path>
               <path d="M12 8h.01"></path>
             </svg>
-            <span>Usuarios Demo (Desarrollo)</span>
+            <span>{{ t('iam.login.demoUsers') }}</span>
           </div>
           <div class="demo-info__users">
             <div 
@@ -88,7 +104,7 @@
               class="demo-user" 
               @click="fillDemoUser(user.email)"
             >
-              <strong>{{ user.role === 'renter' ? 'Cliente' : 'Propietario' }}:</strong> 
+              <strong>{{ t('iam.login.testAs') }} {{ user.role === 'renter' ? t('sidebar.renter.dashboard') : t('sidebar.owner.dashboard') }}:</strong> 
               {{ user.email }} / password123
             </div>
           </div>
@@ -105,7 +121,7 @@
             <line x1="19" x2="19" y1="8" y2="14"></line>
             <line x1="22" x2="16" y1="11" y2="11"></line>
           </svg>
-          Crear cuenta nueva
+          {{ t('iam.login.createAccount') }}
         </router-link>
       </form>
     </div>
@@ -114,15 +130,24 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import AuthLayout from '../components/AuthLayout.vue'
 import { login, loadDemoUsers, userState } from '../application/user.store.js'
 
 const router = useRouter()
+const { t, locale } = useI18n()
 const isSubmitting = ref(false)
 const showPassword = ref(false)
 const demoUsers = ref([])
+
+const currentLocale = computed(() => locale.value)
+
+const changeLanguage = (lang) => {
+  locale.value = lang
+  localStorage.setItem('user-locale', lang)
+}
 
 const formData = reactive({
   email: '',
@@ -158,13 +183,13 @@ const validateForm = () => {
   // Validate email
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   if (!emailRegex.test(formData.email)) {
-    errors.email = 'Ingresa un correo electrónico válido'
+    errors.email = t('iam.login.errors.emailInvalid')
     isValid = false
   }
 
   // Validate password
   if (formData.password.length < 6) {
-    errors.password = 'La contraseña debe tener al menos 6 caracteres'
+    errors.password = t('iam.login.errors.passwordLength')
     isValid = false
   }
 
@@ -192,8 +217,9 @@ const handleSubmit = async () => {
     }
   } catch (error) {
     console.error('Error logging in:', error)
-    errors.email = 'Correo o contraseña incorrectos'
-    errors.password = 'Correo o contraseña incorrectos'
+    const errorMsg = t('iam.login.errors.invalidCredentials')
+    errors.email = errorMsg
+    errors.password = errorMsg
   } finally {
     isSubmitting.value = false
   }
@@ -480,6 +506,45 @@ const handleSubmit = async () => {
   border-radius: 20px;
   z-index: -1;
   opacity: 0.3;
+}
+
+/* Language Selector */
+.language-selector {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.language-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 1rem;
+  font-family: var(--font-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.language-btn:hover {
+  border-color: var(--bg-moveo-green);
+  color: var(--text-primary);
+  transform: translateY(-1px);
+}
+
+.language-btn.active {
+  background: var(--bg-moveo-green);
+  border-color: var(--bg-moveo-green);
+  color: white;
+  box-shadow: 0 4px 12px rgba(74, 222, 128, 0.3);
 }
 
 .link {

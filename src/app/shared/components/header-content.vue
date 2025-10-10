@@ -8,7 +8,7 @@
           <div v-if="isRenter" class="hero-text">
             <h1 class="hero-title">
               <i class="pi pi-compass"></i>
-              Encuentra tu próximo viaje
+              {{ t('shared.header.renter.title') }}
             </h1>
           </div>
 
@@ -16,7 +16,7 @@
           <div v-if="isOwner" class="hero-text">
             <h1 class="hero-title">
               <i class="pi pi-briefcase"></i>
-              Gestiona tu flota
+              {{ t('shared.header.owner.title') }}
             </h1>
           </div>
 
@@ -33,8 +33,10 @@
 <script setup>
 import { computed } from 'vue'
 import { useUserStore } from '@/app/iam/application/user.store'
+import { useI18n } from 'vue-i18n'
 import LanguageSelector from './language-selector.vue'
 
+const { t } = useI18n()
 const userStore = useUserStore()
 const isAuthenticated = computed(() => userStore.isAuthenticated.value)
 const isRenter = computed(() => userStore.isRenter.value)
