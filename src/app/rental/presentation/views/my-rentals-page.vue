@@ -2,8 +2,8 @@
   <section class="my-rentals-page">
     <div class="container">
       <header class="page-header">
-        <h1 class="page-title">Mis Alquileres</h1>
-        <p class="page-subtitle">Gestiona todos tus alquileres en un solo lugar</p>
+        <h1 class="page-title">{{ t('rental.myRentals.title') }}</h1>
+        <p class="page-subtitle">{{ t('rental.myRentals.subtitle') }}</p>
       </header>
 
       <div class="rentals-tabs">
@@ -23,7 +23,7 @@
       <!-- Loading State -->
       <div v-if="loading" class="loading-state">
         <div class="spinner"></div>
-        <p>Cargando alquileres...</p>
+        <p>{{ t('rental.myRentals.loading') }}</p>
       </div>
 
       <!-- Rentals List -->
@@ -56,7 +56,7 @@
               </div>
               <div class="info-item">
                 <i class="pi pi-clock"></i>
-                <span>{{ getRentalDays(rental.startDate, rental.endDate) }} días</span>
+                <span>{{ getRentalDays(rental.startDate, rental.endDate) }} {{ t('rental.myRentals.rentalCard.dates') }}</span>
               </div>
               <div class="info-item">
                 <i class="pi pi-map-marker"></i>
@@ -66,13 +66,13 @@
 
             <div class="rental-footer">
               <div class="rental-price">
-                <span class="price-label">Total</span>
+                <span class="price-label">{{ t('rental.myRentals.rentalCard.totalPrice') }}</span>
                 <span class="price-value">S/. {{ rental.totalPrice }}</span>
               </div>
               <div class="rental-actions">
                 <button class="btn-action btn-details">
                   <i class="pi pi-eye"></i>
-                  Ver detalles
+                  {{ t('rental.browse.vehicleCard.viewDetails') }}
                 </button>
               </div>
             </div>
@@ -97,9 +97,11 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { useRentalStore } from '../../application/rental.store.js'
 import { useUserStore } from '@/app/iam/application/user.store.js'
 
+const { t } = useI18n()
 const router = useRouter()
 const rentalStore = useRentalStore()
 const userStore = useUserStore()

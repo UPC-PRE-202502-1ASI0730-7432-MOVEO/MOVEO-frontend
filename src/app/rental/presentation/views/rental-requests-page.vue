@@ -5,14 +5,14 @@
         <div class="icon-wrapper">
           <i class="pi pi-inbox"></i>
         </div>
-        <h1>Solicitudes de Alquiler</h1>
-        <p class="subtitle">Gestiona las solicitudes de alquiler de tus vehículos</p>
+        <h1>{{ t('rental.rentalRequests.title') }}</h1>
+        <p class="subtitle">{{ t('rental.rentalRequests.subtitle') }}</p>
       </div>
     </div>
 
     <div v-if="loading" class="loading-container">
       <i class="pi pi-spin pi-spinner"></i>
-      <p>Cargando solicitudes...</p>
+      <p>{{ t('rental.rentalRequests.loading') }}</p>
     </div>
 
     <div v-else class="content-container">
@@ -35,8 +35,8 @@
       <!-- Lista de solicitudes -->
       <div v-if="filteredRequests.length === 0" class="empty-state">
         <i class="pi pi-inbox"></i>
-        <h3>No hay solicitudes {{ activeTab === 'all' ? '' : statusLabels[activeTab] }}</h3>
-        <p>Cuando recibas solicitudes de alquiler aparecerán aquí</p>
+        <h3>{{ t('rental.rentalRequests.empty.title') }}</h3>
+        <p>{{ t('rental.rentalRequests.empty.message') }}</p>
       </div>
 
       <div v-else class="requests-grid">
@@ -153,9 +153,11 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useUserStore } from '@/app/iam/application/user.store'
 import { apiClient } from '@/app/shared/infrastructure/apiClient.js'
 
+const { t } = useI18n()
 const userStore = useUserStore()
 const loading = ref(true)
 const requests = ref([])
@@ -163,21 +165,21 @@ const activeTab = ref('all')
 const processingId = ref(null)
 
 const tabs = [
-  { label: 'Todas', value: 'all', icon: 'pi pi-list' },
-  { label: 'Pendientes', value: 'pending', icon: 'pi pi-clock' },
-  { label: 'Confirmadas', value: 'confirmed', icon: 'pi pi-check-circle' },
-  { label: 'Activas', value: 'active', icon: 'pi pi-play-circle' },
-  { label: 'Completadas', value: 'completed', icon: 'pi pi-check' },
-  { label: 'Rechazadas', value: 'rejected', icon: 'pi pi-times-circle' }
+  { label: t('rental.rentalRequests.tabs.all'), value: 'all', icon: 'pi pi-list' },
+  { label: t('rental.rentalRequests.tabs.pending'), value: 'pending', icon: 'pi pi-clock' },
+  { label: t('rental.rentalRequests.tabs.confirmed'), value: 'confirmed', icon: 'pi pi-check-circle' },
+  { label: t('rental.rentalRequests.tabs.active'), value: 'active', icon: 'pi pi-play-circle' },
+  { label: t('rental.rentalRequests.tabs.completed'), value: 'completed', icon: 'pi pi-check' },
+  { label: t('rental.rentalRequests.tabs.rejected'), value: 'rejected', icon: 'pi pi-times-circle' }
 ]
 
 const statusLabels = {
   all: '',
-  pending: 'Pendiente',
-  confirmed: 'Confirmada',
-  active: 'Activa',
-  completed: 'Completada',
-  rejected: 'Rechazada'
+  pending: t('rental.rentalRequests.tabs.pending'),
+  confirmed: t('rental.rentalRequests.tabs.confirmed'),
+  active: t('rental.rentalRequests.tabs.active'),
+  completed: t('rental.rentalRequests.tabs.completed'),
+  rejected: t('rental.rentalRequests.tabs.rejected')
 }
 
 const filteredRequests = computed(() => {

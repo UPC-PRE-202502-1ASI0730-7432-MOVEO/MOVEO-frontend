@@ -5,23 +5,23 @@
       <div class="filters-container">
         <button class="filters-toggle-btn" @click="filtersExpanded = !filtersExpanded">
           <i class="pi pi-filter"></i>
-          <span>Filtros</span>
+          <span>{{ t('rental.browse.filters.title') }}</span>
           <i :class="filtersExpanded ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"></i>
         </button>
         
         <div class="sort-control">
           <i class="pi pi-sort-alt"></i>
           <select v-model="currentSortBy" @change="handleSortChange">
-            <option value="createdAt">Más recientes</option>
-            <option value="price-asc">Precio: Menor a Mayor</option>
-            <option value="price-desc">Precio: Mayor a Menor</option>
-            <option value="rating-desc">Mejor calificados</option>
+            <option value="createdAt">{{ t('rental.browse.sortOptions.newest') }}</option>
+            <option value="price-asc">{{ t('rental.browse.sortOptions.priceAsc') }}</option>
+            <option value="price-desc">{{ t('rental.browse.sortOptions.priceDesc') }}</option>
+            <option value="rating-desc">{{ t('rental.browse.sortOptions.default') }}</option>
           </select>
         </div>
 
         <button v-if="filtersExpanded" class="btn-clear-filters" @click="clearAllFilters">
           <i class="pi pi-times-circle"></i>
-          Limpiar filtros
+          {{ t('rental.browse.filters.clearFilters') }}
         </button>
       </div>
       
@@ -40,8 +40,8 @@
       <div class="vehicles-section">
         <header class="section-header">
           <div>
-            <h1 class="title">Explora Vehículos</h1>
-            <p class="subtitle">{{ filteredVehicles.length }} vehículos encontrados</p>
+            <h1 class="title">{{ t('rental.browse.title') }}</h1>
+            <p class="subtitle">{{ filteredVehicles.length }} {{ t('rental.browse.vehiclesFound') }}</p>
           </div>
         </header>
 
@@ -59,7 +59,7 @@
               <i class="pi pi-car"></i>
               <div class="vehicle-price">
                 <span class="price">S/ {{ vehicle.dailyPrice }}</span>
-                <span class="period">/día</span>
+                <span class="period">/{{ t('rental.browse.vehicleCard.perDay') }}</span>
               </div>
             </div>
             
@@ -83,8 +83,8 @@
 
         <div v-else-if="!loading" class="empty-state">
           <i class="pi pi-inbox"></i>
-          <p>No se encontraron vehículos con esos filtros</p>
-          <button class="btn-secondary" @click="clearAllFilters">Limpiar filtros</button>
+          <p>{{ t('rental.browse.empty.title') }}</p>
+          <button class="btn-secondary" @click="clearAllFilters">{{ t('rental.browse.filters.clearFilters') }}</button>
         </div>
       </div>
     </div>
@@ -100,10 +100,12 @@
 </template>
 <script setup>
 import { onMounted, ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { state, loadVehicles, selectVehicle, selectedVehicle, filteredVehicles, setFilters, setSortBy, clearFilters } from '@/app/rental/application/rental.store.js'
 import SearchFilters from '@/app/rental/presentation/components/search-filters.vue'
 import RentalFlowModal from '@/app/rental/presentation/components/rental-flow-modal.vue'
 
+const { t } = useI18n()
 const loading = ref(false)
 const showRentalFlow = ref(false)
 const currentSortBy = ref('createdAt')

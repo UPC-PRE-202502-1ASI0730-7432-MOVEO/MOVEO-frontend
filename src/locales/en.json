@@ -335,5 +335,222 @@
         "description": "Description"
       }
     }
+  },
+  "rental": {
+    "browse": {
+      "title": "Explore Vehicles",
+      "vehiclesFound": "vehicles found",
+      "sortBy": "Sort by",
+      "sortOptions": {
+        "default": "Featured",
+        "priceAsc": "Price: Low to High",
+        "priceDesc": "Price: High to Low",
+        "newest": "Newest"
+      },
+      "filters": {
+        "title": "Filters",
+        "priceRange": "Price Range",
+        "vehicleType": "Vehicle Type",
+        "transmission": "Transmission",
+        "fuelType": "Fuel Type",
+        "seats": "Seats",
+        "clearFilters": "Clear Filters"
+      },
+      "vehicleCard": {
+        "perDay": "per day",
+        "rentNow": "Rent Now",
+        "viewDetails": "View Details"
+      },
+      "empty": {
+        "title": "No vehicles found",
+        "message": "Try adjusting your filters"
+      }
+    },
+    "myVehicles": {
+      "title": "My Vehicles",
+      "subtitle": "Manage your vehicle fleet",
+      "addVehicle": "Add Vehicle",
+      "addFirstVehicle": "Add my first vehicle",
+      "loading": "Loading vehicles...",
+      "empty": {
+        "title": "You have no published vehicles",
+        "message": "Add your first vehicle to start renting"
+      },
+      "vehicleCard": {
+        "edit": "Edit",
+        "delete": "Delete",
+        "available": "Available",
+        "unavailable": "Unavailable"
+      }
+    },
+    "addVehicle": {
+      "title": "Add Vehicle",
+      "subtitle": "Publish your vehicle and start earning",
+      "sections": {
+        "basicInfo": "Basic Information",
+        "specifications": "Specifications",
+        "pricing": "Pricing & Availability",
+        "description": "Description",
+        "photos": "Photos"
+      },
+      "fields": {
+        "brand": "Brand",
+        "brandPlaceholder": "e.g., Toyota, Honda",
+        "model": "Model",
+        "modelPlaceholder": "e.g., Corolla, Civic",
+        "year": "Year",
+        "yearPlaceholder": "2024",
+        "licensePlate": "License Plate",
+        "licensePlatePlaceholder": "ABC-123",
+        "color": "Color",
+        "colorPlaceholder": "White, Black, Red",
+        "transmission": "Transmission",
+        "transmissionPlaceholder": "Select transmission",
+        "fuelType": "Fuel Type",
+        "fuelTypePlaceholder": "Select fuel type",
+        "seats": "Number of Seats",
+        "seatsPlaceholder": "5",
+        "dailyPrice": "Daily Price (S/)",
+        "dailyPricePlaceholder": "150.00",
+        "status": "Status",
+        "statusPlaceholder": "Vehicle status",
+        "description": "Vehicle Description",
+        "descriptionPlaceholder": "Describe special features, conditions and advantages of your vehicle...",
+        "photos": "Vehicle Photos",
+        "uploadPhotos": "Upload Photos"
+      },
+      "options": {
+        "transmissions": {
+          "manual": "Manual",
+          "automatic": "Automatic",
+          "semiAutomatic": "Semi-automatic"
+        },
+        "fuelTypes": {
+          "gasoline": "Gasoline",
+          "diesel": "Diesel",
+          "electric": "Electric",
+          "hybrid": "Hybrid",
+          "gas": "Natural Gas"
+        },
+        "statuses": {
+          "available": "Available",
+          "rented": "Rented",
+          "maintenance": "Maintenance"
+        }
+      },
+      "actions": {
+        "cancel": "Cancel",
+        "publish": "Publish Vehicle",
+        "publishing": "Publishing..."
+      },
+      "required": "Required field",
+      "alerts": {
+        "success": "Vehicle published successfully!",
+        "error": "Error publishing vehicle"
+      }
+    },
+    "editVehicle": {
+      "title": "Edit Vehicle",
+      "subtitle": "Update your vehicle information",
+      "loading": "Loading vehicle information...",
+      "notFound": {
+        "title": "Vehicle not found",
+        "message": "Could not load vehicle information"
+      },
+      "actions": {
+        "cancel": "Cancel",
+        "save": "Save Changes",
+        "saving": "Saving..."
+      },
+      "alerts": {
+        "success": "Vehicle updated successfully!",
+        "error": "Error updating vehicle"
+      }
+    },
+    "vehicleDetail": {
+      "title": "Vehicle Details",
+      "loading": "Loading vehicle...",
+      "notFound": "Could not load vehicle",
+      "backToVehicles": "Back to Vehicles",
+      "backToMyVehicles": "Back to My Vehicles",
+      "specifications": "Specifications",
+      "pricePerDay": "Price per day",
+      "rentNow": "Rent Now",
+      "features": {
+        "transmission": "Transmission",
+        "fuelType": "Fuel Type",
+        "seats": "Seats",
+        "year": "Year",
+        "color": "Color",
+        "licensePlate": "License Plate"
+      }
+    },
+    "rentalRequests": {
+      "title": "Rental Requests",
+      "subtitle": "Manage rental requests for your vehicles",
+      "loading": "Loading requests...",
+      "tabs": {
+        "all": "All",
+        "pending": "Pending",
+        "confirmed": "Confirmed",
+        "active": "Active",
+        "completed": "Completed",
+        "rejected": "Rejected",
+        "cancelled": "Cancelled"
+      },
+      "empty": {
+        "title": "No requests",
+        "message": "When you receive rental requests they will appear here"
+      },
+      "requestCard": {
+        "requestedBy": "Requested by",
+        "dates": "Dates",
+        "from": "From",
+        "to": "To",
+        "totalPrice": "Total Price",
+        "actions": {
+          "accept": "Accept",
+          "reject": "Reject"
+        }
+      },
+      "alerts": {
+        "confirmAccept": "Accept request from {name}?",
+        "confirmReject": "Reject request from {name}?",
+        "accepted": "Request accepted and rental {status} successfully",
+        "rejected": "Request rejected",
+        "errorAccept": "Error accepting request",
+        "errorReject": "Error rejecting request"
+      },
+      "status": {
+        "confirmed": "confirmed",
+        "active": "activated",
+        "completed": "completed"
+      }
+    },
+    "myRentals": {
+      "title": "My Rentals",
+      "subtitle": "View and manage your rental history",
+      "tabs": {
+        "all": "All",
+        "pending": "Pending",
+        "confirmed": "Confirmed",
+        "active": "Active",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+      },
+      "loading": "Loading rentals...",
+      "empty": {
+        "title": "You have no rentals yet",
+        "message": "Browse available vehicles and make your first rental",
+        "searchVehicles": "Search Vehicles"
+      },
+      "rentalCard": {
+        "dates": "Rental dates",
+        "from": "From",
+        "to": "To",
+        "totalPrice": "Total",
+        "status": "Status"
+      }
+    }
   }
 }

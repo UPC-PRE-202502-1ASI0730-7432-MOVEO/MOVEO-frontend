@@ -4,17 +4,17 @@
     <div class="page-header">
       <button @click="goBack" class="btn-back">
         <i class="pi pi-arrow-left"></i>
-        <span>Volver</span>
+        <span>{{ t('rental.addVehicle.actions.cancel') }}</span>
       </button>
       
       <div class="header-content">
         <div class="icon-wrapper">
           <i class="pi pi-car"></i>
         </div>
-        <h1>Publica tu Vehículo</h1>
+        <h1>{{ t('rental.addVehicle.title') }}</h1>
         <p class="subtitle">
           <i class="pi pi-sparkles"></i>
-          Completa el formulario y empieza a ganar dinero con tu auto
+          {{ t('rental.addVehicle.subtitle') }}
         </p>
       </div>
 
@@ -45,8 +45,8 @@
               <i class="pi pi-info-circle"></i>
             </div>
             <div class="header-text">
-              <h2>Información Básica del Vehículo</h2>
-              <p>Cuéntanos sobre tu auto</p>
+              <h2>{{ t('rental.addVehicle.sections.basicInfo') }}</h2>
+              <p>{{ t('rental.addVehicle.subtitle') }}</p>
             </div>
           </div>
 
@@ -56,11 +56,11 @@
                 <i class="pi pi-tag"></i>
               </div>
               <div class="field-content">
-                <label for="brand">Marca <span class="required">*</span></label>
+                <label for="brand">{{ t('rental.addVehicle.fields.brand') }} <span class="required">*</span></label>
                 <pv-input-text 
                   id="brand"
                   v-model="formData.brand" 
-                  placeholder="Ej: Toyota, Honda, Ford"
+                  :placeholder="t('rental.addVehicle.fields.brandPlaceholder')"
                   :class="{ 'p-invalid': errors.brand }"
                 />
                 <small v-if="errors.brand" class="error-message">
@@ -75,11 +75,11 @@
                 <i class="pi pi-bookmark"></i>
               </div>
               <div class="field-content">
-                <label for="model">Modelo <span class="required">*</span></label>
+                <label for="model">{{ t('rental.addVehicle.fields.model') }} <span class="required">*</span></label>
                 <pv-input-text 
                   id="model"
                   v-model="formData.model" 
-                  placeholder="Ej: Corolla, Civic, Mustang"
+                  :placeholder="t('rental.addVehicle.fields.modelPlaceholder')"
                   :class="{ 'p-invalid': errors.model }"
                 />
                 <small v-if="errors.model" class="error-message">
@@ -448,15 +448,22 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { useUserStore } from '@/app/iam/application/user.store'
 import { RentalApi } from '@/app/rental/infrastructure/rental-api.js'
 
+const { t } = useI18n()
 const router = useRouter()
 const userStore = useUserStore()
 const isSubmitting = ref(false)
 const currentStep = ref(0)
 
-const steps = ['Información Básica', 'Especificaciones', 'Ubicación & Precio', 'Fotos']
+const steps = [
+  t('rental.addVehicle.sections.basicInfo'),
+  t('rental.addVehicle.sections.specifications'),
+  t('rental.addVehicle.sections.pricing'),
+  t('rental.addVehicle.sections.photos')
+]
 
 const formData = reactive({
   brand: '',
