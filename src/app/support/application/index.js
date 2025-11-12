@@ -1,2 +1,2 @@
-// Archivo mínimo para application
+export { useSupportStore } from './support.store.js'
 

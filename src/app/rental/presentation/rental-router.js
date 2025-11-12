@@ -13,6 +13,13 @@ export default [
     meta: { title: 'My Rentals', role: 'renter' }
   },
   {
+    path: 'details/:id',
+    name: 'rental-details',
+    component: () => import('./views/rental-details-page.vue'),
+    props: true,
+    meta: { title: 'Rental Details', requiresAuth: true }
+  },
+  {
     path: 'favorites',
     name: 'favorites',
     component: () => import('../../shared/views/coming-soon.vue'),

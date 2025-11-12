@@ -9,6 +9,7 @@ import iamRoutes from '@/app/iam/presentation/iam-router.js'
 import rentalRoutes from '@/app/rental/presentation/rental-router.js'
 import adventureRoutes from '@/app/adventure/presentation/adventure-router.js'
 import paymentRoutes from '@/app/payment/presentation/payment-router.js'
+import supportRoutes from '@/app/support/presentation/support-router.js'
 
 const routes = [
   // Root redirect - Start at login page
@@ -38,16 +39,24 @@ const routes = [
     children: rentalRoutes
   },
   
-  // Adventure Module
+  // Adventure Module - Themed Travel Routes (Only for Renters)
   {
-    path: '/adventures',
-    children: adventureRoutes
+    path: '/adventure',
+    children: adventureRoutes,
+    meta: { requiresAuth: true, requiresRole: 'renter' }
   },
   
   // Payment Module
   {
     path: '/payments',
     children: paymentRoutes
+  },
+  
+  // Support Module - Tickets and Customer Service (Only for Owners)
+  {
+    path: '/support',
+    children: supportRoutes,
+    meta: { requiresAuth: true, requiresRole: 'owner' }
   },
   
   // Legacy routes redirects for backwards compatibility
@@ -88,10 +97,14 @@ router.beforeEach((to, from, next) => {
   // Check authentication
   const userStore = useUserStore()
   const requiresAuth = to.meta?.requiresAuth
+  const requiresRole = to.meta?.requiresRole
   
   if (requiresAuth && !userStore.isAuthenticated) {
     console.warn('⚠️ Authentication required, redirecting to login')
     next({ name: 'login', query: { redirect: to.fullPath } })
+  } else if (requiresRole && userStore.userRole.value !== requiresRole) {
+    console.warn(`⚠️ Role ${requiresRole} required, user has ${userStore.userRole.value}`)
+    next({ name: 'dashboard' })
   } else {
     next()
   }

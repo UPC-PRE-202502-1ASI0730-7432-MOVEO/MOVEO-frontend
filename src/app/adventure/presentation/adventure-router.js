@@ -2,21 +2,21 @@
 export default [
   {
     path: '',
-    name: 'adventures',
-    component: () => import('../components/views/adventure-list.vue'),
-    meta: { title: 'Adventure List' }
+    name: 'adventure-routes',
+    component: () => import('./views/adventure-routes.vue'),
+    meta: { 
+      title: 'Adventure Routes',
+      requiresAuth: false 
+    }
   },
   {
-    path: 'new',
-    name: 'adventure-new',
-    component: () => import('../components/views/adventure-form.vue'),
-    meta: { title: 'New Adventure' }
-  },
-  {
-    path: 'edit/:id',
-    name: 'adventure-edit',
-    component: () => import('../components/views/adventure-form.vue'),
+    path: ':id',
+    name: 'adventure-route-detail',
+    component: () => import('./views/adventure-route-detail.vue'),
     props: true,
-    meta: { title: 'Edit Adventure' }
+    meta: { 
+      title: 'Route Detail',
+      requiresAuth: false 
+    }
   }
 ]

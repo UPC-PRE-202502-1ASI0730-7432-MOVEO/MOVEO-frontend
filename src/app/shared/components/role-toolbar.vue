@@ -42,7 +42,7 @@ const roleLabel = computed(() => {
 const renterLinks = computed(() => [
   { path: '/rentals', label: t('shared.sidebar.renter.explore'), icon: '🔍' },
   { path: '/my-rentals', label: t('shared.sidebar.renter.myRentals'), icon: '📋' },
-  { path: '/favorites', label: t('shared.sidebar.renter.favorites'), icon: '❤️' },
+  { path: '/adventure', label: t('adventure.routes'), icon: '🗺️' },
   { path: '/profile', label: t('shared.sidebar.renter.profile'), icon: '👤' }
 ])
 
@@ -50,8 +50,7 @@ const renterLinks = computed(() => [
 const ownerLinks = computed(() => [
   { path: '/my-vehicles', label: t('shared.sidebar.owner.myVehicles'), icon: '🚗' },
   { path: '/add-vehicle', label: t('rental.myVehicles.addVehicle'), icon: '➕' },
-  { path: '/rental-requests', label: t('shared.sidebar.owner.rentalRequests'), icon: '📩' },
-  { path: '/earnings', label: t('shared.sidebar.owner.earnings'), icon: '💰' },
+  { path: '/support/tickets', label: t('support.tickets'), icon: '🎫' },
   { path: '/profile', label: t('shared.sidebar.owner.profile'), icon: '👤' }
 ])
 

@@ -514,7 +514,7 @@
       "startDate": "2025-10-07T08:00:00Z",
       "endDate": "2025-10-10T18:00:00Z",
       "totalPrice": 135,
-      "status": "active",
+      "status": "completed",
       "pickupLocation": "Av. Arequipa 123, Miraflores",
       "returnLocation": "Av. Arequipa 123, Miraflores",
       "notes": "Alquiler activo en curso.",
@@ -655,6 +655,49 @@
       "createdAt": "2025-10-09T02:38:32.562Z",
       "id": 11,
       "acceptedAt": "2025-10-09T02:39:58.582Z"
+    },
+    {
+      "vehicleId": 1,
+      "renterId": 2,
+      "ownerId": 1,
+      "startDate": "2025-11-13",
+      "endDate": "2025-11-28",
+      "totalPrice": 675,
+      "status": "confirmed",
+      "pickupLocation": "Av. Arequipa 123, Miraflores, Lima",
+      "returnLocation": "Av. Arequipa 123, Miraflores, Lima",
+      "notes": "Reserva realizada. Método de pago: cash",
+      "createdAt": "2025-11-12T05:39:48.829Z",
+      "id": 12,
+      "acceptedAt": "2025-11-12T05:40:46.161Z"
+    },
+    {
+      "vehicleId": 1,
+      "renterId": 2,
+      "ownerId": 1,
+      "startDate": "2026-01-16",
+      "endDate": "2026-03-19",
+      "totalPrice": 2790,
+      "status": "pending",
+      "pickupLocation": "Av. Arequipa 123, Miraflores, Lima",
+      "returnLocation": "Av. Arequipa 123, Miraflores, Lima",
+      "notes": "Reserva realizada. Método de pago: cash",
+      "createdAt": "2025-11-12T06:16:08.298Z",
+      "id": 13
+    },
+    {
+      "vehicleId": 2,
+      "renterId": 2,
+      "ownerId": 1,
+      "startDate": "2025-11-12",
+      "endDate": "2025-11-16",
+      "totalPrice": 220,
+      "status": "pending",
+      "pickupLocation": "Av. Arequipa 123, Miraflores, Lima",
+      "returnLocation": "Av. Arequipa 123, Miraflores, Lima",
+      "notes": "Reserva realizada. Método de pago: cash",
+      "createdAt": "2025-11-12T06:16:21.826Z",
+      "id": 14
     }
   ],
   "payments": [
@@ -763,6 +806,48 @@
       "description": "Alquiler de Honda Civic - 2 día(s)",
       "createdAt": "2025-10-09T02:38:32.590Z",
       "id": 8
+    },
+    {
+      "rentalId": 12,
+      "payerId": 2,
+      "recipientId": 1,
+      "amount": 675,
+      "currency": "PEN",
+      "method": "cash",
+      "status": "pending",
+      "transactionId": "txn_1762925988946",
+      "type": "rental_payment",
+      "description": "Alquiler de Toyota Corolla - 15 día(s)",
+      "createdAt": "2025-11-12T05:39:48.946Z",
+      "id": 9
+    },
+    {
+      "rentalId": 13,
+      "payerId": 2,
+      "recipientId": 1,
+      "amount": 2790,
+      "currency": "PEN",
+      "method": "cash",
+      "status": "pending",
+      "transactionId": "txn_1762928168341",
+      "type": "rental_payment",
+      "description": "Alquiler de Toyota Corolla - 62 día(s)",
+      "createdAt": "2025-11-12T06:16:08.341Z",
+      "id": 10
+    },
+    {
+      "rentalId": 14,
+      "payerId": 2,
+      "recipientId": 1,
+      "amount": 220,
+      "currency": "PEN",
+      "method": "cash",
+      "status": "pending",
+      "transactionId": "txn_1762928181861",
+      "type": "rental_payment",
+      "description": "Alquiler de ToyotaXDDDD Corollaxdxdxdxd - 4 día(s)",
+      "createdAt": "2025-11-12T06:16:21.861Z",
+      "id": 11
     }
   ],
   "reviews": [
@@ -806,41 +891,6 @@
       "resolutionNotes": "Daño menor. No se aplica cargo. Depósito liberado parcialmente."
     }
   ],
-  "notifications": [
-    {
-      "id": 1,
-      "userId": 2,
-      "actorId": 1,
-      "rentalId": 1,
-      "title": "Reserva confirmada",
-      "message": "Carlos ha aceptado tu solicitud para el Toyota Corolla del 10 al 12 de julio.",
-      "type": "rental_accepted",
-      "isRead": false,
-      "createdAt": "2024-07-06T10:05:00Z"
-    },
-    {
-      "id": 2,
-      "userId": 1,
-      "actorId": 2,
-      "rentalId": 1,
-      "title": "Nueva calificación",
-      "message": "Ana te dio 5 estrellas por tu auto.",
-      "type": "review_received",
-      "isRead": false,
-      "createdAt": "2024-07-13T10:05:00Z"
-    },
-    {
-      "id": 3,
-      "userId": 2,
-      "actorId": null,
-      "rentalId": 1,
-      "title": "Reembolso procesado",
-      "message": "Se ha acreditado S/ 30.00 por el incidente reportado.",
-      "type": "refund_processed",
-      "isRead": false,
-      "createdAt": "2024-07-15T11:05:00Z"
-    }
-  ],
   "pricingPlans": [
     {
       "id": 1,
@@ -867,6 +917,690 @@
         "Pago liberado al finalizar el alquiler"
       ],
       "commissionNote": "MOVEO cobra 15% de comisión sobre el monto del alquiler."
+    }
+  ],
+  "adventure-routes": [
+    {
+      "id": 1,
+      "name": "Ruta Playera del Norte",
+      "type": "beach",
+      "description": "Recorre las mejores playas del norte peruano en una aventura de 3 días inolvidable. Desde las aguas turquesas de Máncora hasta las olas perfectas de Cabo Blanco, esta ruta te llevará a través de paisajes costeros espectaculares, pequeños pueblos de pescadores llenos de encanto y experiencias gastronómicas únicas con los mejores ceviches y mariscos frescos del Pacífico.",
+      "summary": "3 días explorando playas paradisíacas del norte peruano",
+      "duration": 3,
+      "distance": 450,
+      "difficulty": "easy",
+      "imageUrl": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400",
+      "keyPoints": [
+        {
+          "name": "Máncora",
+          "description": "Playa principal con vida nocturna vibrante y excelentes restaurantes"
+        },
+        {
+          "name": "Punta Sal",
+          "description": "Aguas cristalinas perfectas para snorkel y relajación"
+        },
+        {
+          "name": "Cabo Blanco",
+          "description": "Legendario spot de surf, hogar de récords mundiales de pesca"
+        }
+      ],
+      "startLocation": "Lima",
+      "endLocation": "Máncora",
+      "highlights": [
+        "Playas vírgenes de arena blanca",
+        "Surf clase mundial en Cabo Blanco",
+        "Gastronomía marina excepcional",
+        "Avistamiento de tortugas marinas",
+        "Puestas de sol espectaculares"
+      ],
+      "recommendedVehicles": [
+        1,
+        3,
+        5
+      ],
+      "estimatedCost": 450,
+      "bestSeason": "Diciembre - Marzo",
+      "tags": [
+        "playa",
+        "surf",
+        "verano",
+        "gastronomía",
+        "relax"
+      ],
+      "featured": true,
+      "rating": 4.8,
+      "reviewsCount": 127,
+      "createdAt": "2024-01-15T10:00:00Z",
+      "updatedAt": "2024-01-15T10:00:00Z"
+    },
+    {
+      "id": 2,
+      "name": "Camino Inca a Machu Picchu",
+      "type": "mountain",
+      "description": "La ruta más emblemática del Perú te espera. Sigue los pasos de los antiguos incas a través de montañas majestuosas, bosques nublados místicos y ruinas arqueológicas impresionantes. Esta aventura de 4 días culmina con la llegada al amanecer a la ciudadela perdida de Machu Picchu, una de las Siete Maravillas del Mundo Moderno.",
+      "summary": "4 días de trekking hacia la ciudad sagrada de los Incas",
+      "duration": 4,
+      "distance": 320,
+      "difficulty": "hard",
+      "imageUrl": "https://images.unsplash.com/photo-1587595431973-160d0d94add1?w=1600",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1587595431973-160d0d94add1?w=400",
+      "keyPoints": [
+        {
+          "name": "Cusco",
+          "description": "Ciudad imperial, punto de partida de la aventura"
+        },
+        {
+          "name": "Valle Sagrado",
+          "description": "Terrazas agrícolas incas y pueblos tradicionales"
+        },
+        {
+          "name": "Machu Picchu",
+          "description": "Ciudadela inca del siglo XV, patrimonio de la humanidad"
+        }
+      ],
+      "startLocation": "Lima",
+      "endLocation": "Cusco",
+      "highlights": [
+        "Trekking por senderos incas auténticos",
+        "Amanecer en Machu Picchu",
+        "Ruinas arqueológicas en el camino",
+        "Flora y fauna andina única",
+        "Experiencia cultural inmersiva"
+      ],
+      "recommendedVehicles": [
+        2,
+        4,
+        7
+      ],
+      "estimatedCost": 850,
+      "bestSeason": "Mayo - Septiembre",
+      "tags": [
+        "montaña",
+        "historia",
+        "trekking",
+        "cultura",
+        "aventura"
+      ],
+      "featured": true,
+      "rating": 4.9,
+      "reviewsCount": 243,
+      "createdAt": "2024-01-16T10:00:00Z",
+      "updatedAt": "2024-01-16T10:00:00Z"
+    },
+    {
+      "id": 3,
+      "name": "Ruta Colonial de Lima",
+      "type": "cultural",
+      "description": "Descubre el corazón histórico de Lima en un recorrido de 1 día por el centro histórico, declarado Patrimonio de la Humanidad por la UNESCO. Visita impresionantes iglesias coloniales, museos fascinantes, plazas emblemáticas y prueba la gastronomía que ha convertido a Lima en la capital gastronómica de Latinoamérica.",
+      "summary": "1 día explorando el patrimonio colonial de Lima",
+      "duration": 1,
+      "distance": 25,
+      "difficulty": "easy",
+      "imageUrl": "https://images.unsplash.com/photo-1555791018-6572a7ad7e0e?w=1600",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1555791018-6572a7ad7e0e?w=400",
+      "keyPoints": [
+        {
+          "name": "Plaza Mayor",
+          "description": "Centro histórico con arquitectura colonial española"
+        },
+        {
+          "name": "Convento de San Francisco",
+          "description": "Famosas catacumbas y biblioteca colonial"
+        },
+        {
+          "name": "Barrio Bohemio de Barranco",
+          "description": "Arte callejero, galerías y cafés con encanto"
+        }
+      ],
+      "startLocation": "Lima",
+      "endLocation": "Lima",
+      "highlights": [
+        "Arquitectura colonial del siglo XVI",
+        "Catacumbas de San Francisco",
+        "Gastronomía peruana de autor",
+        "Arte y cultura contemporánea",
+        "Balcones coloniales de madera"
+      ],
+      "recommendedVehicles": [
+        1,
+        6,
+        8
+      ],
+      "estimatedCost": 120,
+      "bestSeason": "Todo el año",
+      "tags": [
+        "cultura",
+        "historia",
+        "gastronomía",
+        "arte",
+        "ciudad"
+      ],
+      "featured": true,
+      "rating": 4.6,
+      "reviewsCount": 89,
+      "createdAt": "2024-01-17T10:00:00Z",
+      "updatedAt": "2024-01-17T10:00:00Z"
+    },
+    {
+      "id": 4,
+      "name": "Ruta Gastronómica Limeña",
+      "type": "gastronomic",
+      "description": "Lima es conocida como la capital gastronómica de Latinoamérica, y esta ruta de 2 días te llevará a descubrir por qué. Desde restaurantes con estrellas Michelin hasta mercados tradicionales llenos de sabores auténticos, pasando por cevicherías locales y experiencias culinarias únicas que combinan técnicas ancestrales con innovación contemporánea.",
+      "summary": "2 días degustando la mejor gastronomía peruana",
+      "duration": 2,
+      "distance": 60,
+      "difficulty": "easy",
+      "imageUrl": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1600",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400",
+      "keyPoints": [
+        {
+          "name": "Miraflores",
+          "description": "Restaurantes de alta cocina con vista al Pacífico"
+        },
+        {
+          "name": "Mercado de Surquillo",
+          "description": "Ingredientes frescos y comida callejera auténtica"
+        },
+        {
+          "name": "Barranco",
+          "description": "Bares y cafeterías con propuestas innovadoras"
+        }
+      ],
+      "startLocation": "Lima",
+      "endLocation": "Lima",
+      "highlights": [
+        "Ceviche fresco del día",
+        "Restaurantes premiados internacionalmente",
+        "Mercados locales tradicionales",
+        "Cocina fusión nikkei",
+        "Experiencias con chefs reconocidos"
+      ],
+      "recommendedVehicles": [
+        1,
+        6,
+        8
+      ],
+      "estimatedCost": 380,
+      "bestSeason": "Todo el año",
+      "tags": [
+        "gastronomía",
+        "cultura",
+        "ciudad",
+        "lujo",
+        "experiencia"
+      ],
+      "featured": false,
+      "rating": 4.7,
+      "reviewsCount": 156,
+      "createdAt": "2024-01-18T10:00:00Z",
+      "updatedAt": "2024-01-18T10:00:00Z"
+    },
+    {
+      "id": 5,
+      "name": "Expedición Cañón del Colca",
+      "type": "adventure",
+      "description": "Adéntrate en uno de los cañones más profundos del mundo en esta expedición de 3 días llena de adrenalina. Observa el majestuoso vuelo del cóndor andino, explora pueblos tradicionales que mantienen costumbres ancestrales, relájate en aguas termales naturales y desafía tus límites en caminatas por paisajes volcánicos impresionantes.",
+      "summary": "3 días de aventura en el segundo cañón más profundo del mundo",
+      "duration": 3,
+      "distance": 380,
+      "difficulty": "moderate",
+      "imageUrl": "https://images.unsplash.com/photo-1551632811-561732d1e306?w=1600",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1551632811-561732d1e306?w=400",
+      "keyPoints": [
+        {
+          "name": "Arequipa",
+          "description": "Ciudad Blanca, base de la expedición"
+        },
+        {
+          "name": "Cruz del Cóndor",
+          "description": "Mirador para observar cóndores en vuelo"
+        },
+        {
+          "name": "Chivay",
+          "description": "Pueblo tradicional con aguas termales"
+        }
+      ],
+      "startLocation": "Arequipa",
+      "endLocation": "Arequipa",
+      "highlights": [
+        "Avistamiento de cóndores andinos",
+        "Terrazas agrícolas preincaicas",
+        "Aguas termales naturales",
+        "Pueblos tradicionales auténticos",
+        "Paisajes volcánicos únicos"
+      ],
+      "recommendedVehicles": [
+        2,
+        4,
+        7
+      ],
+      "estimatedCost": 520,
+      "bestSeason": "Abril - Noviembre",
+      "tags": [
+        "aventura",
+        "naturaleza",
+        "trekking",
+        "cultura",
+        "montaña"
+      ],
+      "featured": false,
+      "rating": 4.5,
+      "reviewsCount": 98,
+      "createdAt": "2024-01-19T10:00:00Z",
+      "updatedAt": "2024-01-19T10:00:00Z"
+    },
+    {
+      "id": 6,
+      "name": "Ruta Escénica Paracas - Huacachina",
+      "type": "scenic",
+      "description": "Combina lo mejor de la costa y el desierto peruano en esta ruta de 2 días. Navega por las Islas Ballestas observando lobos marinos y pingüinos de Humboldt, explora la Reserva Nacional de Paracas con sus acantilados rojizos y playas desérticas, y termina con emocionantes paseos en sandboard y tubulares por las dunas doradas de Huacachina.",
+      "summary": "2 días entre islas, desierto y el oasis más bello de Sudamérica",
+      "duration": 2,
+      "distance": 280,
+      "difficulty": "easy",
+      "imageUrl": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400",
+      "keyPoints": [
+        {
+          "name": "Islas Ballestas",
+          "description": "Fauna marina: lobos, pingüinos y aves guaneras"
+        },
+        {
+          "name": "Reserva Nacional de Paracas",
+          "description": "Playas Roja y La Catedral, paisajes desérticos"
+        },
+        {
+          "name": "Oasis de Huacachina",
+          "description": "Laguna rodeada de dunas, sandboarding y buggies"
+        }
+      ],
+      "startLocation": "Lima",
+      "endLocation": "Ica",
+      "highlights": [
+        "Navegación por Islas Ballestas",
+        "Observación de fauna marina",
+        "Sandboarding en dunas gigantes",
+        "Oasis natural de Huacachina",
+        "Paseo en tubulares por el desierto"
+      ],
+      "recommendedVehicles": [
+        1,
+        3,
+        5,
+        7
+      ],
+      "estimatedCost": 350,
+      "bestSeason": "Septiembre - Marzo",
+      "tags": [
+        "aventura",
+        "naturaleza",
+        "playa",
+        "desierto",
+        "fauna"
+      ],
+      "featured": false,
+      "rating": 4.7,
+      "reviewsCount": 134,
+      "createdAt": "2024-01-20T10:00:00Z",
+      "updatedAt": "2024-01-20T10:00:00Z"
+    },
+    {
+      "id": 7,
+      "name": "Ruta Playera del Sur",
+      "type": "beach",
+      "description": "Descubre las playas más tranquilas y vírgenes del sur de Lima en esta escapada de 2 días perfecta para relajarse y desconectarse. Desde las arenas doradas de Asia hasta las calas escondidas de Pucusana, pasando por los acantilados dramáticos de Cerro Azul, esta ruta ofrece la combinación perfecta de relax, deportes acuáticos y gastronomía marina local.",
+      "summary": "2 días de relax en las mejores playas del sur limeño",
+      "duration": 2,
+      "distance": 180,
+      "difficulty": "easy",
+      "imageUrl": "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1600",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=400",
+      "keyPoints": [
+        {
+          "name": "Asia",
+          "description": "Playas modernas con clubes de playa exclusivos"
+        },
+        {
+          "name": "Cerro Azul",
+          "description": "Pueblo de pescadores con excelente surf"
+        },
+        {
+          "name": "Pucusana",
+          "description": "Caleta pintoresca con islas cercanas"
+        }
+      ],
+      "startLocation": "Lima",
+      "endLocation": "Lima",
+      "highlights": [
+        "Playas de arena dorada",
+        "Clubes de playa modernos",
+        "Surf en Cerro Azul",
+        "Ceviche fresco en Pucusana",
+        "Paseos en bote a islas cercanas"
+      ],
+      "recommendedVehicles": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "estimatedCost": 280,
+      "bestSeason": "Enero - Marzo",
+      "tags": [
+        "playa",
+        "relax",
+        "surf",
+        "gastronomía",
+        "verano"
+      ],
+      "featured": false,
+      "rating": 4.4,
+      "reviewsCount": 76,
+      "createdAt": "2024-01-21T10:00:00Z",
+      "updatedAt": "2024-01-21T10:00:00Z"
+    }
+  ],
+  "notifications": [
+    {
+      "id": 1,
+      "userId": 2,
+      "type": "damage_report",
+      "title": "Reporte de Daño Recibido",
+      "message": "Se ha reportado un daño en tu vehículo Toyota Corolla 2022. El cliente reportó un rayón en la puerta del conductor.",
+      "relatedId": 1,
+      "relatedType": "ticket",
+      "read": true,
+      "actionUrl": "/support/tickets/1",
+      "actionLabel": "Ver Ticket",
+      "metadata": {
+        "ticketId": 1,
+        "vehicleId": 1,
+        "estimatedCost": 250
+      },
+      "createdAt": "2025-11-10T14:30:00Z",
+      "readAt": "2025-11-12T06:21:18.392Z"
+    },
+    {
+      "id": 2,
+      "userId": 2,
+      "type": "payment_required",
+      "title": "Pago de Daño Requerido",
+      "message": "Debes pagar S/. 250.00 por el daño reportado en el vehículo.",
+      "relatedId": 1,
+      "relatedType": "ticket",
+      "read": true,
+      "actionUrl": "/payments/damage/1",
+      "actionLabel": "Realizar Pago",
+      "metadata": {
+        "ticketId": 1,
+        "vehicleId": 1,
+        "amount": 250
+      },
+      "createdAt": "2025-11-10T14:35:00Z",
+      "readAt": "2025-11-12T06:21:18.344Z"
+    },
+    {
+      "id": 3,
+      "userId": 1,
+      "type": "rental_confirmed",
+      "title": "Reserva Confirmada",
+      "message": "Tu reserva del Toyota Corolla 2022 ha sido confirmada. Puedes recoger el vehículo el 15 de noviembre.",
+      "relatedId": 1,
+      "relatedType": "rental",
+      "read": true,
+      "actionUrl": "/rental/my-rentals/1",
+      "actionLabel": "Ver Reserva",
+      "metadata": {
+        "rentalId": 1,
+        "vehicleId": 1
+      },
+      "createdAt": "2025-11-08T10:00:00Z",
+      "readAt": "2025-11-08T12:00:00Z"
+    },
+    {
+      "id": 4,
+      "userId": 2,
+      "type": "info",
+      "title": "Nueva Funcionalidad: Rutas de Aventura",
+      "message": "Descubre nuestras nuevas rutas de aventura temáticas. Planifica tu próximo viaje con recomendaciones de vehículos.",
+      "relatedId": null,
+      "relatedType": null,
+      "read": true,
+      "actionUrl": "/adventure",
+      "actionLabel": "Explorar Rutas",
+      "metadata": {},
+      "createdAt": "2025-11-09T08:00:00Z",
+      "readAt": "2025-11-12T06:21:18.484Z"
+    },
+    {
+      "id": 5,
+      "userId": 1,
+      "type": "success",
+      "title": "Perfil Verificado",
+      "message": "¡Felicidades! Tu perfil ha sido completamente verificado. Ahora puedes acceder a todas las funcionalidades.",
+      "relatedId": null,
+      "relatedType": null,
+      "read": true,
+      "actionUrl": "/auth/profile",
+      "actionLabel": "Ver Perfil",
+      "metadata": {},
+      "createdAt": "2025-11-07T16:20:00Z",
+      "readAt": "2025-11-07T18:00:00Z"
+    },
+    {
+      "id": 6,
+      "userId": 2,
+      "type": "rental_completed",
+      "title": "Alquiler Completado",
+      "message": "El alquiler del Honda Civic 2021 se ha completado exitosamente. Por favor, califica tu experiencia.",
+      "relatedId": 2,
+      "relatedType": "rental",
+      "read": true,
+      "actionUrl": "/rental/my-rentals/2",
+      "actionLabel": "Dejar Reseña",
+      "metadata": {
+        "rentalId": 2,
+        "vehicleId": 3
+      },
+      "createdAt": "2025-11-10T09:00:00Z",
+      "readAt": "2025-11-12T06:21:18.438Z"
+    },
+    {
+      "userId": 2,
+      "type": "damage_report",
+      "title": "Reporte de Daño - Acción Requerida",
+      "message": "Se ha reportado un daño en el vehículo Toyota Corolla 2022 - undefined. El propietario ha creado un ticket #6. Costo estimado: $2000",
+      "relatedId": 6,
+      "relatedType": "ticket",
+      "read": false,
+      "actionUrl": "/support/tickets/6",
+      "actionLabel": "Ver Ticket y Pagar",
+      "metadata": {
+        "ticketId": 6,
+        "vehicleId": 1,
+        "estimatedCost": 2000,
+        "ownerName": "Carlos Mendoza"
+      },
+      "createdAt": "2025-11-12T06:22:32.033Z",
+      "readAt": null,
+      "id": 7
+    },
+    {
+      "userId": 2,
+      "type": "damage_report",
+      "title": "Reporte de Daño - Acción Requerida",
+      "message": "Se ha reportado un daño en el vehículo Toyota Corolla 2022 - undefined. El propietario ha creado un ticket #7. Costo estimado: $1112200",
+      "relatedId": 7,
+      "relatedType": "ticket",
+      "read": false,
+      "actionUrl": "/support/tickets/7",
+      "actionLabel": "Ver Ticket y Pagar",
+      "metadata": {
+        "ticketId": 7,
+        "vehicleId": 1,
+        "estimatedCost": 1112200,
+        "ownerName": "Carlos Mendoza",
+        "renterName": "Ana López"
+      },
+      "createdAt": "2025-11-12T06:27:01.685Z",
+      "readAt": null,
+      "id": 8
+    }
+  ],
+  "support-tickets": [
+    {
+      "id": 1,
+      "userId": 2,
+      "userName": "Ana García",
+      "userRole": "renter",
+      "vehicleId": 1,
+      "vehicleName": "Toyota Corolla 2022",
+      "rentalId": 1,
+      "type": "damage",
+      "subject": "Rayón en puerta del conductor",
+      "description": "Al devolver el vehículo, noté un rayón de aproximadamente 10cm en la puerta del conductor lado izquierdo. El rayón no estaba presente al momento de recoger el vehículo. Solicito revisión y estimación de costo de reparación.",
+      "status": "open",
+      "priority": "high",
+      "attachments": [
+        "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=400",
+        "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=400"
+      ],
+      "assignedTo": null,
+      "resolutionNotes": null,
+      "estimatedCost": 250,
+      "createdAt": "2025-11-10T14:25:00Z",
+      "updatedAt": "2025-11-10T14:25:00Z",
+      "resolvedAt": null
+    },
+    {
+      "id": 2,
+      "userId": 1,
+      "userName": "Carlos Mendoza",
+      "userRole": "owner",
+      "vehicleId": 3,
+      "vehicleName": "Honda Civic 2021",
+      "rentalId": 2,
+      "type": "complaint",
+      "subject": "Cliente devolvió vehículo con combustible bajo",
+      "description": "El cliente devolvió el vehículo con menos de 1/4 de tanque cuando se acordó devolverlo lleno. Solicito compensación por el combustible faltante.",
+      "status": "in_progress",
+      "priority": "medium",
+      "attachments": [
+        "https://images.unsplash.com/photo-1527736947477-2790e28f3443?w=400"
+      ],
+      "assignedTo": "support@moveo.com",
+      "resolutionNotes": "Se está revisando el contrato de alquiler para verificar los términos acordados.",
+      "estimatedCost": 50,
+      "createdAt": "2025-11-09T18:00:00Z",
+      "updatedAt": "2025-11-10T10:00:00Z",
+      "resolvedAt": null
+    },
+    {
+      "id": 3,
+      "userId": 2,
+      "userName": "Ana García",
+      "userRole": "renter",
+      "vehicleId": null,
+      "vehicleName": "",
+      "rentalId": null,
+      "type": "question",
+      "subject": "¿Cómo funciona el seguro de vehículos?",
+      "description": "Quisiera entender mejor cómo funciona la cobertura de seguro para los vehículos alquilados. ¿Qué tipo de daños están cubiertos y cuáles no?",
+      "status": "resolved",
+      "priority": "low",
+      "attachments": [],
+      "assignedTo": "support@moveo.com",
+      "resolutionNotes": "Se proporcionó información detallada sobre la póliza de seguro y cobertura. El cliente quedó satisfecho con la respuesta.",
+      "estimatedCost": 0,
+      "createdAt": "2025-11-05T10:30:00Z",
+      "updatedAt": "2025-11-06T14:00:00Z",
+      "resolvedAt": "2025-11-06T14:00:00Z"
+    },
+    {
+      "id": 4,
+      "userId": 1,
+      "userName": "Carlos Mendoza",
+      "userRole": "owner",
+      "vehicleId": 1,
+      "vehicleName": "Toyota Corolla 2022",
+      "rentalId": 3,
+      "type": "damage",
+      "subject": "Abolladura en defensa trasera",
+      "description": "El vehículo fue devuelto con una abolladura en la defensa trasera. El daño es considerable y requiere reparación en taller especializado.",
+      "status": "open",
+      "priority": "urgent",
+      "attachments": [
+        "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400",
+        "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=400",
+        "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=400"
+      ],
+      "assignedTo": "support@moveo.com",
+      "resolutionNotes": null,
+      "estimatedCost": 800,
+      "createdAt": "2025-11-10T16:00:00Z",
+      "updatedAt": "2025-11-10T16:00:00Z",
+      "resolvedAt": null
+    },
+    {
+      "id": 5,
+      "userId": 2,
+      "userName": "Ana García",
+      "userRole": "renter",
+      "vehicleId": null,
+      "vehicleName": "",
+      "rentalId": null,
+      "type": "technical",
+      "subject": "No puedo subir fotos a mi perfil",
+      "description": "Estoy intentando actualizar la foto de mi perfil pero la aplicación muestra un error al cargar la imagen. He intentado con diferentes formatos (JPG, PNG) sin éxito.",
+      "status": "in_progress",
+      "priority": "medium",
+      "attachments": [],
+      "assignedTo": "tech@moveo.com",
+      "resolutionNotes": "Problema identificado con el servicio de almacenamiento. Se está trabajando en la corrección.",
+      "estimatedCost": 0,
+      "createdAt": "2025-11-08T13:45:00Z",
+      "updatedAt": "2025-11-09T09:00:00Z",
+      "resolvedAt": null
+    },
+    {
+      "userId": 1,
+      "userName": "Carlos Mendoza",
+      "userRole": "owner",
+      "type": "damage",
+      "subject": "me da;o todo el auto",
+      "description": "le pusieron multa",
+      "priority": "high",
+      "attachments": [],
+      "vehicleId": 1,
+      "vehicleName": "Toyota Corolla 2022 - undefined",
+      "rentalId": 1,
+      "renterId": 2,
+      "estimatedCost": 2000,
+      "status": "open",
+      "createdAt": "2025-11-12T06:22:31.985Z",
+      "updatedAt": "2025-11-12T06:22:31.985Z",
+      "id": 6
+    },
+    {
+      "userId": 1,
+      "userName": "Carlos Mendoza",
+      "userRole": "owner",
+      "type": "damage",
+      "subject": "aa",
+      "description": "aaa",
+      "priority": "high",
+      "attachments": [],
+      "vehicleId": 1,
+      "vehicleName": "Toyota Corolla 2022 - undefined",
+      "rentalId": 1,
+      "renterId": 2,
+      "renterName": "Ana López",
+      "estimatedCost": 1112200,
+      "status": "open",
+      "createdAt": "2025-11-12T06:27:01.644Z",
+      "updatedAt": "2025-11-12T06:27:01.644Z",
+      "id": 7
     }
   ]
 }

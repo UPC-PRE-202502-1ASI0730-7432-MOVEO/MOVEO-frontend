@@ -69,5 +69,11 @@ export const RentalApi = {
   async createRental(payload) {
     const data = await apiClient.post('/rentals', payload)
     return toRentalEntity(data)
+  },
+
+  // Actualizar el estado de un rental
+  async updateRentalStatus(rentalId, newStatus) {
+    const data = await apiClient.patch(`/rentals/${rentalId}`, { status: newStatus })
+    return toRentalEntity(data)
   }
 }

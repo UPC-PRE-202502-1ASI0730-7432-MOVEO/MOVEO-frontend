@@ -70,9 +70,17 @@
                 <span class="price-value">S/. {{ rental.totalPrice }}</span>
               </div>
               <div class="rental-actions">
-                <button class="btn-action btn-details">
+                <button @click="viewDetails(rental.id)" class="btn-action btn-details">
                   <i class="pi pi-eye"></i>
-                  {{ t('rental.browse.vehicleCard.viewDetails') }}
+                  Ver Detalles
+                </button>
+                <button 
+                  v-if="rental.status === 'active' || rental.status === 'confirmed'"
+                  @click="completeRental(rental.id)"
+                  class="btn-action btn-complete"
+                >
+                  <i class="pi pi-check"></i>
+                  Completar
                 </button>
               </div>
             </div>
@@ -216,6 +224,22 @@ function getStatusLabel(status) {
     'cancelled': 'Cancelado'
   }
   return labels[status] || status
+}
+
+// Ver detalles del alquiler
+const viewDetails = (rentalId) => {
+  router.push(`/rental/details/${rentalId}`)
+}
+
+// Completar alquiler
+const completeRental = async (rentalId) => {
+  try {
+    await rentalStore.updateRentalStatus(rentalId, 'completed')
+    await rentalStore.loadRentals()
+    console.log('✅ Alquiler completado')
+  } catch (error) {
+    console.error('Error completing rental:', error)
+  }
 }
 </script>
 
@@ -549,6 +573,16 @@ function getStatusLabel(status) {
 .btn-details:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(58, 94, 94, 0.3);
+}
+
+.btn-complete {
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  color: white;
+}
+
+.btn-complete:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
 }
 
 @media (max-width: 768px) {

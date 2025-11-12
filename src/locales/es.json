@@ -318,7 +318,9 @@
       "status": {
         "completed": "completado",
         "pending": "pendiente",
-        "cancelled": "cancelado"
+        "cancelled": "cancelado",
+        "refunded": "reembolsado",
+        "held": "retenido"
       },
       "methods": {
         "card": "Tarjeta",
@@ -644,8 +646,169 @@
         "myVehicles": "Mis Vehículos",
         "noVehicles": "No tienes vehículos publicados",
         "addVehicle": "Agregar Vehículo",
-        "viewAll": "Ver Todos"
+        "viewAll": "Ver Todos",
+        "monthlyEarnings": "Ganancias Mensuales",
+        "bestMonth": "Mejor Mes",
+        "totalEarned": "Total Ganado",
+        "averagePerMonth": "Promedio Mensual"
       }
     }
+  },
+  "adventure": {
+    "menu": {
+      "title": "Aventuras"
+    },
+    "routes": {
+      "title": "Descubre Tu Próxima Aventura",
+      "subtitle": "Rutas épicas que transforman un simple alquiler en una experiencia inolvidable",
+      "stats": {
+        "total": "Rutas Disponibles",
+        "beach": "Rutas Playeras",
+        "mountain": "Rutas Montañeras",
+        "cultural": "Rutas Culturales"
+      },
+      "filters": {
+        "search": "Buscar rutas por nombre, ubicación o etiquetas...",
+        "type": "Tipo de Ruta",
+        "difficulty": "Dificultad",
+        "reset": "Resetear Filtros"
+      },
+      "types": {
+        "all": "Todas las Rutas",
+        "beach": "Rutas Playeras",
+        "mountain": "Rutas Montañeras",
+        "cultural": "Rutas Culturales",
+        "gastronomic": "Rutas Gastronómicas",
+        "adventure": "Aventura Extrema",
+        "scenic": "Rutas Escénicas"
+      },
+      "difficulty": {
+        "all": "Todas",
+        "easy": "Fácil",
+        "moderate": "Moderada",
+        "hard": "Difícil"
+      },
+      "card": {
+        "featured": "Destacada",
+        "from": "Desde",
+        "explore": "Explorar Ruta",
+        "reviews": "reseñas"
+      },
+      "empty": {
+        "title": "No se encontraron rutas",
+        "message": "Intenta ajustar los filtros de búsqueda"
+      },
+      "loading": "Cargando rutas de aventura...",
+      "error": "Error al cargar rutas"
+    },
+    "detail": {
+      "overview": "Vista General",
+      "itinerary": "Itinerario",
+      "highlights": "Lo Más Destacado",
+      "vehicles": "Vehículos Recomendados",
+      "bookNow": "Comenzar Aventura",
+      "duration": "Duración",
+      "distance": "Distancia",
+      "difficulty": "Dificultad",
+      "bestSeason": "Mejor Época",
+      "rating": "Calificación",
+      "backToRoutes": "Volver a Rutas",
+      "selectVehicle": "Seleccionar Vehículo",
+      "notFound": "Ruta no encontrada"
+    }
+  },
+  "notification": {
+    "notifications": "Notificaciones",
+    "markAsRead": "Marcar como leída",
+    "markAllAsRead": "Marcar todas como leídas",
+    "delete": "Eliminar",
+    "view": "Ver",
+    "viewAll": "Ver todas",
+    "noNotifications": "No tienes notificaciones",
+    "noNotificationsDesc": "Cuando tengas nuevas notificaciones, aparecerán aquí",
+    "loadError": "Error al cargar notificaciones"
+  },
+  "support": {
+    "tickets": "Tickets de Soporte",
+    "createTicket": "Crear Ticket",
+    "ticketType": "Tipo de Ticket",
+    "selectType": "Seleccionar tipo",
+    "vehicle": "Vehículo",
+    "selectVehicle": "Seleccionar vehículo",
+    "rental": "Alquiler",
+    "selectRental": "Seleccionar alquiler",
+    "rentalRequired": "Debe seleccionar el alquiler asociado",
+    "damageResponsible": "Usuario Responsable del Daño",
+    "renterName": "Nombre del Arrendatario",
+    "rentalPeriod": "Período de Alquiler",
+    "rentalId": "ID de Alquiler",
+    "rentalValue": "Valor del Alquiler",
+    "priorityLabel": "Prioridad",
+    "selectPriority": "Seleccionar prioridad",
+    "subject": "Asunto",
+    "subjectPlaceholder": "Describe brevemente el problema",
+    "description": "Descripción",
+    "descriptionPlaceholder": "Proporciona detalles sobre el problema o consulta",
+    "estimatedCost": "Costo Estimado",
+    "estimatedCostPlaceholder": "S/. 0.00",
+    "attachments": "Archivos Adjuntos",
+    "attachmentsHelp": "Puedes subir imágenes (máximo 5MB cada una)",
+    "submitTicket": "Enviar Ticket",
+    "totalTickets": "Total de Tickets",
+    "openTickets": "Tickets Abiertos",
+    "damageReports": "Reportes de Daños",
+    "closedTickets": "Tickets Cerrados",
+    "filterByStatus": "Filtrar por Estado",
+    "allStatuses": "Todos los estados",
+    "filterByType": "Filtrar por Tipo",
+    "allTypes": "Todos los tipos",
+    "noTicketsFound": "No se encontraron tickets",
+    "proceedToPayment": "Proceder al Pago",
+    "closeTicket": "Cerrar Ticket",
+    "updateTicket": "Actualizar Ticket",
+    "actions": "Acciones",
+    "resolutionNotes": "Notas de Resolución",
+    "resolutionNotesPlaceholder": "Escribe las notas de resolución...",
+    "closeTicketConfirm": "¿Estás seguro de que deseas cerrar este ticket?",
+    "resolvedAt": "Resuelto el",
+    "ticketCreatedSuccess": "Ticket creado exitosamente",
+    "ticketCreatedError": "Error al crear el ticket",
+    "ticketClosedSuccess": "Ticket cerrado exitosamente",
+    "ticketClosedError": "Error al cerrar el ticket",
+    "fillRequiredFields": "Por favor completa todos los campos requeridos",
+    "typeRequired": "El tipo de ticket es requerido",
+    "vehicleRequired": "El vehículo es requerido para reportes de daños",
+    "priorityRequired": "La prioridad es requerida",
+    "subjectRequired": "El asunto es requerido",
+    "descriptionRequired": "La descripción es requerida",
+    "type": {
+      "damage": "Reporte de Daño",
+      "complaint": "Queja",
+      "question": "Pregunta",
+      "technical": "Problema Técnico",
+      "other": "Otro"
+    },
+    "status": {
+      "open": "Abierto",
+      "inProgress": "En Progreso",
+      "resolved": "Resuelto",
+      "closed": "Cerrado"
+    },
+    "priority": {
+      "low": "Baja",
+      "medium": "Media",
+      "high": "Alta",
+      "urgent": "Urgente"
+    }
+  },
+  "common": {
+    "success": "Éxito",
+    "error": "Error",
+    "cancel": "Cancelar",
+    "back": "Volver"
+  },
+  "user": {
+    "owner": "Propietario",
+    "renter": "Cliente"
   }
 }

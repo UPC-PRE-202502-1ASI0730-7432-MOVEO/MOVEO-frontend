@@ -20,8 +20,9 @@
             </h1>
           </div>
 
-          <!-- Language Selector -->
-          <div class="hero-lang">
+          <!-- Language Selector & Notifications -->
+          <div class="hero-actions">
+            <NotificationPanel v-if="isAuthenticated" />
             <LanguageSelector />
           </div>
         </div>
@@ -35,6 +36,7 @@ import { computed } from 'vue'
 import { useUserStore } from '@/app/iam/application/user.store'
 import { useI18n } from 'vue-i18n'
 import LanguageSelector from './language-selector.vue'
+import NotificationPanel from '@/app/notification/presentation/components/notification-panel.vue'
 
 const { t } = useI18n()
 const userStore = useUserStore()
@@ -112,7 +114,10 @@ const isOwner = computed(() => userStore.isOwner.value)
   }
 }
 
-.hero-lang {
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   flex-shrink: 0;
 }
 

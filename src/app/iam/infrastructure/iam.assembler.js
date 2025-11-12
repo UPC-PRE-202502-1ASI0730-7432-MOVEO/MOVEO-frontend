@@ -1,5 +1,6 @@
 // Assembler: DTO (JSON API) → User entity
-import { User } from '../domain/User.entity.js'
+import { apiClient } from '@/app/shared/infrastructure/apiClient.js'
+import { User } from '../domain/model/User.entity.js'
 
 /**
  * Converts a user DTO from the API to a User entity

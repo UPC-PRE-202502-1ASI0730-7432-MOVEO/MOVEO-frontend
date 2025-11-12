@@ -643,8 +643,169 @@
         "myVehicles": "My Vehicles",
         "noVehicles": "You have no published vehicles",
         "addVehicle": "Add Vehicle",
-        "viewAll": "View All"
+        "viewAll": "View All",
+        "monthlyEarnings": "Monthly Earnings",
+        "bestMonth": "Best Month",
+        "totalEarned": "Total Earned",
+        "averagePerMonth": "Monthly Average"
       }
     }
+  },
+  "adventure": {
+    "menu": {
+      "title": "Adventures"
+    },
+    "routes": {
+      "title": "Discover Your Next Adventure",
+      "subtitle": "Epic routes that transform a simple rental into an unforgettable experience",
+      "stats": {
+        "total": "Available Routes",
+        "beach": "Beach Routes",
+        "mountain": "Mountain Routes",
+        "cultural": "Cultural Routes"
+      },
+      "filters": {
+        "search": "Search routes by name, location or tags...",
+        "type": "Route Type",
+        "difficulty": "Difficulty",
+        "reset": "Reset Filters"
+      },
+      "types": {
+        "all": "All Routes",
+        "beach": "Beach Routes",
+        "mountain": "Mountain Routes",
+        "cultural": "Cultural Routes",
+        "gastronomic": "Gastronomic Routes",
+        "adventure": "Extreme Adventure",
+        "scenic": "Scenic Routes"
+      },
+      "difficulty": {
+        "all": "All",
+        "easy": "Easy",
+        "moderate": "Moderate",
+        "hard": "Hard"
+      },
+      "card": {
+        "featured": "Featured",
+        "from": "From",
+        "explore": "Explore Route",
+        "reviews": "reviews"
+      },
+      "empty": {
+        "title": "No routes found",
+        "message": "Try adjusting your search filters"
+      },
+      "loading": "Loading adventure routes...",
+      "error": "Error loading routes"
+    },
+    "detail": {
+      "overview": "Overview",
+      "itinerary": "Itinerary",
+      "highlights": "Highlights",
+      "vehicles": "Recommended Vehicles",
+      "bookNow": "Start Adventure",
+      "duration": "Duration",
+      "distance": "Distance",
+      "difficulty": "Difficulty",
+      "bestSeason": "Best Season",
+      "rating": "Rating",
+      "backToRoutes": "Back to Routes",
+      "selectVehicle": "Select Vehicle",
+      "notFound": "Route not found"
+    }
+  },
+  "notification": {
+    "notifications": "Notifications",
+    "markAsRead": "Mark as read",
+    "markAllAsRead": "Mark all as read",
+    "delete": "Delete",
+    "view": "View",
+    "viewAll": "View all",
+    "noNotifications": "You have no notifications",
+    "noNotificationsDesc": "When you have new notifications, they will appear here",
+    "loadError": "Error loading notifications"
+  },
+  "support": {
+    "tickets": "Support Tickets",
+    "createTicket": "Create Ticket",
+    "ticketType": "Ticket Type",
+    "selectType": "Select type",
+    "vehicle": "Vehicle",
+    "selectVehicle": "Select vehicle",
+    "rental": "Rental",
+    "selectRental": "Select rental",
+    "rentalRequired": "You must select the associated rental",
+    "damageResponsible": "Damage Responsible User",
+    "renterName": "Renter Name",
+    "rentalPeriod": "Rental Period",
+    "rentalId": "Rental ID",
+    "rentalValue": "Rental Value",
+    "priorityLabel": "Priority",
+    "selectPriority": "Select priority",
+    "subject": "Subject",
+    "subjectPlaceholder": "Briefly describe the issue",
+    "description": "Description",
+    "descriptionPlaceholder": "Provide details about the issue or inquiry",
+    "estimatedCost": "Estimated Cost",
+    "estimatedCostPlaceholder": "S/. 0.00",
+    "attachments": "Attachments",
+    "attachmentsHelp": "You can upload images (max 5MB each)",
+    "submitTicket": "Submit Ticket",
+    "totalTickets": "Total Tickets",
+    "openTickets": "Open Tickets",
+    "damageReports": "Damage Reports",
+    "closedTickets": "Closed Tickets",
+    "filterByStatus": "Filter by Status",
+    "allStatuses": "All statuses",
+    "filterByType": "Filter by Type",
+    "allTypes": "All types",
+    "noTicketsFound": "No tickets found",
+    "proceedToPayment": "Proceed to Payment",
+    "closeTicket": "Close Ticket",
+    "updateTicket": "Update Ticket",
+    "actions": "Actions",
+    "resolutionNotes": "Resolution Notes",
+    "resolutionNotesPlaceholder": "Write resolution notes...",
+    "closeTicketConfirm": "Are you sure you want to close this ticket?",
+    "resolvedAt": "Resolved on",
+    "ticketCreatedSuccess": "Ticket created successfully",
+    "ticketCreatedError": "Error creating ticket",
+    "ticketClosedSuccess": "Ticket closed successfully",
+    "ticketClosedError": "Error closing ticket",
+    "fillRequiredFields": "Please fill all required fields",
+    "typeRequired": "Ticket type is required",
+    "vehicleRequired": "Vehicle is required for damage reports",
+    "priorityRequired": "Priority is required",
+    "subjectRequired": "Subject is required",
+    "descriptionRequired": "Description is required",
+    "type": {
+      "damage": "Damage Report",
+      "complaint": "Complaint",
+      "question": "Question",
+      "technical": "Technical Issue",
+      "other": "Other"
+    },
+    "status": {
+      "open": "Open",
+      "inProgress": "In Progress",
+      "resolved": "Resolved",
+      "closed": "Closed"
+    },
+    "priority": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "urgent": "Urgent"
+    }
+  },
+  "common": {
+    "success": "Success",
+    "error": "Error",
+    "cancel": "Cancel",
+    "back": "Back"
+  },
+  "user": {
+    "owner": "Owner",
+    "renter": "Renter"
   }
 }

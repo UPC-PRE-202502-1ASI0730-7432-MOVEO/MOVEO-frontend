@@ -158,6 +158,139 @@ export async function loadRentals() {
   } catch (e) { state.error = e.message } finally { state.loading = false }
 }
 
+export async function updateRentalStatus(rentalId, newStatus) {
+  state.loading = true
+  state.error = null
+  try {
+    const rental = state.rentals.find(r => r.id === rentalId)
+    
+    await RentalApi.updateRentalStatus(rentalId, newStatus)
+    
+    // Crear notificaciones según el nuevo estado
+    if (rental) {
+      if (newStatus === 'completed') {
+        // Notificar al owner que el alquiler se completó
+        await createRentalCompletedNotification(rental)
+      } else if (newStatus === 'accepted') {
+        // Notificar al renter que su solicitud fue aceptada
+        await createRentalAcceptedNotification(rental)
+      } else if (newStatus === 'rejected') {
+        // Notificar al renter que su solicitud fue rechazada
+        await createRentalRejectedNotification(rental)
+      }
+    }
+    
+    // Recargar rentals después de actualizar
+    await loadRentals()
+  } catch (e) {
+    state.error = e.message
+    throw e
+  } finally {
+    state.loading = false
+  }
+}
+
+// Crear notificación cuando un rental se completa
+async function createRentalCompletedNotification(rental) {
+  try {
+    const axios = (await import('axios')).default
+    const vehicle = state.vehicles.find(v => v.id === rental.vehicleId)
+    
+    const notification = {
+      userId: rental.ownerId,
+      type: 'rental_completed',
+      title: '✅ Alquiler Completado',
+      message: `El cliente ${rental.renterName || ''} ha completado el alquiler del vehículo ${vehicle?.brand} ${vehicle?.model}. Alquiler #${rental.id}. Total: S/. ${rental.totalPrice}`,
+      relatedId: rental.id,
+      relatedType: 'rental',
+      read: false,
+      actionUrl: `/rental/vehicles/${rental.vehicleId}`,
+      actionLabel: 'Ver Vehículo',
+      metadata: {
+        rentalId: rental.id,
+        vehicleId: rental.vehicleId,
+        renterId: rental.renterId,
+        renterName: rental.renterName,
+        totalPrice: rental.totalPrice
+      },
+      createdAt: new Date().toISOString(),
+      readAt: null
+    }
+    
+    await axios.post('http://localhost:5332/notifications', notification)
+    console.log('✅ Notificación de alquiler completado creada para owner:', rental.ownerId)
+  } catch (error) {
+    console.error('Error creating rental completed notification:', error)
+  }
+}
+
+// Crear notificación cuando una solicitud es aceptada
+async function createRentalAcceptedNotification(rental) {
+  try {
+    const axios = (await import('axios')).default
+    const vehicle = state.vehicles.find(v => v.id === rental.vehicleId)
+    
+    const notification = {
+      userId: rental.renterId,
+      type: 'rental_confirmed',
+      title: '🎉 ¡Solicitud Aceptada!',
+      message: `Tu solicitud de alquiler del vehículo ${vehicle?.brand} ${vehicle?.model} ha sido aceptada. Alquiler #${rental.id}. Puedes recoger el vehículo el ${new Date(rental.startDate).toLocaleDateString('es-ES')}`,
+      relatedId: rental.id,
+      relatedType: 'rental',
+      read: false,
+      actionUrl: `/rental/details/${rental.id}`,
+      actionLabel: 'Ver Detalles',
+      metadata: {
+        rentalId: rental.id,
+        vehicleId: rental.vehicleId,
+        ownerId: rental.ownerId,
+        totalPrice: rental.totalPrice,
+        startDate: rental.startDate,
+        endDate: rental.endDate
+      },
+      createdAt: new Date().toISOString(),
+      readAt: null
+    }
+    
+    await axios.post('http://localhost:5332/notifications', notification)
+    console.log('✅ Notificación de solicitud aceptada creada para renter:', rental.renterId)
+  } catch (error) {
+    console.error('Error creating rental accepted notification:', error)
+  }
+}
+
+// Crear notificación cuando una solicitud es rechazada
+async function createRentalRejectedNotification(rental) {
+  try {
+    const axios = (await import('axios')).default
+    const vehicle = state.vehicles.find(v => v.id === rental.vehicleId)
+    
+    const notification = {
+      userId: rental.renterId,
+      type: 'rental_cancelled',
+      title: '❌ Solicitud Rechazada',
+      message: `Lo sentimos, tu solicitud de alquiler del vehículo ${vehicle?.brand} ${vehicle?.model} ha sido rechazada por el propietario. Alquiler #${rental.id}`,
+      relatedId: rental.id,
+      relatedType: 'rental',
+      read: false,
+      actionUrl: `/rental/browse`,
+      actionLabel: 'Ver Otros Vehículos',
+      metadata: {
+        rentalId: rental.id,
+        vehicleId: rental.vehicleId,
+        ownerId: rental.ownerId
+      },
+      createdAt: new Date().toISOString(),
+      readAt: null
+    }
+    
+    await axios.post('http://localhost:5332/notifications', notification)
+    console.log('✅ Notificación de solicitud rechazada creada para renter:', rental.renterId)
+  } catch (error) {
+    console.error('Error creating rental rejected notification:', error)
+  }
+}
+
 export function selectVehicle(id) { state.selectedVehicleId = id }
 
 export const selectedVehicle = computed(() => state.vehicles.find(v => v.id === state.selectedVehicleId) || null)
@@ -198,6 +331,7 @@ export function useRentalStore() {
     state,
     loadVehicles,
     loadRentals,
+    updateRentalStatus,
     selectVehicle,
     selectedVehicle,
     filteredVehicles,
