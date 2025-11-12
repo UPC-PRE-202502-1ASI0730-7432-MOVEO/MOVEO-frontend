@@ -868,5 +868,315 @@
       ],
       "commissionNote": "MOVEO cobra 15% de comisión sobre el monto del alquiler."
     }
+  ],
+  "adventure-routes": [
+    {
+      "id": 1,
+      "name": "Ruta Playera del Norte",
+      "type": "beach",
+      "description": "Recorre las mejores playas del norte peruano en una aventura de 3 días inolvidable. Desde las aguas turquesas de Máncora hasta las olas perfectas de Cabo Blanco, esta ruta te llevará a través de paisajes costeros espectaculares, pequeños pueblos de pescadores llenos de encanto y experiencias gastronómicas únicas con los mejores ceviches y mariscos frescos del Pacífico.",
+      "summary": "3 días explorando playas paradisíacas del norte peruano",
+      "duration": 3,
+      "distance": 450,
+      "difficulty": "easy",
+      "imageUrl": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400",
+      "keyPoints": [
+        {
+          "name": "Máncora",
+          "description": "Playa principal con vida nocturna vibrante y excelentes restaurantes"
+        },
+        {
+          "name": "Punta Sal",
+          "description": "Aguas cristalinas perfectas para snorkel y relajación"
+        },
+        {
+          "name": "Cabo Blanco",
+          "description": "Legendario spot de surf, hogar de récords mundiales de pesca"
+        }
+      ],
+      "startLocation": "Lima",
+      "endLocation": "Máncora",
+      "highlights": [
+        "Playas vírgenes de arena blanca",
+        "Surf clase mundial en Cabo Blanco",
+        "Gastronomía marina excepcional",
+        "Avistamiento de tortugas marinas",
+        "Puestas de sol espectaculares"
+      ],
+      "recommendedVehicles": [1, 3, 5],
+      "estimatedCost": 450.00,
+      "bestSeason": "Diciembre - Marzo",
+      "tags": ["playa", "surf", "verano", "gastronomía", "relax"],
+      "featured": true,
+      "rating": 4.8,
+      "reviewsCount": 127,
+      "createdAt": "2024-01-15T10:00:00Z",
+      "updatedAt": "2024-01-15T10:00:00Z"
+    },
+    {
+      "id": 2,
+      "name": "Camino Inca a Machu Picchu",
+      "type": "mountain",
+      "description": "La ruta más emblemática del Perú te espera. Sigue los pasos de los antiguos incas a través de montañas majestuosas, bosques nublados místicos y ruinas arqueológicas impresionantes. Esta aventura de 4 días culmina con la llegada al amanecer a la ciudadela perdida de Machu Picchu, una de las Siete Maravillas del Mundo Moderno.",
+      "summary": "4 días de trekking hacia la ciudad sagrada de los Incas",
+      "duration": 4,
+      "distance": 320,
+      "difficulty": "hard",
+      "imageUrl": "https://images.unsplash.com/photo-1587595431973-160d0d94add1?w=1600",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1587595431973-160d0d94add1?w=400",
+      "keyPoints": [
+        {
+          "name": "Cusco",
+          "description": "Ciudad imperial, punto de partida de la aventura"
+        },
+        {
+          "name": "Valle Sagrado",
+          "description": "Terrazas agrícolas incas y pueblos tradicionales"
+        },
+        {
+          "name": "Machu Picchu",
+          "description": "Ciudadela inca del siglo XV, patrimonio de la humanidad"
+        }
+      ],
+      "startLocation": "Lima",
+      "endLocation": "Cusco",
+      "highlights": [
+        "Trekking por senderos incas auténticos",
+        "Amanecer en Machu Picchu",
+        "Ruinas arqueológicas en el camino",
+        "Flora y fauna andina única",
+        "Experiencia cultural inmersiva"
+      ],
+      "recommendedVehicles": [2, 4, 7],
+      "estimatedCost": 850.00,
+      "bestSeason": "Mayo - Septiembre",
+      "tags": ["montaña", "historia", "trekking", "cultura", "aventura"],
+      "featured": true,
+      "rating": 4.9,
+      "reviewsCount": 243,
+      "createdAt": "2024-01-16T10:00:00Z",
+      "updatedAt": "2024-01-16T10:00:00Z"
+    },
+    {
+      "id": 3,
+      "name": "Ruta Colonial de Lima",
+      "type": "cultural",
+      "description": "Descubre el corazón histórico de Lima en un recorrido de 1 día por el centro histórico, declarado Patrimonio de la Humanidad por la UNESCO. Visita impresionantes iglesias coloniales, museos fascinantes, plazas emblemáticas y prueba la gastronomía que ha convertido a Lima en la capital gastronómica de Latinoamérica.",
+      "summary": "1 día explorando el patrimonio colonial de Lima",
+      "duration": 1,
+      "distance": 25,
+      "difficulty": "easy",
+      "imageUrl": "https://images.unsplash.com/photo-1555791018-6572a7ad7e0e?w=1600",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1555791018-6572a7ad7e0e?w=400",
+      "keyPoints": [
+        {
+          "name": "Plaza Mayor",
+          "description": "Centro histórico con arquitectura colonial española"
+        },
+        {
+          "name": "Convento de San Francisco",
+          "description": "Famosas catacumbas y biblioteca colonial"
+        },
+        {
+          "name": "Barrio Bohemio de Barranco",
+          "description": "Arte callejero, galerías y cafés con encanto"
+        }
+      ],
+      "startLocation": "Lima",
+      "endLocation": "Lima",
+      "highlights": [
+        "Arquitectura colonial del siglo XVI",
+        "Catacumbas de San Francisco",
+        "Gastronomía peruana de autor",
+        "Arte y cultura contemporánea",
+        "Balcones coloniales de madera"
+      ],
+      "recommendedVehicles": [1, 6, 8],
+      "estimatedCost": 120.00,
+      "bestSeason": "Todo el año",
+      "tags": ["cultura", "historia", "gastronomía", "arte", "ciudad"],
+      "featured": true,
+      "rating": 4.6,
+      "reviewsCount": 89,
+      "createdAt": "2024-01-17T10:00:00Z",
+      "updatedAt": "2024-01-17T10:00:00Z"
+    },
+    {
+      "id": 4,
+      "name": "Ruta Gastronómica Limeña",
+      "type": "gastronomic",
+      "description": "Lima es conocida como la capital gastronómica de Latinoamérica, y esta ruta de 2 días te llevará a descubrir por qué. Desde restaurantes con estrellas Michelin hasta mercados tradicionales llenos de sabores auténticos, pasando por cevicherías locales y experiencias culinarias únicas que combinan técnicas ancestrales con innovación contemporánea.",
+      "summary": "2 días degustando la mejor gastronomía peruana",
+      "duration": 2,
+      "distance": 60,
+      "difficulty": "easy",
+      "imageUrl": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1600",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400",
+      "keyPoints": [
+        {
+          "name": "Miraflores",
+          "description": "Restaurantes de alta cocina con vista al Pacífico"
+        },
+        {
+          "name": "Mercado de Surquillo",
+          "description": "Ingredientes frescos y comida callejera auténtica"
+        },
+        {
+          "name": "Barranco",
+          "description": "Bares y cafeterías con propuestas innovadoras"
+        }
+      ],
+      "startLocation": "Lima",
+      "endLocation": "Lima",
+      "highlights": [
+        "Ceviche fresco del día",
+        "Restaurantes premiados internacionalmente",
+        "Mercados locales tradicionales",
+        "Cocina fusión nikkei",
+        "Experiencias con chefs reconocidos"
+      ],
+      "recommendedVehicles": [1, 6, 8],
+      "estimatedCost": 380.00,
+      "bestSeason": "Todo el año",
+      "tags": ["gastronomía", "cultura", "ciudad", "lujo", "experiencia"],
+      "featured": false,
+      "rating": 4.7,
+      "reviewsCount": 156,
+      "createdAt": "2024-01-18T10:00:00Z",
+      "updatedAt": "2024-01-18T10:00:00Z"
+    },
+    {
+      "id": 5,
+      "name": "Expedición Cañón del Colca",
+      "type": "adventure",
+      "description": "Adéntrate en uno de los cañones más profundos del mundo en esta expedición de 3 días llena de adrenalina. Observa el majestuoso vuelo del cóndor andino, explora pueblos tradicionales que mantienen costumbres ancestrales, relájate en aguas termales naturales y desafía tus límites en caminatas por paisajes volcánicos impresionantes.",
+      "summary": "3 días de aventura en el segundo cañón más profundo del mundo",
+      "duration": 3,
+      "distance": 380,
+      "difficulty": "moderate",
+      "imageUrl": "https://images.unsplash.com/photo-1551632811-561732d1e306?w=1600",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1551632811-561732d1e306?w=400",
+      "keyPoints": [
+        {
+          "name": "Arequipa",
+          "description": "Ciudad Blanca, base de la expedición"
+        },
+        {
+          "name": "Cruz del Cóndor",
+          "description": "Mirador para observar cóndores en vuelo"
+        },
+        {
+          "name": "Chivay",
+          "description": "Pueblo tradicional con aguas termales"
+        }
+      ],
+      "startLocation": "Arequipa",
+      "endLocation": "Arequipa",
+      "highlights": [
+        "Avistamiento de cóndores andinos",
+        "Terrazas agrícolas preincaicas",
+        "Aguas termales naturales",
+        "Pueblos tradicionales auténticos",
+        "Paisajes volcánicos únicos"
+      ],
+      "recommendedVehicles": [2, 4, 7],
+      "estimatedCost": 520.00,
+      "bestSeason": "Abril - Noviembre",
+      "tags": ["aventura", "naturaleza", "trekking", "cultura", "montaña"],
+      "featured": false,
+      "rating": 4.5,
+      "reviewsCount": 98,
+      "createdAt": "2024-01-19T10:00:00Z",
+      "updatedAt": "2024-01-19T10:00:00Z"
+    },
+    {
+      "id": 6,
+      "name": "Ruta Escénica Paracas - Huacachina",
+      "type": "scenic",
+      "description": "Combina lo mejor de la costa y el desierto peruano en esta ruta de 2 días. Navega por las Islas Ballestas observando lobos marinos y pingüinos de Humboldt, explora la Reserva Nacional de Paracas con sus acantilados rojizos y playas desérticas, y termina con emocionantes paseos en sandboard y tubulares por las dunas doradas de Huacachina.",
+      "summary": "2 días entre islas, desierto y el oasis más bello de Sudamérica",
+      "duration": 2,
+      "distance": 280,
+      "difficulty": "easy",
+      "imageUrl": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400",
+      "keyPoints": [
+        {
+          "name": "Islas Ballestas",
+          "description": "Fauna marina: lobos, pingüinos y aves guaneras"
+        },
+        {
+          "name": "Reserva Nacional de Paracas",
+          "description": "Playas Roja y La Catedral, paisajes desérticos"
+        },
+        {
+          "name": "Oasis de Huacachina",
+          "description": "Laguna rodeada de dunas, sandboarding y buggies"
+        }
+      ],
+      "startLocation": "Lima",
+      "endLocation": "Ica",
+      "highlights": [
+        "Navegación por Islas Ballestas",
+        "Observación de fauna marina",
+        "Sandboarding en dunas gigantes",
+        "Oasis natural de Huacachina",
+        "Paseo en tubulares por el desierto"
+      ],
+      "recommendedVehicles": [1, 3, 5, 7],
+      "estimatedCost": 350.00,
+      "bestSeason": "Septiembre - Marzo",
+      "tags": ["aventura", "naturaleza", "playa", "desierto", "fauna"],
+      "featured": false,
+      "rating": 4.7,
+      "reviewsCount": 134,
+      "createdAt": "2024-01-20T10:00:00Z",
+      "updatedAt": "2024-01-20T10:00:00Z"
+    },
+    {
+      "id": 7,
+      "name": "Ruta Playera del Sur",
+      "type": "beach",
+      "description": "Descubre las playas más tranquilas y vírgenes del sur de Lima en esta escapada de 2 días perfecta para relajarse y desconectarse. Desde las arenas doradas de Asia hasta las calas escondidas de Pucusana, pasando por los acantilados dramáticos de Cerro Azul, esta ruta ofrece la combinación perfecta de relax, deportes acuáticos y gastronomía marina local.",
+      "summary": "2 días de relax en las mejores playas del sur limeño",
+      "duration": 2,
+      "distance": 180,
+      "difficulty": "easy",
+      "imageUrl": "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1600",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=400",
+      "keyPoints": [
+        {
+          "name": "Asia",
+          "description": "Playas modernas con clubes de playa exclusivos"
+        },
+        {
+          "name": "Cerro Azul",
+          "description": "Pueblo de pescadores con excelente surf"
+        },
+        {
+          "name": "Pucusana",
+          "description": "Caleta pintoresca con islas cercanas"
+        }
+      ],
+      "startLocation": "Lima",
+      "endLocation": "Lima",
+      "highlights": [
+        "Playas de arena dorada",
+        "Clubes de playa modernos",
+        "Surf en Cerro Azul",
+        "Ceviche fresco en Pucusana",
+        "Paseos en bote a islas cercanas"
+      ],
+      "recommendedVehicles": [1, 3, 5, 6],
+      "estimatedCost": 280.00,
+      "bestSeason": "Enero - Marzo",
+      "tags": ["playa", "relax", "surf", "gastronomía", "verano"],
+      "featured": false,
+      "rating": 4.4,
+      "reviewsCount": 76,
+      "createdAt": "2024-01-21T10:00:00Z",
+      "updatedAt": "2024-01-21T10:00:00Z"
+    }
   ]
 }

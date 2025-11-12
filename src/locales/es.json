@@ -647,5 +647,68 @@
         "viewAll": "Ver Todos"
       }
     }
+  },
+  "adventure": {
+    "menu": {
+      "title": "Aventuras"
+    },
+    "routes": {
+      "title": "Descubre Tu Próxima Aventura",
+      "subtitle": "Rutas épicas que transforman un simple alquiler en una experiencia inolvidable",
+      "stats": {
+        "total": "Rutas Disponibles",
+        "beach": "Rutas Playeras",
+        "mountain": "Rutas Montañeras",
+        "cultural": "Rutas Culturales"
+      },
+      "filters": {
+        "search": "Buscar rutas por nombre, ubicación o etiquetas...",
+        "type": "Tipo de Ruta",
+        "difficulty": "Dificultad",
+        "reset": "Resetear Filtros"
+      },
+      "types": {
+        "all": "Todas las Rutas",
+        "beach": "Rutas Playeras",
+        "mountain": "Rutas Montañeras",
+        "cultural": "Rutas Culturales",
+        "gastronomic": "Rutas Gastronómicas",
+        "adventure": "Aventura Extrema",
+        "scenic": "Rutas Escénicas"
+      },
+      "difficulty": {
+        "all": "Todas",
+        "easy": "Fácil",
+        "moderate": "Moderada",
+        "hard": "Difícil"
+      },
+      "card": {
+        "featured": "Destacada",
+        "from": "Desde",
+        "explore": "Explorar Ruta",
+        "reviews": "reseñas"
+      },
+      "empty": {
+        "title": "No se encontraron rutas",
+        "message": "Intenta ajustar los filtros de búsqueda"
+      },
+      "loading": "Cargando rutas de aventura...",
+      "error": "Error al cargar rutas"
+    },
+    "detail": {
+      "overview": "Vista General",
+      "itinerary": "Itinerario",
+      "highlights": "Lo Más Destacado",
+      "vehicles": "Vehículos Recomendados",
+      "bookNow": "Comenzar Aventura",
+      "duration": "Duración",
+      "distance": "Distancia",
+      "difficulty": "Dificultad",
+      "bestSeason": "Mejor Época",
+      "rating": "Calificación",
+      "backToRoutes": "Volver a Rutas",
+      "selectVehicle": "Seleccionar Vehículo",
+      "notFound": "Ruta no encontrada"
+    }
   }
 }

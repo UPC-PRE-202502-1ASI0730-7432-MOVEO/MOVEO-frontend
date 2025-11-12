@@ -38,10 +38,11 @@ const routes = [
     children: rentalRoutes
   },
   
-  // Adventure Module
+  // Adventure Module - Themed Travel Routes
   {
-    path: '/adventures',
-    children: adventureRoutes
+    path: '/adventure',
+    children: adventureRoutes,
+    meta: { requiresAuth: false }
   },
   
   // Payment Module

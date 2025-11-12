@@ -646,5 +646,68 @@
         "viewAll": "View All"
       }
     }
+  },
+  "adventure": {
+    "menu": {
+      "title": "Adventures"
+    },
+    "routes": {
+      "title": "Discover Your Next Adventure",
+      "subtitle": "Epic routes that transform a simple rental into an unforgettable experience",
+      "stats": {
+        "total": "Available Routes",
+        "beach": "Beach Routes",
+        "mountain": "Mountain Routes",
+        "cultural": "Cultural Routes"
+      },
+      "filters": {
+        "search": "Search routes by name, location or tags...",
+        "type": "Route Type",
+        "difficulty": "Difficulty",
+        "reset": "Reset Filters"
+      },
+      "types": {
+        "all": "All Routes",
+        "beach": "Beach Routes",
+        "mountain": "Mountain Routes",
+        "cultural": "Cultural Routes",
+        "gastronomic": "Gastronomic Routes",
+        "adventure": "Extreme Adventure",
+        "scenic": "Scenic Routes"
+      },
+      "difficulty": {
+        "all": "All",
+        "easy": "Easy",
+        "moderate": "Moderate",
+        "hard": "Hard"
+      },
+      "card": {
+        "featured": "Featured",
+        "from": "From",
+        "explore": "Explore Route",
+        "reviews": "reviews"
+      },
+      "empty": {
+        "title": "No routes found",
+        "message": "Try adjusting your search filters"
+      },
+      "loading": "Loading adventure routes...",
+      "error": "Error loading routes"
+    },
+    "detail": {
+      "overview": "Overview",
+      "itinerary": "Itinerary",
+      "highlights": "Highlights",
+      "vehicles": "Recommended Vehicles",
+      "bookNow": "Start Adventure",
+      "duration": "Duration",
+      "distance": "Distance",
+      "difficulty": "Difficulty",
+      "bestSeason": "Best Season",
+      "rating": "Rating",
+      "backToRoutes": "Back to Routes",
+      "selectVehicle": "Select Vehicle",
+      "notFound": "Route not found"
+    }
   }
 }

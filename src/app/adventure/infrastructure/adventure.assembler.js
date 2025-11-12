@@ -1,4 +1,5 @@
 import { Adventure } from "../domain/model/adventure.entity.js";
+import { AdventureRoute } from "../domain/model/adventure-route.entity.js";
 
 export class AdventureAssembler {
     static toEntityFromResource(resource = {}) {
@@ -14,6 +15,16 @@ export class AdventureAssembler {
             images: resource.images ?? (resource.photos ?? []),
             tags: resource.tags ?? []
         });
+    }
+
+    static toRouteEntity(data) {
+        if (!data) return null;
+        return new AdventureRoute(data);
+    }
+
+    static toRouteCollection(dataArray) {
+        if (!Array.isArray(dataArray)) return [];
+        return dataArray.map(item => this.toRouteEntity(item));
     }
 
     static toEntitiesFromResponse(response) {

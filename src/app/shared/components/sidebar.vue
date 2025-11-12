@@ -16,6 +16,7 @@ const isOwner = computed(() => userStore.isOwner.value)
 
 const renterLinks = computed(() => [
   { path: '/dashboard', icon: 'pi-home', label: t('shared.sidebar.renter.dashboard') },
+  { path: '/adventure', icon: 'pi-compass', label: 'Aventuras' },
   { path: '/rental/browse', icon: 'pi-car', label: t('shared.sidebar.renter.explore') },
   { path: '/rental/my-rentals', icon: 'pi-list', label: t('shared.sidebar.renter.myRentals') },
   { path: '/payments/my-payments', icon: 'pi-wallet', label: t('payment.history.title') },
@@ -25,6 +26,7 @@ const renterLinks = computed(() => [
 
 const ownerLinks = computed(() => [
   { path: '/dashboard', icon: 'pi-home', label: t('shared.sidebar.owner.dashboard') },
+  { path: '/adventure', icon: 'pi-compass', label: 'Aventuras' },
   { path: '/rental/my-vehicles', icon: 'pi-car', label: t('shared.sidebar.owner.myVehicles') },
   { path: '/rental/add-vehicle', icon: 'pi-plus-circle', label: t('rental.myVehicles.addVehicle') },
   { path: '/rental/rental-requests', icon: 'pi-inbox', label: t('shared.sidebar.owner.rentalRequests') },
