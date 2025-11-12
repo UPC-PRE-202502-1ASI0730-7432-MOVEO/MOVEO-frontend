@@ -115,11 +115,11 @@
         <template #content>
           <div class="ticket-header">
             <div class="ticket-type">
-              <i :class="['pi', ticket.typeIcon]"></i>
-              <span>{{ ticket.typeLabel }}</span>
+              <i :class="['pi', getTypeIcon(ticket.type)]"></i>
+              <span>{{ getTypeLabel(ticket.type) }}</span>
             </div>
             <Tag :severity="getPrioritySeverity(ticket.priority)">
-              {{ ticket.priorityLabel }}
+              {{ getPriorityLabel(ticket.priority) }}
             </Tag>
           </div>
           
@@ -129,8 +129,8 @@
           
           <div class="ticket-meta">
             <div class="ticket-status">
-              <Tag :class="ticket.statusClass">
-                {{ ticket.statusLabel }}
+              <Tag :severity="ticket.status === 'open' ? 'warning' : ticket.status === 'closed' ? 'success' : 'info'">
+                {{ getStatusLabel(ticket.status) }}
               </Tag>
             </div>
             
@@ -141,14 +141,14 @@
               </span>
               <span class="ticket-date">
                 <i class="pi pi-calendar"></i>
-                {{ ticket.formattedDate }}
+                {{ formatDate(ticket.createdAt) }}
               </span>
             </div>
           </div>
           
           <div v-if="ticket.estimatedCost" class="ticket-cost">
             <strong>{{ $t('support.estimatedCost') }}:</strong>
-            <span class="cost-amount">{{ ticket.formattedCost }}</span>
+            <span class="cost-amount">{{ formatCost(ticket.estimatedCost) }}</span>
           </div>
         </template>
       </Card>
@@ -174,6 +174,7 @@ import ProgressSpinner from 'primevue/progressspinner'
 import Message from 'primevue/message'
 import { useSupportStore } from '@/app/support/application/support.store.js'
 import SupportTicketForm from '../components/support-ticket-form.vue'
+import { useUserStore } from '@/app/iam/application/user.store.js'
 
 const { t } = useI18n()
 const router = useRouter()
@@ -183,10 +184,10 @@ const showCreateDialog = ref(false)
 const selectedStatus = ref(null)
 const selectedType = ref(null)
 
-const tickets = computed(() => supportStore.tickets)
-const stats = computed(() => supportStore.stats)
-const loading = computed(() => supportStore.loading)
-const error = computed(() => supportStore.error)
+const tickets = computed(() => supportStore.state.tickets || [])
+const stats = computed(() => supportStore.stats.value || { total: 0, open: 0, closed: 0, damage: 0 })
+const loading = computed(() => supportStore.state.loading)
+const error = computed(() => supportStore.state.error)
 
 const statusOptions = [
   { label: t('support.status.open'), value: 'open' },
@@ -217,6 +218,29 @@ const filteredTickets = computed(() => {
   return result
 })
 
+const getTypeIcon = (type) => {
+  const icons = {
+    'damage': 'pi-exclamation-triangle',
+    'complaint': 'pi-comment',
+    'question': 'pi-question-circle',
+    'technical': 'pi-wrench',
+    'other': 'pi-info-circle'
+  }
+  return icons[type] || 'pi-ticket'
+}
+
+const getTypeLabel = (type) => {
+  return t(`support.type.${type}`)
+}
+
+const getPriorityLabel = (priority) => {
+  return t(`support.priority.${priority}`)
+}
+
+const getStatusLabel = (status) => {
+  return t(`support.status.${status}`)
+}
+
 const getPrioritySeverity = (priority) => {
   const severityMap = {
     low: 'info',
@@ -225,6 +249,19 @@ const getPrioritySeverity = (priority) => {
     urgent: 'danger'
   }
   return severityMap[priority] || 'info'
+}
+
+const formatCost = (cost) => {
+  return `$${cost.toFixed(2)}`
+}
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString)
+  return date.toLocaleDateString('es-ES', { 
+    day: '2-digit', 
+    month: 'short', 
+    year: 'numeric' 
+  })
 }
 
 const viewTicket = (ticketId) => {
@@ -237,10 +274,22 @@ const handleTicketCreated = async () => {
 }
 
 const loadTickets = async () => {
-  const userStr = localStorage.getItem('user')
-  if (userStr) {
-    const user = JSON.parse(userStr)
-    await supportStore.fetchTickets(user.id)
+  // Prefer userStore over localStorage to get the current authenticated user
+  const userStore = useUserStore()
+  const user = userStore.currentUser.value
+  if (user && user.id !== undefined && user.id !== null) {
+    await supportStore.fetchTickets(Number(user.id))
+  } else {
+    // Fallback: try localStorage if userStore is empty
+    const userStr = localStorage.getItem('user')
+    if (userStr) {
+      try {
+        const parsed = JSON.parse(userStr)
+        await supportStore.fetchTickets(Number(parsed.id))
+      } catch (err) {
+        console.warn('Could not parse user from localStorage', err)
+      }
+    }
   }
 }
 
@@ -252,8 +301,10 @@ onMounted(() => {
 <style scoped>
 .support-tickets-page {
   padding: 2rem;
-  max-width: 1400px;
-  margin: 0 auto;
+  max-width: 100%;
+  width: 100%;
+  margin: 0;
+  min-height: 100vh;
 }
 
 .page-header {
@@ -277,7 +328,8 @@ onMounted(() => {
 }
 
 .stat-card {
-  background: linear-gradient(135deg, var(--primary-50) 0%, var(--surface-0) 100%);
+  background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+  border-left: 4px solid #FF6F00;
 }
 
 .stat-content {
@@ -288,15 +340,15 @@ onMounted(() => {
 
 .stat-icon {
   font-size: 2.5rem;
-  color: var(--primary-color);
+  color: #FF6F00;
 }
 
 .stat-icon.status-open {
-  color: var(--orange-500);
+  color: #FF8F00;
 }
 
 .stat-icon.status-damage {
-  color: var(--red-500);
+  color: #FF6F00;
 }
 
 .stat-icon.status-closed {
@@ -306,13 +358,14 @@ onMounted(() => {
 .stat-value {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--text-color);
+  color: #FF6F00;
 }
 
 .stat-label {
   font-size: 0.875rem;
-  color: var(--text-color-secondary);
+  color: #666;
   margin-top: 0.25rem;
+  font-weight: 500;
 }
 
 .filters-card {
@@ -333,8 +386,9 @@ onMounted(() => {
 .filter-group label {
   display: block;
   margin-bottom: 0.5rem;
-  font-weight: 500;
-  color: var(--text-color);
+  font-weight: 600;
+  color: #FF6F00;
+  font-size: 0.95rem;
 }
 
 .loading-container {

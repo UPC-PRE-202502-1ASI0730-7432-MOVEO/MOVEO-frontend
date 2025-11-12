@@ -20,9 +20,9 @@
           <i class="pi pi-home"></i>
           {{ t('shared.footer.dashboard') }}
         </router-link>
-        <a href="mailto:support@moveo.com" class="footer-link">
+        <a href="mailto:contact@moveo.com" class="footer-link">
           <i class="pi pi-envelope"></i>
-          {{ t('footer.support') }}
+          {{ t('footer.contact') }}
         </a>
       </div>
     </div>

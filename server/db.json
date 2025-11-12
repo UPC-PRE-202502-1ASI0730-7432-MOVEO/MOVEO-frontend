@@ -514,7 +514,7 @@
       "startDate": "2025-10-07T08:00:00Z",
       "endDate": "2025-10-10T18:00:00Z",
       "totalPrice": 135,
-      "status": "active",
+      "status": "completed",
       "pickupLocation": "Av. Arequipa 123, Miraflores",
       "returnLocation": "Av. Arequipa 123, Miraflores",
       "notes": "Alquiler activo en curso.",
@@ -655,6 +655,49 @@
       "createdAt": "2025-10-09T02:38:32.562Z",
       "id": 11,
       "acceptedAt": "2025-10-09T02:39:58.582Z"
+    },
+    {
+      "vehicleId": 1,
+      "renterId": 2,
+      "ownerId": 1,
+      "startDate": "2025-11-13",
+      "endDate": "2025-11-28",
+      "totalPrice": 675,
+      "status": "confirmed",
+      "pickupLocation": "Av. Arequipa 123, Miraflores, Lima",
+      "returnLocation": "Av. Arequipa 123, Miraflores, Lima",
+      "notes": "Reserva realizada. Método de pago: cash",
+      "createdAt": "2025-11-12T05:39:48.829Z",
+      "id": 12,
+      "acceptedAt": "2025-11-12T05:40:46.161Z"
+    },
+    {
+      "vehicleId": 1,
+      "renterId": 2,
+      "ownerId": 1,
+      "startDate": "2026-01-16",
+      "endDate": "2026-03-19",
+      "totalPrice": 2790,
+      "status": "pending",
+      "pickupLocation": "Av. Arequipa 123, Miraflores, Lima",
+      "returnLocation": "Av. Arequipa 123, Miraflores, Lima",
+      "notes": "Reserva realizada. Método de pago: cash",
+      "createdAt": "2025-11-12T06:16:08.298Z",
+      "id": 13
+    },
+    {
+      "vehicleId": 2,
+      "renterId": 2,
+      "ownerId": 1,
+      "startDate": "2025-11-12",
+      "endDate": "2025-11-16",
+      "totalPrice": 220,
+      "status": "pending",
+      "pickupLocation": "Av. Arequipa 123, Miraflores, Lima",
+      "returnLocation": "Av. Arequipa 123, Miraflores, Lima",
+      "notes": "Reserva realizada. Método de pago: cash",
+      "createdAt": "2025-11-12T06:16:21.826Z",
+      "id": 14
     }
   ],
   "payments": [
@@ -763,6 +806,48 @@
       "description": "Alquiler de Honda Civic - 2 día(s)",
       "createdAt": "2025-10-09T02:38:32.590Z",
       "id": 8
+    },
+    {
+      "rentalId": 12,
+      "payerId": 2,
+      "recipientId": 1,
+      "amount": 675,
+      "currency": "PEN",
+      "method": "cash",
+      "status": "pending",
+      "transactionId": "txn_1762925988946",
+      "type": "rental_payment",
+      "description": "Alquiler de Toyota Corolla - 15 día(s)",
+      "createdAt": "2025-11-12T05:39:48.946Z",
+      "id": 9
+    },
+    {
+      "rentalId": 13,
+      "payerId": 2,
+      "recipientId": 1,
+      "amount": 2790,
+      "currency": "PEN",
+      "method": "cash",
+      "status": "pending",
+      "transactionId": "txn_1762928168341",
+      "type": "rental_payment",
+      "description": "Alquiler de Toyota Corolla - 62 día(s)",
+      "createdAt": "2025-11-12T06:16:08.341Z",
+      "id": 10
+    },
+    {
+      "rentalId": 14,
+      "payerId": 2,
+      "recipientId": 1,
+      "amount": 220,
+      "currency": "PEN",
+      "method": "cash",
+      "status": "pending",
+      "transactionId": "txn_1762928181861",
+      "type": "rental_payment",
+      "description": "Alquiler de ToyotaXDDDD Corollaxdxdxdxd - 4 día(s)",
+      "createdAt": "2025-11-12T06:16:21.861Z",
+      "id": 11
     }
   ],
   "reviews": [
@@ -869,10 +954,20 @@
         "Avistamiento de tortugas marinas",
         "Puestas de sol espectaculares"
       ],
-      "recommendedVehicles": [1, 3, 5],
-      "estimatedCost": 450.00,
+      "recommendedVehicles": [
+        1,
+        3,
+        5
+      ],
+      "estimatedCost": 450,
       "bestSeason": "Diciembre - Marzo",
-      "tags": ["playa", "surf", "verano", "gastronomía", "relax"],
+      "tags": [
+        "playa",
+        "surf",
+        "verano",
+        "gastronomía",
+        "relax"
+      ],
       "featured": true,
       "rating": 4.8,
       "reviewsCount": 127,
@@ -913,10 +1008,20 @@
         "Flora y fauna andina única",
         "Experiencia cultural inmersiva"
       ],
-      "recommendedVehicles": [2, 4, 7],
-      "estimatedCost": 850.00,
+      "recommendedVehicles": [
+        2,
+        4,
+        7
+      ],
+      "estimatedCost": 850,
       "bestSeason": "Mayo - Septiembre",
-      "tags": ["montaña", "historia", "trekking", "cultura", "aventura"],
+      "tags": [
+        "montaña",
+        "historia",
+        "trekking",
+        "cultura",
+        "aventura"
+      ],
       "featured": true,
       "rating": 4.9,
       "reviewsCount": 243,
@@ -957,10 +1062,20 @@
         "Arte y cultura contemporánea",
         "Balcones coloniales de madera"
       ],
-      "recommendedVehicles": [1, 6, 8],
-      "estimatedCost": 120.00,
+      "recommendedVehicles": [
+        1,
+        6,
+        8
+      ],
+      "estimatedCost": 120,
       "bestSeason": "Todo el año",
-      "tags": ["cultura", "historia", "gastronomía", "arte", "ciudad"],
+      "tags": [
+        "cultura",
+        "historia",
+        "gastronomía",
+        "arte",
+        "ciudad"
+      ],
       "featured": true,
       "rating": 4.6,
       "reviewsCount": 89,
@@ -1001,10 +1116,20 @@
         "Cocina fusión nikkei",
         "Experiencias con chefs reconocidos"
       ],
-      "recommendedVehicles": [1, 6, 8],
-      "estimatedCost": 380.00,
+      "recommendedVehicles": [
+        1,
+        6,
+        8
+      ],
+      "estimatedCost": 380,
       "bestSeason": "Todo el año",
-      "tags": ["gastronomía", "cultura", "ciudad", "lujo", "experiencia"],
+      "tags": [
+        "gastronomía",
+        "cultura",
+        "ciudad",
+        "lujo",
+        "experiencia"
+      ],
       "featured": false,
       "rating": 4.7,
       "reviewsCount": 156,
@@ -1045,10 +1170,20 @@
         "Pueblos tradicionales auténticos",
         "Paisajes volcánicos únicos"
       ],
-      "recommendedVehicles": [2, 4, 7],
-      "estimatedCost": 520.00,
+      "recommendedVehicles": [
+        2,
+        4,
+        7
+      ],
+      "estimatedCost": 520,
       "bestSeason": "Abril - Noviembre",
-      "tags": ["aventura", "naturaleza", "trekking", "cultura", "montaña"],
+      "tags": [
+        "aventura",
+        "naturaleza",
+        "trekking",
+        "cultura",
+        "montaña"
+      ],
       "featured": false,
       "rating": 4.5,
       "reviewsCount": 98,
@@ -1089,10 +1224,21 @@
         "Oasis natural de Huacachina",
         "Paseo en tubulares por el desierto"
       ],
-      "recommendedVehicles": [1, 3, 5, 7],
-      "estimatedCost": 350.00,
+      "recommendedVehicles": [
+        1,
+        3,
+        5,
+        7
+      ],
+      "estimatedCost": 350,
       "bestSeason": "Septiembre - Marzo",
-      "tags": ["aventura", "naturaleza", "playa", "desierto", "fauna"],
+      "tags": [
+        "aventura",
+        "naturaleza",
+        "playa",
+        "desierto",
+        "fauna"
+      ],
       "featured": false,
       "rating": 4.7,
       "reviewsCount": 134,
@@ -1133,10 +1279,21 @@
         "Ceviche fresco en Pucusana",
         "Paseos en bote a islas cercanas"
       ],
-      "recommendedVehicles": [1, 3, 5, 6],
-      "estimatedCost": 280.00,
+      "recommendedVehicles": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "estimatedCost": 280,
       "bestSeason": "Enero - Marzo",
-      "tags": ["playa", "relax", "surf", "gastronomía", "verano"],
+      "tags": [
+        "playa",
+        "relax",
+        "surf",
+        "gastronomía",
+        "verano"
+      ],
       "featured": false,
       "rating": 4.4,
       "reviewsCount": 76,
@@ -1153,16 +1310,16 @@
       "message": "Se ha reportado un daño en tu vehículo Toyota Corolla 2022. El cliente reportó un rayón en la puerta del conductor.",
       "relatedId": 1,
       "relatedType": "ticket",
-      "read": false,
+      "read": true,
       "actionUrl": "/support/tickets/1",
       "actionLabel": "Ver Ticket",
       "metadata": {
         "ticketId": 1,
         "vehicleId": 1,
-        "estimatedCost": 250.00
+        "estimatedCost": 250
       },
       "createdAt": "2025-11-10T14:30:00Z",
-      "readAt": null
+      "readAt": "2025-11-12T06:21:18.392Z"
     },
     {
       "id": 2,
@@ -1172,16 +1329,16 @@
       "message": "Debes pagar S/. 250.00 por el daño reportado en el vehículo.",
       "relatedId": 1,
       "relatedType": "ticket",
-      "read": false,
+      "read": true,
       "actionUrl": "/payments/damage/1",
       "actionLabel": "Realizar Pago",
       "metadata": {
         "ticketId": 1,
         "vehicleId": 1,
-        "amount": 250.00
+        "amount": 250
       },
       "createdAt": "2025-11-10T14:35:00Z",
-      "readAt": null
+      "readAt": "2025-11-12T06:21:18.344Z"
     },
     {
       "id": 3,
@@ -1209,12 +1366,12 @@
       "message": "Descubre nuestras nuevas rutas de aventura temáticas. Planifica tu próximo viaje con recomendaciones de vehículos.",
       "relatedId": null,
       "relatedType": null,
-      "read": false,
+      "read": true,
       "actionUrl": "/adventure",
       "actionLabel": "Explorar Rutas",
       "metadata": {},
       "createdAt": "2025-11-09T08:00:00Z",
-      "readAt": null
+      "readAt": "2025-11-12T06:21:18.484Z"
     },
     {
       "id": 5,
@@ -1239,7 +1396,7 @@
       "message": "El alquiler del Honda Civic 2021 se ha completado exitosamente. Por favor, califica tu experiencia.",
       "relatedId": 2,
       "relatedType": "rental",
-      "read": false,
+      "read": true,
       "actionUrl": "/rental/my-rentals/2",
       "actionLabel": "Dejar Reseña",
       "metadata": {
@@ -1247,7 +1404,48 @@
         "vehicleId": 3
       },
       "createdAt": "2025-11-10T09:00:00Z",
-      "readAt": null
+      "readAt": "2025-11-12T06:21:18.438Z"
+    },
+    {
+      "userId": 2,
+      "type": "damage_report",
+      "title": "Reporte de Daño - Acción Requerida",
+      "message": "Se ha reportado un daño en el vehículo Toyota Corolla 2022 - undefined. El propietario ha creado un ticket #6. Costo estimado: $2000",
+      "relatedId": 6,
+      "relatedType": "ticket",
+      "read": false,
+      "actionUrl": "/support/tickets/6",
+      "actionLabel": "Ver Ticket y Pagar",
+      "metadata": {
+        "ticketId": 6,
+        "vehicleId": 1,
+        "estimatedCost": 2000,
+        "ownerName": "Carlos Mendoza"
+      },
+      "createdAt": "2025-11-12T06:22:32.033Z",
+      "readAt": null,
+      "id": 7
+    },
+    {
+      "userId": 2,
+      "type": "damage_report",
+      "title": "Reporte de Daño - Acción Requerida",
+      "message": "Se ha reportado un daño en el vehículo Toyota Corolla 2022 - undefined. El propietario ha creado un ticket #7. Costo estimado: $1112200",
+      "relatedId": 7,
+      "relatedType": "ticket",
+      "read": false,
+      "actionUrl": "/support/tickets/7",
+      "actionLabel": "Ver Ticket y Pagar",
+      "metadata": {
+        "ticketId": 7,
+        "vehicleId": 1,
+        "estimatedCost": 1112200,
+        "ownerName": "Carlos Mendoza",
+        "renterName": "Ana López"
+      },
+      "createdAt": "2025-11-12T06:27:01.685Z",
+      "readAt": null,
+      "id": 8
     }
   ],
   "support-tickets": [
@@ -1270,7 +1468,7 @@
       ],
       "assignedTo": null,
       "resolutionNotes": null,
-      "estimatedCost": 250.00,
+      "estimatedCost": 250,
       "createdAt": "2025-11-10T14:25:00Z",
       "updatedAt": "2025-11-10T14:25:00Z",
       "resolvedAt": null
@@ -1293,7 +1491,7 @@
       ],
       "assignedTo": "support@moveo.com",
       "resolutionNotes": "Se está revisando el contrato de alquiler para verificar los términos acordados.",
-      "estimatedCost": 50.00,
+      "estimatedCost": 50,
       "createdAt": "2025-11-09T18:00:00Z",
       "updatedAt": "2025-11-10T10:00:00Z",
       "resolvedAt": null
@@ -1339,7 +1537,7 @@
       ],
       "assignedTo": "support@moveo.com",
       "resolutionNotes": null,
-      "estimatedCost": 800.00,
+      "estimatedCost": 800,
       "createdAt": "2025-11-10T16:00:00Z",
       "updatedAt": "2025-11-10T16:00:00Z",
       "resolvedAt": null
@@ -1364,6 +1562,45 @@
       "createdAt": "2025-11-08T13:45:00Z",
       "updatedAt": "2025-11-09T09:00:00Z",
       "resolvedAt": null
+    },
+    {
+      "userId": 1,
+      "userName": "Carlos Mendoza",
+      "userRole": "owner",
+      "type": "damage",
+      "subject": "me da;o todo el auto",
+      "description": "le pusieron multa",
+      "priority": "high",
+      "attachments": [],
+      "vehicleId": 1,
+      "vehicleName": "Toyota Corolla 2022 - undefined",
+      "rentalId": 1,
+      "renterId": 2,
+      "estimatedCost": 2000,
+      "status": "open",
+      "createdAt": "2025-11-12T06:22:31.985Z",
+      "updatedAt": "2025-11-12T06:22:31.985Z",
+      "id": 6
+    },
+    {
+      "userId": 1,
+      "userName": "Carlos Mendoza",
+      "userRole": "owner",
+      "type": "damage",
+      "subject": "aa",
+      "description": "aaa",
+      "priority": "high",
+      "attachments": [],
+      "vehicleId": 1,
+      "vehicleName": "Toyota Corolla 2022 - undefined",
+      "rentalId": 1,
+      "renterId": 2,
+      "renterName": "Ana López",
+      "estimatedCost": 1112200,
+      "status": "open",
+      "createdAt": "2025-11-12T06:27:01.644Z",
+      "updatedAt": "2025-11-12T06:27:01.644Z",
+      "id": 7
     }
   ]
 }

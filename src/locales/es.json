@@ -318,7 +318,9 @@
       "status": {
         "completed": "completado",
         "pending": "pendiente",
-        "cancelled": "cancelado"
+        "cancelled": "cancelado",
+        "refunded": "reembolsado",
+        "held": "retenido"
       },
       "methods": {
         "card": "Tarjeta",
@@ -644,7 +646,11 @@
         "myVehicles": "Mis Vehículos",
         "noVehicles": "No tienes vehículos publicados",
         "addVehicle": "Agregar Vehículo",
-        "viewAll": "Ver Todos"
+        "viewAll": "Ver Todos",
+        "monthlyEarnings": "Ganancias Mensuales",
+        "bestMonth": "Mejor Mes",
+        "totalEarned": "Total Ganado",
+        "averagePerMonth": "Promedio Mensual"
       }
     }
   },
@@ -719,6 +725,7 @@
     "view": "Ver",
     "viewAll": "Ver todas",
     "noNotifications": "No tienes notificaciones",
+    "noNotificationsDesc": "Cuando tengas nuevas notificaciones, aparecerán aquí",
     "loadError": "Error al cargar notificaciones"
   },
   "support": {
@@ -728,6 +735,14 @@
     "selectType": "Seleccionar tipo",
     "vehicle": "Vehículo",
     "selectVehicle": "Seleccionar vehículo",
+    "rental": "Alquiler",
+    "selectRental": "Seleccionar alquiler",
+    "rentalRequired": "Debe seleccionar el alquiler asociado",
+    "damageResponsible": "Usuario Responsable del Daño",
+    "renterName": "Nombre del Arrendatario",
+    "rentalPeriod": "Período de Alquiler",
+    "rentalId": "ID de Alquiler",
+    "rentalValue": "Valor del Alquiler",
     "priorityLabel": "Prioridad",
     "selectPriority": "Seleccionar prioridad",
     "subject": "Asunto",

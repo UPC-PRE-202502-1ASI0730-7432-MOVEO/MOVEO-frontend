@@ -1,204 +1,170 @@
-import { ref, computed } from 'vue'
-import { SupportApi } from '@/app/support/infrastructure/support-api.js'
-import { useNotificationStore } from '@/app/notification/application/notification.store.js'
+import { reactive, computed } from 'vue'
+import axios from 'axios'
 
-// Module-level singleton state
-const tickets = ref([])
-const currentTicket = ref(null)
-const loading = ref(false)
-const error = ref(null)
+const API_BASE = 'http://localhost:5332'
 
-const openTickets = computed(() => {
-  return (tickets.value || []).filter(t => t.isOpen)
+const state = reactive({
+  tickets: [],
+  currentTicket: null,
+  loading: false,
+  error: null
 })
 
-const closedTickets = computed(() => {
-  return (tickets.value || []).filter(t => t.isClosed)
-})
-
-const damageTickets = computed(() => {
-  return (tickets.value || []).filter(t => t.type === 'damage')
-})
-
-const stats = computed(() => {
-  const list = tickets.value || []
-  return {
-    total: list.length,
-    open: openTickets.value.length,
-    closed: closedTickets.value.length,
-    damage: damageTickets.value.length
-  }
-})
-
-/**
- * Store para gestionar tickets de soporte
- */
-export function useSupportStore() {
-  const notificationStore = useNotificationStore()
-
-  async function fetchTickets(userId) {
-    if (!userId) return
-    loading.value = true
-    error.value = null
+export const useSupportStore = () => {
+  // Cargar tickets del usuario
+  const fetchTickets = async (userId) => {
+    state.loading = true
+    state.error = null
+    
     try {
-      const result = await SupportApi.listTickets(userId)
-      tickets.value = Array.isArray(result) ? result : []
-    } catch (err) {
-      console.error('Error fetching tickets:', err)
-      error.value = err?.message || String(err)
-    } finally {
-      loading.value = false
-    }
-  }
-
-  async function fetchTicket(ticketId) {
-    loading.value = true
-    error.value = null
-    try {
-      const result = await SupportApi.getTicket(ticketId)
-      currentTicket.value = result || null
-      return currentTicket.value
-    } catch (err) {
-      console.error('Error fetching ticket:', err)
-      error.value = err?.message || String(err)
-      currentTicket.value = null
-      throw err
-    } finally {
-      loading.value = false
-    }
-  }
-
-  async function createTicket(ticketData) {
-    try {
-      const created = await SupportApi.createTicket(ticketData)
-      // Add to local state
-      tickets.value = [created, ...tickets.value]
+      // Obtener TODOS los tickets del db.json
+      const response = await axios.get(`${API_BASE}/support-tickets`)
       
-      // Si es un ticket de daño, crear notificación para el owner
-      if (created.type === 'damage' && created.vehicleId) {
-        // Buscar el owner del vehículo (necesitarías una API para esto)
-        // Por ahora asumimos que el ticketData incluye ownerId
-        if (ticketData.ownerId) {
-          await notificationStore.createDamageNotification(ticketData.ownerId, created)
-        }
+      // Filtrar solo los tickets del usuario actual
+      // Normalizar ids a Number para evitar mismatch string/number
+      const uid = Number(userId)
+      const userTickets = response.data.filter(ticket => 
+        Number(ticket.userId) === uid || Number(ticket.renterId) === uid
+      )
+      
+      state.tickets = userTickets
+      console.log('📋 Tickets cargados:', userTickets.length)
+    } catch (error) {
+      console.error('Error loading tickets:', error)
+      state.error = 'Error al cargar los tickets'
+      state.tickets = []
+    } finally {
+      state.loading = false
+    }
+  }
+
+  // Crear nuevo ticket
+  const createTicket = async (ticketData) => {
+    state.loading = true
+    state.error = null
+    
+    try {
+      // 1. Crear el ticket
+      const newTicket = {
+        ...ticketData,
+        status: 'open',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       }
       
-      return created
-    } catch (err) {
-      console.error('Error creating ticket:', err)
-      throw err
-    }
-  }
-
-  async function updateTicket(ticketId, updates) {
-    try {
-      const updated = await SupportApi.updateTicket(ticketId, updates)
-      // Update local state
-      const index = tickets.value.findIndex(t => t.id === ticketId)
-      if (index !== -1) {
-        tickets.value[index] = updated
+      const ticketResponse = await axios.post(`${API_BASE}/support-tickets`, newTicket)
+      const createdTicket = ticketResponse.data
+      
+      // 2. Si es un ticket de daño Y tiene renterId, crear notificación automática
+      if (ticketData.type === 'damage' && ticketData.renterId) {
+        await createDamageNotification(createdTicket, ticketData.renterId, ticketData.renterName)
       }
-      if (currentTicket.value?.id === ticketId) {
-        currentTicket.value = updated
+      
+      // 3. Recargar tickets
+      await fetchTickets(ticketData.userId)
+      
+      return createdTicket
+    } catch (error) {
+      console.error('Error creating ticket:', error)
+      state.error = 'Error al crear el ticket'
+      throw error
+    } finally {
+      state.loading = false
+    }
+  }
+
+  // Crear notificación de daño para el renter
+  const createDamageNotification = async (ticket, renterId, renterName) => {
+    try {
+      const notification = {
+        userId: renterId,
+        type: 'damage_report',
+        title: 'Reporte de Daño - Acción Requerida',
+        message: `Se ha reportado un daño en el vehículo ${ticket.vehicleName || 'alquilado'}. El propietario ha creado un ticket #${ticket.id}. Costo estimado: $${ticket.estimatedCost || 0}`,
+        relatedId: ticket.id,
+        relatedType: 'ticket',
+        read: false,
+        actionUrl: `/support/tickets/${ticket.id}`,
+        actionLabel: 'Ver Ticket y Pagar',
+        metadata: {
+          ticketId: ticket.id,
+          vehicleId: ticket.vehicleId,
+          estimatedCost: ticket.estimatedCost || 0,
+          ownerName: ticket.userName,
+          renterName: renterName
+        },
+        createdAt: new Date().toISOString(),
+        readAt: null
       }
-      return updated
-    } catch (err) {
-      console.error('Error updating ticket:', err)
-      throw err
+      
+      await axios.post(`${API_BASE}/notifications`, notification)
+      console.log('✅ Notificación de daño creada para:', renterName)
+    } catch (error) {
+      console.error('Error creating damage notification:', error)
     }
   }
 
-  async function closeTicket(ticketId, resolutionNotes = '') {
+  // Cargar un ticket específico
+  const fetchTicket = async (ticketId) => {
+    state.loading = true
+    state.error = null
+    
     try {
-      const closed = await SupportApi.closeTicket(ticketId, resolutionNotes)
-      // Update local state
-      const index = tickets.value.findIndex(t => t.id === ticketId)
-      if (index !== -1) {
-        tickets.value[index] = closed
-      }
-      if (currentTicket.value?.id === ticketId) {
-        currentTicket.value = closed
-      }
-      return closed
-    } catch (err) {
-      console.error('Error closing ticket:', err)
-      throw err
+      const response = await axios.get(`${API_BASE}/support-tickets/${ticketId}`)
+      state.currentTicket = response.data
+    } catch (error) {
+      console.error('Error loading ticket:', error)
+      state.error = 'Error al cargar el ticket'
+      state.currentTicket = null
+    } finally {
+      state.loading = false
     }
   }
 
-  async function fetchOpenTickets(userId) {
-    if (!userId) return
+  // Cerrar ticket
+  const closeTicket = async (ticketId, resolutionNotes) => {
+    state.loading = true
+    state.error = null
+    
     try {
-      const result = await SupportApi.getOpenTickets(userId)
-      return Array.isArray(result) ? result : []
-    } catch (err) {
-      console.error('Error fetching open tickets:', err)
-      throw err
-    }
-  }
-
-  async function fetchDamageTickets(userId) {
-    if (!userId) return
-    try {
-      const result = await SupportApi.getDamageTickets(userId)
-      return Array.isArray(result) ? result : []
-    } catch (err) {
-      console.error('Error fetching damage tickets:', err)
-      throw err
-    }
-  }
-
-  /**
-   * Helper para reportar daño y crear notificaciones
-   */
-  async function reportDamage(damageData) {
-    try {
-      // Crear ticket de daño
-      const ticket = await createTicket({
-        ...damageData,
-        type: 'damage',
-        priority: 'high'
+      await axios.patch(`${API_BASE}/support-tickets/${ticketId}`, {
+        status: 'closed',
+        resolutionNotes,
+        resolvedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       })
-
-      // Si hay un costo estimado, crear notificación de pago para el renter
-      if (ticket.estimatedCost > 0 && damageData.renterId) {
-        await notificationStore.createPaymentRequiredNotification(
-          damageData.renterId,
-          ticket
-        )
-      }
-
-      return ticket
-    } catch (err) {
-      console.error('Error reporting damage:', err)
-      throw err
+      
+      // Recargar el ticket actual
+      await fetchTicket(ticketId)
+    } catch (error) {
+      console.error('Error closing ticket:', error)
+      state.error = 'Error al cerrar el ticket'
+      throw error
+    } finally {
+      state.loading = false
     }
   }
 
-  function getTicketById(id) {
-    return tickets.value.find(t => t.id === id) || null
-  }
+  // Computed: Estadísticas
+  const stats = computed(() => {
+    const total = state.tickets.length
+    const open = state.tickets.filter(t => t.status === 'open').length
+    const closed = state.tickets.filter(t => t.status === 'closed').length
+    const damage = state.tickets.filter(t => t.type === 'damage').length
+    
+    return { total, open, closed, damage }
+  })
 
   return {
-    // State
-    tickets,
-    currentTicket,
-    loading,
-    error,
-    // Computed
-    openTickets,
-    closedTickets,
-    damageTickets,
+    state,
+    tickets: computed(() => state.tickets),
+    currentTicket: computed(() => state.currentTicket),
+    loading: computed(() => state.loading),
+    error: computed(() => state.error),
     stats,
-    // Actions
     fetchTickets,
-    fetchTicket,
     createTicket,
-    updateTicket,
-    closeTicket,
-    fetchOpenTickets,
-    fetchDamageTickets,
-    reportDamage,
-    getTicketById
+    fetchTicket,
+    closeTicket
   }
 }

@@ -1,21 +1,21 @@
 <template>
   <div 
-    :class="['notification-item', { 'unread': notification.isUnread }]"
+    :class="['notification-item', { 'unread': !notification.read }]"
     @click="handleClick"
   >
     <div class="notification-icon">
-      <i :class="['pi', notification.typeIcon, notification.typeClass]"></i>
+      <i :class="['pi', getIcon(notification.type)]" :style="{ color: getColor(notification.type) }"></i>
     </div>
     
     <div class="notification-content">
       <h4 class="notification-title">{{ notification.title }}</h4>
       <p class="notification-message">{{ notification.message }}</p>
-      <span class="notification-date">{{ notification.formattedDate }}</span>
+      <span class="notification-date">{{ formatDate(notification.createdAt) }}</span>
     </div>
     
     <div class="notification-actions">
       <Button
-        v-if="notification.hasAction"
+        v-if="notification.actionUrl"
         :label="notification.actionLabel || $t('notification.view')"
         icon="pi pi-arrow-right"
         size="small"
@@ -23,7 +23,7 @@
         @click.stop="handleAction"
       />
       <Button
-        v-if="notification.isUnread"
+        v-if="!notification.read"
         icon="pi pi-check"
         size="small"
         text
@@ -62,8 +62,53 @@ const emit = defineEmits(['action', 'read', 'delete'])
 const router = useRouter()
 const notificationStore = useNotificationStore()
 
+const getIcon = (type) => {
+  const icons = {
+    'damage_report': 'pi-exclamation-triangle',
+    'payment_required': 'pi-dollar',
+    'rental_confirmed': 'pi-check-circle',
+    'rental_request': 'pi-calendar',
+    'rental_cancelled': 'pi-times-circle',
+    'system': 'pi-info-circle'
+  }
+  return icons[type] || 'pi-bell'
+}
+
+const getColor = (type) => {
+  const colors = {
+    'damage_report': '#FF6F00',
+    'payment_required': '#f44336',
+    'rental_confirmed': '#4caf50',
+    'rental_request': '#2196f3',
+    'rental_cancelled': '#9e9e9e',
+    'system': '#757575'
+  }
+  return colors[type] || '#666'
+}
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString)
+  const now = new Date()
+  const diff = now - date
+  
+  const minutes = Math.floor(diff / 60000)
+  const hours = Math.floor(diff / 3600000)
+  const days = Math.floor(diff / 86400000)
+  
+  if (minutes < 1) return 'Ahora'
+  if (minutes < 60) return `Hace ${minutes}min`
+  if (hours < 24) return `Hace ${hours}h`
+  if (days < 7) return `Hace ${days}d`
+  
+  return date.toLocaleDateString('es-ES', { 
+    day: '2-digit', 
+    month: 'short',
+    year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
+  })
+}
+
 const handleClick = () => {
-  if (props.notification.isUnread) {
+  if (!props.notification.read) {
     markAsRead()
   }
 }

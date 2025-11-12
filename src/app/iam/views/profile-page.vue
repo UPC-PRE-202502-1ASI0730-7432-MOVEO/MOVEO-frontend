@@ -23,23 +23,6 @@
               ✓ Verificado
             </span>
           </div>
-          <div class="profile-stats">
-            <div class="stat">
-              <span class="stat-icon">⭐</span>
-              <span class="stat-value">{{ currentUser?.reputationScore }}</span>
-              <span class="stat-label">Calificación</span>
-            </div>
-            <div class="stat">
-              <span class="stat-icon">💬</span>
-              <span class="stat-value">{{ currentUser?.totalReviews }}</span>
-              <span class="stat-label">Reseñas</span>
-            </div>
-            <div class="stat">
-              <span class="stat-icon">📅</span>
-              <span class="stat-value">{{ joinedDate }}</span>
-              <span class="stat-label">Miembro desde</span>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -117,83 +100,6 @@
                     <p class="verification-title">Teléfono verificado</p>
                     <p class="verification-desc">{{ currentUser?.phone }}</p>
                   </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tab: Estadísticas -->
-        <div v-if="activeTab === 'stats'" class="tab-panel">
-          <div class="info-grid">
-            <div class="info-card">
-              <h3 class="card-title">📊 Estadísticas Generales</h3>
-              <div class="stats-grid">
-                <div class="stat-card">
-                  <div class="stat-card-icon">🚗</div>
-                  <div class="stat-card-value">{{ profileStats.totalRentals || 0 }}</div>
-                  <div class="stat-card-label">Total de Alquileres</div>
-                </div>
-                <div class="stat-card">
-                  <div class="stat-card-icon">✅</div>
-                  <div class="stat-card-value">{{ profileStats.completedRentals || 0 }}</div>
-                  <div class="stat-card-label">Completados</div>
-                </div>
-                <div class="stat-card">
-                  <div class="stat-card-icon">⏳</div>
-                  <div class="stat-card-value">{{ profileStats.activeRentals || 0 }}</div>
-                  <div class="stat-card-label">Activos</div>
-                </div>
-                <div class="stat-card">
-                  <div class="stat-card-icon">⭐</div>
-                  <div class="stat-card-value">{{ profileStats.averageRating?.toFixed(1) || '0.0' }}</div>
-                  <div class="stat-card-label">Calificación</div>
-                </div>
-              </div>
-            </div>
-
-            <div class="info-card">
-              <h3 class="card-title">💰 Estadísticas Financieras</h3>
-              <div class="financial-stats">
-                <div class="financial-item">
-                  <span class="financial-label">
-                    {{ currentUser?.role === 'owner' ? 'Total Ganado' : 'Total Gastado' }}
-                  </span>
-                  <span class="financial-value">
-                    S/. {{ (currentUser?.role === 'owner' ? profileStats.totalEarned : profileStats.totalSpent || 0).toFixed(2) }}
-                  </span>
-                </div>
-                <div class="financial-item">
-                  <span class="financial-label">Total de Transacciones</span>
-                  <span class="financial-value">{{ profileStats.totalRentals || 0 }}</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="info-card">
-              <h3 class="card-title">✅ Progreso de Verificación</h3>
-              <div class="verification-progress">
-                <div class="progress-bar-container">
-                  <div class="progress-bar" :style="{ width: verificationProgress + '%' }"></div>
-                </div>
-                <p class="progress-text">{{ verificationProgress }}% completado</p>
-              </div>
-              <div class="verification-checklist">
-                <div class="checklist-item" :class="{ completed: profileData?.verified?.email }">
-                  <i class="pi" :class="profileData?.verified?.email ? 'pi-check-circle' : 'pi-circle'"></i>
-                  <span>Email verificado</span>
-                </div>
-                <div class="checklist-item" :class="{ completed: profileData?.verified?.phone }">
-                  <i class="pi" :class="profileData?.verified?.phone ? 'pi-check-circle' : 'pi-circle'"></i>
-                  <span>Teléfono verificado</span>
-                </div>
-                <div class="checklist-item" :class="{ completed: profileData?.verified?.dni }">
-                  <i class="pi" :class="profileData?.verified?.dni ? 'pi-check-circle' : 'pi-circle'"></i>
-                  <span>DNI verificado</span>
-                </div>
-                <div class="checklist-item" :class="{ completed: profileData?.verified?.license }">
-                  <i class="pi" :class="profileData?.verified?.license ? 'pi-check-circle' : 'pi-circle'"></i>
-                  <span>Licencia verificada</span>
                 </div>
               </div>
             </div>
@@ -279,7 +185,6 @@ const activeTab = ref('personal')
 
 const tabs = [
   { value: 'personal', label: 'Información Personal', icon: '👤' },
-  { value: 'stats', label: 'Estadísticas', icon: '📊' },
   { value: 'preferences', label: 'Preferencias', icon: '⚙️' },
   { value: 'security', label: 'Seguridad', icon: '🔒' },
   { value: 'demo', label: 'Demo (DEV)', icon: '🧪' }

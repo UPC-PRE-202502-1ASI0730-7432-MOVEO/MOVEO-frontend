@@ -1,181 +1,124 @@
-import { ref, computed } from 'vue'
-import { NotificationApi } from '@/app/notification/infrastructure/notification-api.js'
+import { reactive, computed } from 'vue'
+import axios from 'axios'
 
-// Module-level singleton state
-const notifications = ref([])
-const unreadCount = ref(0)
-const loading = ref(false)
-const error = ref(null)
+const API_BASE = 'http://localhost:5332'
 
-const unreadNotifications = computed(() => {
-  return (notifications.value || []).filter(n => !n.read)
+const state = reactive({
+  notifications: [],
+  loading: false,
+  error: null
 })
 
-const recentNotifications = computed(() => {
-  return (notifications.value || []).slice(0, 5)
-})
-
-/**
- * Store para gestionar notificaciones del usuario
- */
-export function useNotificationStore() {
-  
-  async function fetchNotifications(userId) {
-    if (!userId) return
-    loading.value = true
-    error.value = null
+export const useNotificationStore = () => {
+  // Cargar notificaciones del usuario
+  const fetchNotifications = async (userId) => {
+    state.loading = true
+    state.error = null
+    
     try {
-      const result = await NotificationApi.listNotifications(userId)
-      notifications.value = Array.isArray(result) ? result : []
-      updateUnreadCount()
-    } catch (err) {
-      console.error('Error fetching notifications:', err)
-      error.value = err?.message || String(err)
+      // Obtener TODAS las notificaciones del db.json
+      const response = await axios.get(`${API_BASE}/notifications`)
+      
+      // Filtrar solo las notificaciones del usuario actual
+      const userNotifications = response.data.filter(n => n.userId === userId)
+      
+      // Ordenar por fecha (más recientes primero)
+      state.notifications = userNotifications.sort((a, b) => 
+        new Date(b.createdAt) - new Date(a.createdAt)
+      )
+      
+      console.log('📬 Notificaciones cargadas:', state.notifications.length)
+    } catch (error) {
+      console.error('Error loading notifications:', error)
+      state.error = 'Error al cargar notificaciones'
+      state.notifications = []
     } finally {
-      loading.value = false
+      state.loading = false
     }
   }
 
-  async function fetchUnreadNotifications(userId) {
-    if (!userId) return
+  // Marcar notificación como leída
+  const markAsRead = async (notificationId) => {
     try {
-      const result = await NotificationApi.getUnreadNotifications(userId)
-      const unread = Array.isArray(result) ? result : []
-      unreadCount.value = unread.length
-      return unread
-    } catch (err) {
-      console.error('Error fetching unread notifications:', err)
-      throw err
-    }
-  }
-
-  async function markAsRead(notificationId) {
-    try {
-      const updated = await NotificationApi.markAsRead(notificationId)
-      // Update local state
-      const index = notifications.value.findIndex(n => n.id === notificationId)
-      if (index !== -1) {
-        notifications.value[index] = updated
-      }
-      updateUnreadCount()
-      return updated
-    } catch (err) {
-      console.error('Error marking notification as read:', err)
-      throw err
-    }
-  }
-
-  async function markAllAsRead(userId) {
-    if (!userId) return
-    try {
-      await NotificationApi.markAllAsRead(userId)
-      // Update all local notifications to read
-      notifications.value = notifications.value.map(n => ({
-        ...n,
+      await axios.patch(`${API_BASE}/notifications/${notificationId}`, {
         read: true,
         readAt: new Date().toISOString()
-      }))
-      unreadCount.value = 0
-    } catch (err) {
-      console.error('Error marking all as read:', err)
-      throw err
-    }
-  }
-
-  async function deleteNotification(notificationId) {
-    try {
-      await NotificationApi.deleteNotification(notificationId)
-      // Remove from local state
-      notifications.value = notifications.value.filter(n => n.id !== notificationId)
-      updateUnreadCount()
-    } catch (err) {
-      console.error('Error deleting notification:', err)
-      throw err
-    }
-  }
-
-  async function createNotification(notificationData) {
-    try {
-      const created = await NotificationApi.createNotification(notificationData)
-      // Add to local state
-      notifications.value = [created, ...notifications.value]
-      updateUnreadCount()
-      return created
-    } catch (err) {
-      console.error('Error creating notification:', err)
-      throw err
-    }
-  }
-
-  function updateUnreadCount() {
-    unreadCount.value = (notifications.value || []).filter(n => !n.read).length
-  }
-
-  function getNotificationById(id) {
-    return notifications.value.find(n => n.id === id) || null
-  }
-
-  /**
-   * Helper para crear notificación de daño reportado
-   */
-  async function createDamageNotification(userId, ticketData) {
-    return await createNotification({
-      userId,
-      type: 'damage_report',
-      title: 'Reporte de Daño Recibido',
-      message: `Se ha reportado un daño en tu vehículo: ${ticketData.subject}`,
-      relatedId: ticketData.id,
-      relatedType: 'ticket',
-      actionUrl: `/support/tickets/${ticketData.id}`,
-      actionLabel: 'Ver Ticket',
-      metadata: {
-        ticketId: ticketData.id,
-        vehicleId: ticketData.vehicleId,
-        estimatedCost: ticketData.estimatedCost
+      })
+      
+      // Actualizar estado local
+      const notif = state.notifications.find(n => n.id === notificationId)
+      if (notif) {
+        notif.read = true
+        notif.readAt = new Date().toISOString()
       }
-    })
+      
+      console.log('✅ Notificación marcada como leída')
+    } catch (error) {
+      console.error('Error marking notification as read:', error)
+    }
   }
 
-  /**
-   * Helper para crear notificación de pago requerido
-   */
-  async function createPaymentRequiredNotification(userId, ticketData) {
-    return await createNotification({
-      userId,
-      type: 'payment_required',
-      title: 'Pago de Daño Requerido',
-      message: `Debes pagar ${ticketData.formattedCost} por el daño reportado en el vehículo.`,
-      relatedId: ticketData.id,
-      relatedType: 'ticket',
-      actionUrl: `/payments/damage/${ticketData.id}`,
-      actionLabel: 'Realizar Pago',
-      metadata: {
-        ticketId: ticketData.id,
-        vehicleId: ticketData.vehicleId,
-        amount: ticketData.estimatedCost
+  // Marcar todas como leídas
+  const markAllAsRead = async (userId) => {
+    try {
+      const unread = state.notifications.filter(n => !n.read)
+      
+      // Marcar cada una como leída
+      for (const notif of unread) {
+        await axios.patch(`${API_BASE}/notifications/${notif.id}`, {
+          read: true,
+          readAt: new Date().toISOString()
+        })
+        notif.read = true
+        notif.readAt = new Date().toISOString()
       }
-    })
+      
+      console.log('✅ Todas las notificaciones marcadas como leídas')
+    } catch (error) {
+      console.error('Error marking all as read:', error)
+    }
   }
+
+  // Eliminar notificación
+  const deleteNotification = async (notificationId) => {
+    try {
+      await axios.delete(`${API_BASE}/notifications/${notificationId}`)
+      
+      // Remover del estado local
+      state.notifications = state.notifications.filter(n => n.id !== notificationId)
+      
+      console.log('✅ Notificación eliminada')
+    } catch (error) {
+      console.error('Error deleting notification:', error)
+    }
+  }
+
+  // Computed: Notificaciones no leídas
+  const unreadNotifications = computed(() => {
+    return state.notifications.filter(n => !n.read)
+  })
+
+  // Computed: Conteo de no leídas
+  const unreadCount = computed(() => {
+    return unreadNotifications.value.length
+  })
+
+  // Computed: Notificaciones recientes (últimas 5)
+  const recentNotifications = computed(() => {
+    return state.notifications.slice(0, 5)
+  })
 
   return {
-    // State
-    notifications,
-    unreadCount,
-    loading,
-    error,
-    // Computed
+    state,
+    notifications: computed(() => state.notifications),
+    loading: computed(() => state.loading),
+    error: computed(() => state.error),
     unreadNotifications,
+    unreadCount,
     recentNotifications,
-    // Actions
     fetchNotifications,
-    fetchUnreadNotifications,
     markAsRead,
     markAllAsRead,
-    deleteNotification,
-    createNotification,
-    getNotificationById,
-    // Helpers
-    createDamageNotification,
-    createPaymentRequiredNotification
+    deleteNotification
   }
 }

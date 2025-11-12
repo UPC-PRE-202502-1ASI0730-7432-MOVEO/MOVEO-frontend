@@ -643,7 +643,11 @@
         "myVehicles": "My Vehicles",
         "noVehicles": "You have no published vehicles",
         "addVehicle": "Add Vehicle",
-        "viewAll": "View All"
+        "viewAll": "View All",
+        "monthlyEarnings": "Monthly Earnings",
+        "bestMonth": "Best Month",
+        "totalEarned": "Total Earned",
+        "averagePerMonth": "Monthly Average"
       }
     }
   },
@@ -718,6 +722,7 @@
     "view": "View",
     "viewAll": "View all",
     "noNotifications": "You have no notifications",
+    "noNotificationsDesc": "When you have new notifications, they will appear here",
     "loadError": "Error loading notifications"
   },
   "support": {
@@ -727,6 +732,14 @@
     "selectType": "Select type",
     "vehicle": "Vehicle",
     "selectVehicle": "Select vehicle",
+    "rental": "Rental",
+    "selectRental": "Select rental",
+    "rentalRequired": "You must select the associated rental",
+    "damageResponsible": "Damage Responsible User",
+    "renterName": "Renter Name",
+    "rentalPeriod": "Rental Period",
+    "rentalId": "Rental ID",
+    "rentalValue": "Rental Value",
     "priorityLabel": "Priority",
     "selectPriority": "Select priority",
     "subject": "Subject",

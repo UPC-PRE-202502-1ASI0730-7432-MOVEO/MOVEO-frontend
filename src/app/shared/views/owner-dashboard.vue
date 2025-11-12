@@ -46,6 +46,44 @@ const totalEarned = computed(() => {
     .reduce((total, rental) => total + (rental.totalPrice || 0), 0)
 })
 
+// Calcular ganancias por mes
+const monthlyEarnings = computed(() => {
+  const earnings = {}
+  const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+  
+  // Inicializar todos los meses en 0
+  months.forEach(month => {
+    earnings[month] = 0
+  })
+  
+  // Calcular ganancias por mes de alquileres completados
+  ownerRentals.value
+    .filter(rental => rental.status === 'completed')
+    .forEach(rental => {
+      const endDate = new Date(rental.endDate)
+      const monthName = months[endDate.getMonth()]
+      earnings[monthName] += rental.totalPrice || 0
+    })
+  
+  return earnings
+})
+
+// Obtener el mes con mayores ganancias
+const bestMonth = computed(() => {
+  const earnings = monthlyEarnings.value
+  let maxEarning = 0
+  let bestMonthName = 'Ene'
+  
+  Object.entries(earnings).forEach(([month, amount]) => {
+    if (amount > maxEarning) {
+      maxEarning = amount
+      bestMonthName = month
+    }
+  })
+  
+  return { month: bestMonthName, amount: maxEarning }
+})
+
 // Stats funcionales
 const stats = computed(() => ({
   totalEarned: totalEarned.value,
@@ -67,6 +105,28 @@ function formatDate(dateString) {
     month: 'short',
     year: 'numeric'
   })
+}
+
+// Aceptar solicitud
+const acceptRequest = async (rentalId) => {
+  try {
+    await rentalStore.updateRentalStatus(rentalId, 'accepted')
+    await rentalStore.loadRentals()
+    console.log('✅ Solicitud aceptada')
+  } catch (error) {
+    console.error('Error accepting request:', error)
+  }
+}
+
+// Rechazar solicitud
+const rejectRequest = async (rentalId) => {
+  try {
+    await rentalStore.updateRentalStatus(rentalId, 'rejected')
+    await rentalStore.loadRentals()
+    console.log('❌ Solicitud rechazada')
+  } catch (error) {
+    console.error('Error rejecting request:', error)
+  }
 }
 </script>
 
@@ -157,8 +217,8 @@ function formatDate(dateString) {
               <span class="price">${{ rental.totalPrice }}</span>
             </div>
             <div class="request-actions">
-              <button class="btn-accept">✓ Aceptar</button>
-              <button class="btn-decline">✗ Rechazar</button>
+              <button class="btn-accept" @click="acceptRequest(rental.id)">✓ Aceptar</button>
+              <button class="btn-decline" @click="rejectRequest(rental.id)">✗ Rechazar</button>
             </div>
           </div>
         </div>
@@ -218,12 +278,52 @@ function formatDate(dateString) {
       </div>
     </div>
 
-    <!-- Ganancias Recientes -->
+    <!-- Gráfica de Ganancias Mensuales -->
     <div class="section">
-      <h2>Historial de Ganancias</h2>
-      <div class="empty-state">
-        <p>Aún no tienes transacciones completadas</p>
-        <router-link to="/rental/earnings" class="link">Ver Detalles →</router-link>
+      <div class="section-header">
+        <h2>{{ t('shared.dashboard.owner.monthlyEarnings') }}</h2>
+        <div class="best-month-badge">
+          <i class="pi pi-trophy"></i>
+          <span>{{ t('shared.dashboard.owner.bestMonth') }}: {{ bestMonth.month }} - ${{ bestMonth.amount.toFixed(2) }}</span>
+        </div>
+      </div>
+      <div class="chart-container">
+        <div class="earnings-grid">
+          <div 
+            v-for="(amount, month) in monthlyEarnings" 
+            :key="month"
+            class="earnings-bar-wrapper"
+          >
+            <div class="earnings-bar">
+              <div 
+                class="earnings-fill"
+                :style="{ 
+                  height: amount > 0 ? `${(amount / Math.max(...Object.values(monthlyEarnings))) * 100}%` : '0%',
+                  background: month === bestMonth.month ? 'linear-gradient(180deg, #FF8F00 0%, #FF6F00 100%)' : 'linear-gradient(180deg, #FFB74D 0%, #FFA726 100%)'
+                }"
+              >
+                <span class="earnings-amount" v-if="amount > 0">${{ amount.toFixed(0) }}</span>
+              </div>
+            </div>
+            <span class="month-label">{{ month }}</span>
+          </div>
+        </div>
+        <div class="chart-summary">
+          <div class="summary-item">
+            <i class="pi pi-calendar"></i>
+            <div>
+              <strong>{{ t('shared.dashboard.owner.totalEarned') }}</strong>
+              <span class="summary-value">${{ totalEarned.toFixed(2) }}</span>
+            </div>
+          </div>
+          <div class="summary-item">
+            <i class="pi pi-chart-line"></i>
+            <div>
+              <strong>{{ t('shared.dashboard.owner.averagePerMonth') }}</strong>
+              <span class="summary-value">${{ (totalEarned / 12).toFixed(2) }}</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -634,6 +734,123 @@ function formatDate(dateString) {
 
 .vehicle-status.paused {
   background: #FFF3E0;
+  color: #FF6F00;
+}
+
+/* Chart Container */
+.chart-container {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.best-month-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #FFD54F 0%, #FFC107 100%);
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #333;
+  box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
+}
+
+.best-month-badge i {
+  font-size: 1rem;
+  color: #FF6F00;
+}
+
+.earnings-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1rem;
+  padding: 1rem 0;
+  min-height: 250px;
+  align-items: flex-end;
+}
+
+.earnings-bar-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.earnings-bar {
+  width: 100%;
+  height: 200px;
+  background: #f5f5f5;
+  border-radius: 8px 8px 0 0;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid #e0e0e0;
+}
+
+.earnings-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-radius: 6px 6px 0 0;
+  transition: height 0.5s ease;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 0.5rem;
+}
+
+.earnings-amount {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.month-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #666;
+  text-align: center;
+}
+
+.chart-summary {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 2px solid #f0f0f0;
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%);
+  border-radius: 12px;
+  border-left: 4px solid #FF6F00;
+}
+
+.summary-item i {
+  font-size: 2rem;
+  color: #FF6F00;
+}
+
+.summary-item strong {
+  display: block;
+  font-size: 0.875rem;
+  color: #666;
+  margin-bottom: 0.25rem;
+}
+
+.summary-value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
   color: #FF6F00;
 }
 
