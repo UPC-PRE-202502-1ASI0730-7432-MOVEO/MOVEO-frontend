@@ -1,2 +1,2 @@
-// Archivo mínimo para application
+export { useProfileStore } from './profile.store.js'
 

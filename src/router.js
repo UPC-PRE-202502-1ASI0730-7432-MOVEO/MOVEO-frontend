@@ -9,6 +9,7 @@ import iamRoutes from '@/app/iam/presentation/iam-router.js'
 import rentalRoutes from '@/app/rental/presentation/rental-router.js'
 import adventureRoutes from '@/app/adventure/presentation/adventure-router.js'
 import paymentRoutes from '@/app/payment/presentation/payment-router.js'
+import supportRoutes from '@/app/support/presentation/support-router.js'
 
 const routes = [
   // Root redirect - Start at login page
@@ -49,6 +50,13 @@ const routes = [
   {
     path: '/payments',
     children: paymentRoutes
+  },
+  
+  // Support Module - Tickets and Customer Service
+  {
+    path: '/support',
+    children: supportRoutes,
+    meta: { requiresAuth: true }
   },
   
   // Legacy routes redirects for backwards compatibility

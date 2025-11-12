@@ -50,7 +50,7 @@ const renterLinks = computed(() => [
 const ownerLinks = computed(() => [
   { path: '/my-vehicles', label: t('shared.sidebar.owner.myVehicles'), icon: '🚗' },
   { path: '/add-vehicle', label: t('rental.myVehicles.addVehicle'), icon: '➕' },
-  { path: '/rental-requests', label: t('shared.sidebar.owner.rentalRequests'), icon: '📩' },
+  { path: '/notifications', label: t('notification.notifications'), icon: '�' },
   { path: '/earnings', label: t('shared.sidebar.owner.earnings'), icon: '💰' },
   { path: '/profile', label: t('shared.sidebar.owner.profile'), icon: '👤' }
 ])

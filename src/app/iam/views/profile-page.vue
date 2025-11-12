@@ -123,6 +123,83 @@
           </div>
         </div>
 
+        <!-- Tab: Estadísticas -->
+        <div v-if="activeTab === 'stats'" class="tab-panel">
+          <div class="info-grid">
+            <div class="info-card">
+              <h3 class="card-title">📊 Estadísticas Generales</h3>
+              <div class="stats-grid">
+                <div class="stat-card">
+                  <div class="stat-card-icon">🚗</div>
+                  <div class="stat-card-value">{{ profileStats.totalRentals || 0 }}</div>
+                  <div class="stat-card-label">Total de Alquileres</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-card-icon">✅</div>
+                  <div class="stat-card-value">{{ profileStats.completedRentals || 0 }}</div>
+                  <div class="stat-card-label">Completados</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-card-icon">⏳</div>
+                  <div class="stat-card-value">{{ profileStats.activeRentals || 0 }}</div>
+                  <div class="stat-card-label">Activos</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-card-icon">⭐</div>
+                  <div class="stat-card-value">{{ profileStats.averageRating?.toFixed(1) || '0.0' }}</div>
+                  <div class="stat-card-label">Calificación</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <h3 class="card-title">💰 Estadísticas Financieras</h3>
+              <div class="financial-stats">
+                <div class="financial-item">
+                  <span class="financial-label">
+                    {{ currentUser?.role === 'owner' ? 'Total Ganado' : 'Total Gastado' }}
+                  </span>
+                  <span class="financial-value">
+                    S/. {{ (currentUser?.role === 'owner' ? profileStats.totalEarned : profileStats.totalSpent || 0).toFixed(2) }}
+                  </span>
+                </div>
+                <div class="financial-item">
+                  <span class="financial-label">Total de Transacciones</span>
+                  <span class="financial-value">{{ profileStats.totalRentals || 0 }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <h3 class="card-title">✅ Progreso de Verificación</h3>
+              <div class="verification-progress">
+                <div class="progress-bar-container">
+                  <div class="progress-bar" :style="{ width: verificationProgress + '%' }"></div>
+                </div>
+                <p class="progress-text">{{ verificationProgress }}% completado</p>
+              </div>
+              <div class="verification-checklist">
+                <div class="checklist-item" :class="{ completed: profileData?.verified?.email }">
+                  <i class="pi" :class="profileData?.verified?.email ? 'pi-check-circle' : 'pi-circle'"></i>
+                  <span>Email verificado</span>
+                </div>
+                <div class="checklist-item" :class="{ completed: profileData?.verified?.phone }">
+                  <i class="pi" :class="profileData?.verified?.phone ? 'pi-check-circle' : 'pi-circle'"></i>
+                  <span>Teléfono verificado</span>
+                </div>
+                <div class="checklist-item" :class="{ completed: profileData?.verified?.dni }">
+                  <i class="pi" :class="profileData?.verified?.dni ? 'pi-check-circle' : 'pi-circle'"></i>
+                  <span>DNI verificado</span>
+                </div>
+                <div class="checklist-item" :class="{ completed: profileData?.verified?.license }">
+                  <i class="pi" :class="profileData?.verified?.license ? 'pi-check-circle' : 'pi-circle'"></i>
+                  <span>Licencia verificada</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Tab: Preferencias -->
         <div v-if="activeTab === 'preferences'" class="tab-panel">
           <user-preferences />
@@ -190,16 +267,19 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useUserStore } from '@/app/iam/application/user.store.js'
+import { useProfileStore } from '@/app/profile/application/profile.store.js'
 import UserPreferences from '@/app/iam/components/user-preferences.vue'
 
 const { currentUser, userName, userInitials, switchToDemoUser, DEMO_USERS } = useUserStore()
+const profileStore = useProfileStore()
 
 const activeTab = ref('personal')
 
 const tabs = [
   { value: 'personal', label: 'Información Personal', icon: '👤' },
+  { value: 'stats', label: 'Estadísticas', icon: '📊' },
   { value: 'preferences', label: 'Preferencias', icon: '⚙️' },
   { value: 'security', label: 'Seguridad', icon: '🔒' },
   { value: 'demo', label: 'Demo (DEV)', icon: '🧪' }
@@ -211,10 +291,20 @@ const joinedDate = computed(() => {
   return date.toLocaleDateString('es-ES', { month: 'short', year: 'numeric' })
 })
 
+const profileData = computed(() => profileStore.profile)
+const verificationProgress = computed(() => profileStore.verificationLevel)
+const profileStats = computed(() => profileData.value?.stats || {})
+
 function switchUser(role) {
   switchToDemoUser(role)
   window.location.reload() // Recargar para actualizar el toolbar
 }
+
+onMounted(async () => {
+  if (currentUser.value?.id) {
+    await profileStore.fetchProfile(currentUser.value.id)
+  }
+})
 </script>
 
 <style scoped>
@@ -648,6 +738,125 @@ function switchUser(role) {
   font-weight: 700;
 }
 
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, var(--bg-moveo-green) 0%, var(--brand-green) 100%);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.stat-card-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.stat-card-value {
+  font-family: var(--font-family-primary);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-secondary-2);
+  margin-bottom: 0.25rem;
+}
+
+.stat-card-label {
+  font-family: var(--font-family-primary);
+  font-size: 0.875rem;
+  color: var(--text-secondary-2);
+  opacity: 0.9;
+}
+
+.financial-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.financial-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: var(--bg-base);
+  border-radius: 8px;
+}
+
+.financial-label {
+  font-family: var(--font-family-primary);
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.financial-value {
+  font-family: var(--font-family-primary);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--brand-green);
+}
+
+.verification-progress {
+  margin: 1.5rem 0;
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 12px;
+  background: var(--bg-muted);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--brand-green) 0%, #10b981 100%);
+  transition: width 0.5s ease;
+}
+
+.progress-text {
+  font-family: var(--font-family-primary);
+  text-align: center;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.verification-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: var(--bg-base);
+  border-radius: 8px;
+  font-family: var(--font-family-primary);
+  color: var(--text-secondary);
+}
+
+.checklist-item.completed {
+  background: #ecfdf5;
+  color: #10b981;
+}
+
+.checklist-item i {
+  font-size: 1.25rem;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .profile-header {
@@ -674,6 +883,10 @@ function switchUser(role) {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 </style>

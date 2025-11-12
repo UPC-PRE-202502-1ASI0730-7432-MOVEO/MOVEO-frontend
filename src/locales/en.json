@@ -709,5 +709,90 @@
       "selectVehicle": "Select Vehicle",
       "notFound": "Route not found"
     }
+  },
+  "notification": {
+    "notifications": "Notifications",
+    "markAsRead": "Mark as read",
+    "markAllAsRead": "Mark all as read",
+    "delete": "Delete",
+    "view": "View",
+    "viewAll": "View all",
+    "noNotifications": "You have no notifications",
+    "loadError": "Error loading notifications"
+  },
+  "support": {
+    "tickets": "Support Tickets",
+    "createTicket": "Create Ticket",
+    "ticketType": "Ticket Type",
+    "selectType": "Select type",
+    "vehicle": "Vehicle",
+    "selectVehicle": "Select vehicle",
+    "priorityLabel": "Priority",
+    "selectPriority": "Select priority",
+    "subject": "Subject",
+    "subjectPlaceholder": "Briefly describe the issue",
+    "description": "Description",
+    "descriptionPlaceholder": "Provide details about the issue or inquiry",
+    "estimatedCost": "Estimated Cost",
+    "estimatedCostPlaceholder": "S/. 0.00",
+    "attachments": "Attachments",
+    "attachmentsHelp": "You can upload images (max 5MB each)",
+    "submitTicket": "Submit Ticket",
+    "totalTickets": "Total Tickets",
+    "openTickets": "Open Tickets",
+    "damageReports": "Damage Reports",
+    "closedTickets": "Closed Tickets",
+    "filterByStatus": "Filter by Status",
+    "allStatuses": "All statuses",
+    "filterByType": "Filter by Type",
+    "allTypes": "All types",
+    "noTicketsFound": "No tickets found",
+    "proceedToPayment": "Proceed to Payment",
+    "closeTicket": "Close Ticket",
+    "updateTicket": "Update Ticket",
+    "actions": "Actions",
+    "resolutionNotes": "Resolution Notes",
+    "resolutionNotesPlaceholder": "Write resolution notes...",
+    "closeTicketConfirm": "Are you sure you want to close this ticket?",
+    "resolvedAt": "Resolved on",
+    "ticketCreatedSuccess": "Ticket created successfully",
+    "ticketCreatedError": "Error creating ticket",
+    "ticketClosedSuccess": "Ticket closed successfully",
+    "ticketClosedError": "Error closing ticket",
+    "fillRequiredFields": "Please fill all required fields",
+    "typeRequired": "Ticket type is required",
+    "vehicleRequired": "Vehicle is required for damage reports",
+    "priorityRequired": "Priority is required",
+    "subjectRequired": "Subject is required",
+    "descriptionRequired": "Description is required",
+    "type": {
+      "damage": "Damage Report",
+      "complaint": "Complaint",
+      "question": "Question",
+      "technical": "Technical Issue",
+      "other": "Other"
+    },
+    "status": {
+      "open": "Open",
+      "inProgress": "In Progress",
+      "resolved": "Resolved",
+      "closed": "Closed"
+    },
+    "priority": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "urgent": "Urgent"
+    }
+  },
+  "common": {
+    "success": "Success",
+    "error": "Error",
+    "cancel": "Cancel",
+    "back": "Back"
+  },
+  "user": {
+    "owner": "Owner",
+    "renter": "Renter"
   }
 }

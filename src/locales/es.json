@@ -710,5 +710,90 @@
       "selectVehicle": "Seleccionar Vehículo",
       "notFound": "Ruta no encontrada"
     }
+  },
+  "notification": {
+    "notifications": "Notificaciones",
+    "markAsRead": "Marcar como leída",
+    "markAllAsRead": "Marcar todas como leídas",
+    "delete": "Eliminar",
+    "view": "Ver",
+    "viewAll": "Ver todas",
+    "noNotifications": "No tienes notificaciones",
+    "loadError": "Error al cargar notificaciones"
+  },
+  "support": {
+    "tickets": "Tickets de Soporte",
+    "createTicket": "Crear Ticket",
+    "ticketType": "Tipo de Ticket",
+    "selectType": "Seleccionar tipo",
+    "vehicle": "Vehículo",
+    "selectVehicle": "Seleccionar vehículo",
+    "priorityLabel": "Prioridad",
+    "selectPriority": "Seleccionar prioridad",
+    "subject": "Asunto",
+    "subjectPlaceholder": "Describe brevemente el problema",
+    "description": "Descripción",
+    "descriptionPlaceholder": "Proporciona detalles sobre el problema o consulta",
+    "estimatedCost": "Costo Estimado",
+    "estimatedCostPlaceholder": "S/. 0.00",
+    "attachments": "Archivos Adjuntos",
+    "attachmentsHelp": "Puedes subir imágenes (máximo 5MB cada una)",
+    "submitTicket": "Enviar Ticket",
+    "totalTickets": "Total de Tickets",
+    "openTickets": "Tickets Abiertos",
+    "damageReports": "Reportes de Daños",
+    "closedTickets": "Tickets Cerrados",
+    "filterByStatus": "Filtrar por Estado",
+    "allStatuses": "Todos los estados",
+    "filterByType": "Filtrar por Tipo",
+    "allTypes": "Todos los tipos",
+    "noTicketsFound": "No se encontraron tickets",
+    "proceedToPayment": "Proceder al Pago",
+    "closeTicket": "Cerrar Ticket",
+    "updateTicket": "Actualizar Ticket",
+    "actions": "Acciones",
+    "resolutionNotes": "Notas de Resolución",
+    "resolutionNotesPlaceholder": "Escribe las notas de resolución...",
+    "closeTicketConfirm": "¿Estás seguro de que deseas cerrar este ticket?",
+    "resolvedAt": "Resuelto el",
+    "ticketCreatedSuccess": "Ticket creado exitosamente",
+    "ticketCreatedError": "Error al crear el ticket",
+    "ticketClosedSuccess": "Ticket cerrado exitosamente",
+    "ticketClosedError": "Error al cerrar el ticket",
+    "fillRequiredFields": "Por favor completa todos los campos requeridos",
+    "typeRequired": "El tipo de ticket es requerido",
+    "vehicleRequired": "El vehículo es requerido para reportes de daños",
+    "priorityRequired": "La prioridad es requerida",
+    "subjectRequired": "El asunto es requerido",
+    "descriptionRequired": "La descripción es requerida",
+    "type": {
+      "damage": "Reporte de Daño",
+      "complaint": "Queja",
+      "question": "Pregunta",
+      "technical": "Problema Técnico",
+      "other": "Otro"
+    },
+    "status": {
+      "open": "Abierto",
+      "inProgress": "En Progreso",
+      "resolved": "Resuelto",
+      "closed": "Cerrado"
+    },
+    "priority": {
+      "low": "Baja",
+      "medium": "Media",
+      "high": "Alta",
+      "urgent": "Urgente"
+    }
+  },
+  "common": {
+    "success": "Éxito",
+    "error": "Error",
+    "cancel": "Cancelar",
+    "back": "Volver"
+  },
+  "user": {
+    "owner": "Propietario",
+    "renter": "Cliente"
   }
 }

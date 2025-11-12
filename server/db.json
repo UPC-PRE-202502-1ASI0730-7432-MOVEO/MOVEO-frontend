@@ -806,41 +806,6 @@
       "resolutionNotes": "Daño menor. No se aplica cargo. Depósito liberado parcialmente."
     }
   ],
-  "notifications": [
-    {
-      "id": 1,
-      "userId": 2,
-      "actorId": 1,
-      "rentalId": 1,
-      "title": "Reserva confirmada",
-      "message": "Carlos ha aceptado tu solicitud para el Toyota Corolla del 10 al 12 de julio.",
-      "type": "rental_accepted",
-      "isRead": false,
-      "createdAt": "2024-07-06T10:05:00Z"
-    },
-    {
-      "id": 2,
-      "userId": 1,
-      "actorId": 2,
-      "rentalId": 1,
-      "title": "Nueva calificación",
-      "message": "Ana te dio 5 estrellas por tu auto.",
-      "type": "review_received",
-      "isRead": false,
-      "createdAt": "2024-07-13T10:05:00Z"
-    },
-    {
-      "id": 3,
-      "userId": 2,
-      "actorId": null,
-      "rentalId": 1,
-      "title": "Reembolso procesado",
-      "message": "Se ha acreditado S/ 30.00 por el incidente reportado.",
-      "type": "refund_processed",
-      "isRead": false,
-      "createdAt": "2024-07-15T11:05:00Z"
-    }
-  ],
   "pricingPlans": [
     {
       "id": 1,
@@ -1177,6 +1142,228 @@
       "reviewsCount": 76,
       "createdAt": "2024-01-21T10:00:00Z",
       "updatedAt": "2024-01-21T10:00:00Z"
+    }
+  ],
+  "notifications": [
+    {
+      "id": 1,
+      "userId": 2,
+      "type": "damage_report",
+      "title": "Reporte de Daño Recibido",
+      "message": "Se ha reportado un daño en tu vehículo Toyota Corolla 2022. El cliente reportó un rayón en la puerta del conductor.",
+      "relatedId": 1,
+      "relatedType": "ticket",
+      "read": false,
+      "actionUrl": "/support/tickets/1",
+      "actionLabel": "Ver Ticket",
+      "metadata": {
+        "ticketId": 1,
+        "vehicleId": 1,
+        "estimatedCost": 250.00
+      },
+      "createdAt": "2025-11-10T14:30:00Z",
+      "readAt": null
+    },
+    {
+      "id": 2,
+      "userId": 2,
+      "type": "payment_required",
+      "title": "Pago de Daño Requerido",
+      "message": "Debes pagar S/. 250.00 por el daño reportado en el vehículo.",
+      "relatedId": 1,
+      "relatedType": "ticket",
+      "read": false,
+      "actionUrl": "/payments/damage/1",
+      "actionLabel": "Realizar Pago",
+      "metadata": {
+        "ticketId": 1,
+        "vehicleId": 1,
+        "amount": 250.00
+      },
+      "createdAt": "2025-11-10T14:35:00Z",
+      "readAt": null
+    },
+    {
+      "id": 3,
+      "userId": 1,
+      "type": "rental_confirmed",
+      "title": "Reserva Confirmada",
+      "message": "Tu reserva del Toyota Corolla 2022 ha sido confirmada. Puedes recoger el vehículo el 15 de noviembre.",
+      "relatedId": 1,
+      "relatedType": "rental",
+      "read": true,
+      "actionUrl": "/rental/my-rentals/1",
+      "actionLabel": "Ver Reserva",
+      "metadata": {
+        "rentalId": 1,
+        "vehicleId": 1
+      },
+      "createdAt": "2025-11-08T10:00:00Z",
+      "readAt": "2025-11-08T12:00:00Z"
+    },
+    {
+      "id": 4,
+      "userId": 2,
+      "type": "info",
+      "title": "Nueva Funcionalidad: Rutas de Aventura",
+      "message": "Descubre nuestras nuevas rutas de aventura temáticas. Planifica tu próximo viaje con recomendaciones de vehículos.",
+      "relatedId": null,
+      "relatedType": null,
+      "read": false,
+      "actionUrl": "/adventure",
+      "actionLabel": "Explorar Rutas",
+      "metadata": {},
+      "createdAt": "2025-11-09T08:00:00Z",
+      "readAt": null
+    },
+    {
+      "id": 5,
+      "userId": 1,
+      "type": "success",
+      "title": "Perfil Verificado",
+      "message": "¡Felicidades! Tu perfil ha sido completamente verificado. Ahora puedes acceder a todas las funcionalidades.",
+      "relatedId": null,
+      "relatedType": null,
+      "read": true,
+      "actionUrl": "/auth/profile",
+      "actionLabel": "Ver Perfil",
+      "metadata": {},
+      "createdAt": "2025-11-07T16:20:00Z",
+      "readAt": "2025-11-07T18:00:00Z"
+    },
+    {
+      "id": 6,
+      "userId": 2,
+      "type": "rental_completed",
+      "title": "Alquiler Completado",
+      "message": "El alquiler del Honda Civic 2021 se ha completado exitosamente. Por favor, califica tu experiencia.",
+      "relatedId": 2,
+      "relatedType": "rental",
+      "read": false,
+      "actionUrl": "/rental/my-rentals/2",
+      "actionLabel": "Dejar Reseña",
+      "metadata": {
+        "rentalId": 2,
+        "vehicleId": 3
+      },
+      "createdAt": "2025-11-10T09:00:00Z",
+      "readAt": null
+    }
+  ],
+  "support-tickets": [
+    {
+      "id": 1,
+      "userId": 2,
+      "userName": "Ana García",
+      "userRole": "renter",
+      "vehicleId": 1,
+      "vehicleName": "Toyota Corolla 2022",
+      "rentalId": 1,
+      "type": "damage",
+      "subject": "Rayón en puerta del conductor",
+      "description": "Al devolver el vehículo, noté un rayón de aproximadamente 10cm en la puerta del conductor lado izquierdo. El rayón no estaba presente al momento de recoger el vehículo. Solicito revisión y estimación de costo de reparación.",
+      "status": "open",
+      "priority": "high",
+      "attachments": [
+        "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=400",
+        "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=400"
+      ],
+      "assignedTo": null,
+      "resolutionNotes": null,
+      "estimatedCost": 250.00,
+      "createdAt": "2025-11-10T14:25:00Z",
+      "updatedAt": "2025-11-10T14:25:00Z",
+      "resolvedAt": null
+    },
+    {
+      "id": 2,
+      "userId": 1,
+      "userName": "Carlos Mendoza",
+      "userRole": "owner",
+      "vehicleId": 3,
+      "vehicleName": "Honda Civic 2021",
+      "rentalId": 2,
+      "type": "complaint",
+      "subject": "Cliente devolvió vehículo con combustible bajo",
+      "description": "El cliente devolvió el vehículo con menos de 1/4 de tanque cuando se acordó devolverlo lleno. Solicito compensación por el combustible faltante.",
+      "status": "in_progress",
+      "priority": "medium",
+      "attachments": [
+        "https://images.unsplash.com/photo-1527736947477-2790e28f3443?w=400"
+      ],
+      "assignedTo": "support@moveo.com",
+      "resolutionNotes": "Se está revisando el contrato de alquiler para verificar los términos acordados.",
+      "estimatedCost": 50.00,
+      "createdAt": "2025-11-09T18:00:00Z",
+      "updatedAt": "2025-11-10T10:00:00Z",
+      "resolvedAt": null
+    },
+    {
+      "id": 3,
+      "userId": 2,
+      "userName": "Ana García",
+      "userRole": "renter",
+      "vehicleId": null,
+      "vehicleName": "",
+      "rentalId": null,
+      "type": "question",
+      "subject": "¿Cómo funciona el seguro de vehículos?",
+      "description": "Quisiera entender mejor cómo funciona la cobertura de seguro para los vehículos alquilados. ¿Qué tipo de daños están cubiertos y cuáles no?",
+      "status": "resolved",
+      "priority": "low",
+      "attachments": [],
+      "assignedTo": "support@moveo.com",
+      "resolutionNotes": "Se proporcionó información detallada sobre la póliza de seguro y cobertura. El cliente quedó satisfecho con la respuesta.",
+      "estimatedCost": 0,
+      "createdAt": "2025-11-05T10:30:00Z",
+      "updatedAt": "2025-11-06T14:00:00Z",
+      "resolvedAt": "2025-11-06T14:00:00Z"
+    },
+    {
+      "id": 4,
+      "userId": 1,
+      "userName": "Carlos Mendoza",
+      "userRole": "owner",
+      "vehicleId": 1,
+      "vehicleName": "Toyota Corolla 2022",
+      "rentalId": 3,
+      "type": "damage",
+      "subject": "Abolladura en defensa trasera",
+      "description": "El vehículo fue devuelto con una abolladura en la defensa trasera. El daño es considerable y requiere reparación en taller especializado.",
+      "status": "open",
+      "priority": "urgent",
+      "attachments": [
+        "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400",
+        "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=400",
+        "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=400"
+      ],
+      "assignedTo": "support@moveo.com",
+      "resolutionNotes": null,
+      "estimatedCost": 800.00,
+      "createdAt": "2025-11-10T16:00:00Z",
+      "updatedAt": "2025-11-10T16:00:00Z",
+      "resolvedAt": null
+    },
+    {
+      "id": 5,
+      "userId": 2,
+      "userName": "Ana García",
+      "userRole": "renter",
+      "vehicleId": null,
+      "vehicleName": "",
+      "rentalId": null,
+      "type": "technical",
+      "subject": "No puedo subir fotos a mi perfil",
+      "description": "Estoy intentando actualizar la foto de mi perfil pero la aplicación muestra un error al cargar la imagen. He intentado con diferentes formatos (JPG, PNG) sin éxito.",
+      "status": "in_progress",
+      "priority": "medium",
+      "attachments": [],
+      "assignedTo": "tech@moveo.com",
+      "resolutionNotes": "Problema identificado con el servicio de almacenamiento. Se está trabajando en la corrección.",
+      "estimatedCost": 0,
+      "createdAt": "2025-11-08T13:45:00Z",
+      "updatedAt": "2025-11-09T09:00:00Z",
+      "resolvedAt": null
     }
   ]
 }

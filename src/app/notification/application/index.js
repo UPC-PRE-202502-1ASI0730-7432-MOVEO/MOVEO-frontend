@@ -1,2 +1,2 @@
-// Archivo mínimo para application
+export { useNotificationStore } from './notification.store.js'
 
