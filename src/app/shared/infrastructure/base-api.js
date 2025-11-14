@@ -1,14 +1,13 @@
-import axios from 'axios';
+import { apiClient } from './apiClient.js'
 
-const platformApi = import.meta.env.VITE_LEARNING_PLATFORM_API_URL;
+// BaseApi delegates to the shared `apiClient` so endpoints built on
+// `BaseEndpoint` can continue to call `this.http.get/post/...`.
 export class BaseApi {
-    #http;
+    #http
     constructor() {
-        this.#http = axios.create({
-            baseURL: platformApi
-        });
+        this.#http = apiClient
     }
     get http() {
-        return this.#http;
+        return this.#http
     }
 }
