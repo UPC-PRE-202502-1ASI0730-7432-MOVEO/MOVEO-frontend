@@ -280,8 +280,8 @@ const loadTickets = async () => {
   if (user && user.id !== undefined && user.id !== null) {
     await supportStore.fetchTickets(Number(user.id))
   } else {
-    // Fallback: try localStorage if userStore is empty
-    const userStr = localStorage.getItem('user')
+    // Fallback: try localStorage if userStore is empty (check canonical key)
+    const userStr = localStorage.getItem('moveo_current_user') || localStorage.getItem('user')
     if (userStr) {
       try {
         const parsed = JSON.parse(userStr)

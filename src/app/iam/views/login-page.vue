@@ -87,28 +87,7 @@
           <span v-else>{{ t('iam.login.submitting') }}</span>
         </button>
 
-        <!-- Demo Users Info -->
-        <div class="demo-info" v-if="demoUsers.length > 0">
-          <div class="demo-info__header">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <path d="M12 16v-4"></path>
-              <path d="M12 8h.01"></path>
-            </svg>
-            <span>{{ t('iam.login.demoUsers') }}</span>
-          </div>
-          <div class="demo-info__users">
-            <div 
-              v-for="user in demoUsers" 
-              :key="user.id" 
-              class="demo-user" 
-              @click="fillDemoUser(user.email)"
-            >
-              <strong>{{ t('iam.login.testAs') }} {{ user.role === 'renter' ? t('sidebar.renter.dashboard') : t('sidebar.owner.dashboard') }}:</strong> 
-              {{ user.email }} / password123
-            </div>
-          </div>
-        </div>
+        <!-- demo users removed -->
 
         <div class="form__divider">
           <span>o</span>
@@ -134,13 +113,13 @@ import { ref, reactive, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import AuthLayout from '../components/AuthLayout.vue'
-import { login, loadDemoUsers, userState } from '../application/user.store.js'
+import { login } from '../application/user.store.js'
 
 const router = useRouter()
 const { t, locale } = useI18n()
 const isSubmitting = ref(false)
 const showPassword = ref(false)
-const demoUsers = ref([])
+// demo users removed
 
 const currentLocale = computed(() => locale.value)
 
@@ -160,19 +139,9 @@ const errors = reactive({
   password: ''
 })
 
-// Cargar usuarios demo al montar el componente
-onMounted(async () => {
-  try {
-    demoUsers.value = await loadDemoUsers()
-  } catch (error) {
-    console.error('Error loading demo users:', error)
-  }
+onMounted(() => {
+  // no-op: demo users removed
 })
-
-const fillDemoUser = (email) => {
-  formData.email = email
-  formData.password = 'password123' // Demo password
-}
 
 const validateForm = () => {
   let isValid = true

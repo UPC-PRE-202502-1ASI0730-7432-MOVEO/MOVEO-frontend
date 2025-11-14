@@ -19,8 +19,8 @@ export const useNotificationStore = () => {
       // Obtener TODAS las notificaciones del db.json
       const response = await axios.get(`${API_BASE}/notifications`)
       
-      // Filtrar solo las notificaciones del usuario actual
-      const userNotifications = response.data.filter(n => n.userId === userId)
+      // Filtrar solo las notificaciones del usuario actual (normalizar tipos)
+      const userNotifications = response.data.filter(n => Number(n.userId) === Number(userId))
       
       // Ordenar por fecha (más recientes primero)
       state.notifications = userNotifications.sort((a, b) => 

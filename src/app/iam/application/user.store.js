@@ -7,7 +7,7 @@ export const userState = reactive({
   isAuthenticated: false,
   loading: false,
   error: null,
-  demoUsers: [] // Para el switcher de demo users
+  // demoUsers removed - production auth only
 })
 
 // Inicializar con usuario guardado en localStorage
@@ -127,35 +127,12 @@ export async function register(userData) {
 /**
  * Cargar usuarios demo (para el switcher de desarrollo)
  */
-export async function loadDemoUsers() {
-  try {
-    const users = await IamApi.listUsers()
-    // Obtener 1 renter y 1 owner
-    const renter = users.find(u => u.role === 'renter')
-    const owner = users.find(u => u.role === 'owner')
-    
-    userState.demoUsers = [renter, owner].filter(Boolean)
-    return userState.demoUsers
-  } catch (error) {
-    console.error('Error loading demo users:', error)
-    userState.demoUsers = []
-    return []
-  }
-}
+// Demo users removed: no longer supported in production flows
 
 /**
  * Cambiar a usuario demo por ID (para desarrollo)
  */
-export async function switchToDemoUser(userId) {
-  try {
-    const user = await IamApi.getUser(userId)
-    if (user) {
-      setUser(user)
-    }
-  } catch (error) {
-    console.error('Error switching to demo user:', error)
-  }
-}
+// switchToDemoUser removed
 
 /**
  * Setear usuario actual y guardar en localStorage
@@ -228,8 +205,6 @@ export function useUserStore() {
     userInitials,
     login,
     register,
-    loadDemoUsers,
-    switchToDemoUser,
     setUser,
     logout,
     updateUserPreferences,

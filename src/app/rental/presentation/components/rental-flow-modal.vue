@@ -243,6 +243,7 @@
 import { ref, computed, watch, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import usePaymentsStore from '@/app/payment/application/payment.store.js'
+import { useUserStore } from '@/app/iam/application/user.store.js'
 import PaymentManagement from '@/app/payment/components/views/payment-management.vue'
 import axios from 'axios'
 
@@ -256,6 +257,7 @@ const props = defineProps({
 const emit = defineEmits(['close', 'rental-confirmed'])
 const router = useRouter()
 const { addPayment } = usePaymentsStore()
+const userStore = useUserStore()
 
 // Estado del formulario
 const currentStep = ref('calendar')
@@ -271,7 +273,7 @@ onMounted(async () => {
   try {
     const response = await axios.get('http://localhost:5332/rentals')
     existingRentals.value = response.data.filter(
-      rental => rental.vehicleId === props.vehicle.id && 
+      rental => Number(rental.vehicleId) === Number(props.vehicle.id) && 
                rental.status !== 'cancelled'
     )
   } catch (error) {
@@ -403,9 +405,16 @@ async function confirmRental() {
   
   try {
     // Guardar el rental en db.json con estado "pending"
+    const currentUser = userStore.currentUser.value
+    if (!currentUser || !currentUser.id) {
+      throw new Error('Usuario no autenticado')
+    }
+
+    const renterId = Number(currentUser.id)
+
     const rentalData = {
       vehicleId: props.vehicle.id,
-      renterId: 2, // ID del usuario actual (Ana - renter)
+      renterId: renterId,
       ownerId: props.vehicle.ownerId,
       startDate: startDate.value,
       endDate: endDate.value,
@@ -424,7 +433,7 @@ async function confirmRental() {
     // Guardar el pago usando payment.store.js con los campos correctos
     const paymentData = {
       rentalId: response.data.id, // ID del rental recién creado
-      payerId: 2, // ID del inquilino que hace el pago
+      payerId: renterId, // ID del inquilino que hace el pago
       recipientId: props.vehicle.ownerId, // ID del propietario que recibe el pago
       amount: totalPrice.value,
       currency: 'PEN',
@@ -439,8 +448,37 @@ async function confirmRental() {
     console.log('💰 Creando pago:', paymentData);
     await addPayment(paymentData)
     console.log('✅ Pago creado exitosamente');
-    
+
+    // Crear notificación para el owner indicando que hay una nueva solicitud pendiente
+    try {
+      const notification = {
+        userId: props.vehicle.ownerId,
+        type: 'rental_requested',
+        title: 'Nueva solicitud de alquiler',
+        message: `El usuario ${currentUser.firstName || ''} ${currentUser.lastName || ''} ha solicitado alquilar ${props.vehicle.brand} ${props.vehicle.model}. Alquiler #${response.data.id}`,
+        relatedId: response.data.id,
+        relatedType: 'rental',
+        read: false,
+        actionUrl: `/rental/details/${response.data.id}`,
+        actionLabel: 'Ver solicitud',
+        metadata: {
+          rentalId: response.data.id,
+          vehicleId: props.vehicle.id,
+          renterId: renterId
+        },
+        createdAt: new Date().toISOString(),
+        readAt: null
+      }
+
+      await axios.post(`${import.meta.env.VITE_API_BASE_URL}/notifications`, notification)
+      console.log('🔔 Notificación creada para owner:', props.vehicle.ownerId)
+    } catch (err) {
+      console.error('Error creando notificación para owner:', err)
+    }
+
     emit('rental-confirmed', response.data)
+    // Redirigir al usuario a Mis Alquileres para que vea la reserva
+    router.push('/rental/my-rentals')
   } catch (error) {
     console.error('Error al confirmar el alquiler:', error)
     alert('Hubo un error al procesar tu reserva. Por favor intenta nuevamente.')

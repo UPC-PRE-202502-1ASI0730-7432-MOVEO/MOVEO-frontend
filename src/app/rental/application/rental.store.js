@@ -12,7 +12,7 @@ export const state = reactive({
     startDate: '',
     endDate: '',
     minPrice: 0,
-    maxPrice: 100,
+    maxPrice: 1000,
     transmission: '',
     minSeats: 0,
     fuelType: ''
@@ -135,9 +135,24 @@ export async function loadVehicles() {
       RentalApi.listVehicles(),
       RentalApi.listRentals()
     ])
-    
-    state.vehicles = vehicles
-    state.rentals = rentals
+    // Normalize numeric fields to avoid string/number mismatches from the API
+    const normalizeVehicle = v => ({
+      ...v,
+      id: Number(v.id),
+      ownerId: v.ownerId != null ? Number(v.ownerId) : v.ownerId
+    })
+
+    const normalizeRental = r => ({
+      ...r,
+      id: Number(r.id),
+      vehicleId: r.vehicleId != null ? Number(r.vehicleId) : r.vehicleId,
+      renterId: r.renterId != null ? Number(r.renterId) : r.renterId,
+      ownerId: r.ownerId != null ? Number(r.ownerId) : r.ownerId,
+      totalPrice: r.totalPrice != null ? Number(r.totalPrice) : r.totalPrice
+    })
+
+    state.vehicles = vehicles.map(normalizeVehicle)
+    state.rentals = rentals.map(normalizeRental)
     
     // Mark vehicles as unavailable if they have active rentals
     state.vehicles.forEach(vehicle => {
@@ -154,7 +169,16 @@ export async function loadRentals() {
   state.loading = true
   state.error = null
   try {
-    state.rentals = await RentalApi.listRentals()
+    const rentals = await RentalApi.listRentals()
+    // Normalize numeric fields
+    state.rentals = Array.isArray(rentals) ? rentals.map(r => ({
+      ...r,
+      id: Number(r.id),
+      vehicleId: r.vehicleId != null ? Number(r.vehicleId) : r.vehicleId,
+      renterId: r.renterId != null ? Number(r.renterId) : r.renterId,
+      ownerId: r.ownerId != null ? Number(r.ownerId) : r.ownerId,
+      totalPrice: r.totalPrice != null ? Number(r.totalPrice) : r.totalPrice
+    })) : []
   } catch (e) { state.error = e.message } finally { state.loading = false }
 }
 
@@ -171,11 +195,11 @@ export async function updateRentalStatus(rentalId, newStatus) {
       if (newStatus === 'completed') {
         // Notificar al owner que el alquiler se completó
         await createRentalCompletedNotification(rental)
-      } else if (newStatus === 'accepted') {
-        // Notificar al renter que su solicitud fue aceptada
+      } else if (newStatus === 'accepted' || newStatus === 'confirmed') {
+        // Notificar al renter que su solicitud fue aceptada/confirmada
         await createRentalAcceptedNotification(rental)
-      } else if (newStatus === 'rejected') {
-        // Notificar al renter que su solicitud fue rechazada
+      } else if (newStatus === 'rejected' || newStatus === 'cancelled') {
+        // Notificar al renter que su solicitud fue rechazada/cancelada
         await createRentalRejectedNotification(rental)
       }
     }
@@ -319,7 +343,7 @@ export function clearFilters() {
     startDate: '',
     endDate: '',
     minPrice: 0,
-    maxPrice: 100,
+    maxPrice: 1000,
     transmission: '',
     minSeats: 0,
     fuelType: ''

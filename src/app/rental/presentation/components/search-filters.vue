@@ -68,8 +68,8 @@
           type="range" 
           v-model.number="localFilters.minPrice" 
           min="0" 
-          max="100" 
-          step="5"
+          :max="1000" 
+          step="10"
           class="filter-range"
           @input="emitFilters"
         />
@@ -85,8 +85,8 @@
           type="range" 
           v-model.number="localFilters.maxPrice" 
           min="0" 
-          max="100" 
-          step="5"
+          :max="1000" 
+          step="10"
           class="filter-range"
           @input="emitFilters"
         />
@@ -172,7 +172,7 @@ const localFilters = ref({
   startDate: '',
   endDate: '',
   minPrice: 0,
-  maxPrice: 100,
+  maxPrice: 1000,
   transmission: '',
   minSeats: 0,
   fuelType: ''
@@ -184,7 +184,7 @@ const hasActiveFilters = computed(() => {
          localFilters.value.startDate !== '' ||
          localFilters.value.endDate !== '' ||
          localFilters.value.minPrice > 0 ||
-         localFilters.value.maxPrice < 100 ||
+         localFilters.value.maxPrice < 1000 ||
          localFilters.value.transmission !== '' ||
          localFilters.value.minSeats > 0 ||
          localFilters.value.fuelType !== ''
@@ -202,7 +202,7 @@ function clearFilters() {
     startDate: '',
     endDate: '',
     minPrice: 0,
-    maxPrice: 100,
+    maxPrice: 1000,
     transmission: '',
     minSeats: 0,
     fuelType: ''
