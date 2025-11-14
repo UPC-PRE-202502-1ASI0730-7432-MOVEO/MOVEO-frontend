@@ -1,5 +1,6 @@
 import { reactive, computed } from 'vue'
 import { RentalApi } from '../infrastructure/rental-api.js'
+import { apiClient } from '@/app/shared/infrastructure/apiClient.js'
 
 export const state = reactive({
   vehicles: [],
@@ -217,7 +218,6 @@ export async function updateRentalStatus(rentalId, newStatus) {
 // Crear notificación cuando un rental se completa
 async function createRentalCompletedNotification(rental) {
   try {
-    const axios = (await import('axios')).default
     const vehicle = state.vehicles.find(v => v.id === rental.vehicleId)
     
     const notification = {
@@ -241,7 +241,7 @@ async function createRentalCompletedNotification(rental) {
       readAt: null
     }
     
-    await axios.post('http://localhost:5332/notifications', notification)
+    await apiClient.post('/notifications', notification)
     console.log('✅ Notificación de alquiler completado creada para owner:', rental.ownerId)
   } catch (error) {
     console.error('Error creating rental completed notification:', error)
@@ -251,7 +251,6 @@ async function createRentalCompletedNotification(rental) {
 // Crear notificación cuando una solicitud es aceptada
 async function createRentalAcceptedNotification(rental) {
   try {
-    const axios = (await import('axios')).default
     const vehicle = state.vehicles.find(v => v.id === rental.vehicleId)
     
     const notification = {
@@ -276,7 +275,7 @@ async function createRentalAcceptedNotification(rental) {
       readAt: null
     }
     
-    await axios.post('http://localhost:5332/notifications', notification)
+    await apiClient.post('/notifications', notification)
     console.log('✅ Notificación de solicitud aceptada creada para renter:', rental.renterId)
   } catch (error) {
     console.error('Error creating rental accepted notification:', error)
@@ -286,7 +285,6 @@ async function createRentalAcceptedNotification(rental) {
 // Crear notificación cuando una solicitud es rechazada
 async function createRentalRejectedNotification(rental) {
   try {
-    const axios = (await import('axios')).default
     const vehicle = state.vehicles.find(v => v.id === rental.vehicleId)
     
     const notification = {
@@ -308,7 +306,7 @@ async function createRentalRejectedNotification(rental) {
       readAt: null
     }
     
-    await axios.post('http://localhost:5332/notifications', notification)
+    await apiClient.post('/notifications', notification)
     console.log('✅ Notificación de solicitud rechazada creada para renter:', rental.renterId)
   } catch (error) {
     console.error('Error creating rental rejected notification:', error)

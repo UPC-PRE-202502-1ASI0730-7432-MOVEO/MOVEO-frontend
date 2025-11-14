@@ -245,7 +245,7 @@ import { useRouter } from 'vue-router'
 import usePaymentsStore from '@/app/payment/application/payment.store.js'
 import { useUserStore } from '@/app/iam/application/user.store.js'
 import PaymentManagement from '@/app/payment/components/views/payment-management.vue'
-import axios from 'axios'
+import { apiClient } from '@/app/shared/infrastructure/apiClient.js'
 
 const props = defineProps({
   vehicle: {
@@ -271,8 +271,8 @@ const existingRentals = ref([])
 // Cargar reservas existentes al montar
 onMounted(async () => {
   try {
-    const response = await axios.get('http://localhost:5332/rentals')
-    existingRentals.value = response.data.filter(
+    const data = await apiClient.get('/rentals')
+    existingRentals.value = data.filter(
       rental => Number(rental.vehicleId) === Number(props.vehicle.id) && 
                rental.status !== 'cancelled'
     )
@@ -427,12 +427,12 @@ async function confirmRental() {
     }
     
     // Guardar en la base de datos
-    const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/rentals`, rentalData)
-    console.log('Rental guardado exitosamente:', response.data)
+    const created = await apiClient.post('/rentals', rentalData)
+    console.log('Rental guardado exitosamente:', created)
     
     // Guardar el pago usando payment.store.js con los campos correctos
     const paymentData = {
-      rentalId: response.data.id, // ID del rental recién creado
+      rentalId: created.id, // ID del rental recién creado
       payerId: renterId, // ID del inquilino que hace el pago
       recipientId: props.vehicle.ownerId, // ID del propietario que recibe el pago
       amount: totalPrice.value,
@@ -455,14 +455,14 @@ async function confirmRental() {
         userId: props.vehicle.ownerId,
         type: 'rental_requested',
         title: 'Nueva solicitud de alquiler',
-        message: `El usuario ${currentUser.firstName || ''} ${currentUser.lastName || ''} ha solicitado alquilar ${props.vehicle.brand} ${props.vehicle.model}. Alquiler #${response.data.id}`,
-        relatedId: response.data.id,
+        message: `El usuario ${currentUser.firstName || ''} ${currentUser.lastName || ''} ha solicitado alquilar ${props.vehicle.brand} ${props.vehicle.model}. Alquiler #${created.id}`,
+        relatedId: created.id,
         relatedType: 'rental',
         read: false,
         actionUrl: `/rental/details/${response.data.id}`,
         actionLabel: 'Ver solicitud',
         metadata: {
-          rentalId: response.data.id,
+          rentalId: created.id,
           vehicleId: props.vehicle.id,
           renterId: renterId
         },
@@ -470,13 +470,13 @@ async function confirmRental() {
         readAt: null
       }
 
-      await axios.post(`${import.meta.env.VITE_API_BASE_URL}/notifications`, notification)
+      await apiClient.post('/notifications', notification)
       console.log('🔔 Notificación creada para owner:', props.vehicle.ownerId)
     } catch (err) {
       console.error('Error creando notificación para owner:', err)
     }
 
-    emit('rental-confirmed', response.data)
+    emit('rental-confirmed', created)
     // Redirigir al usuario a Mis Alquileres para que vea la reserva
     router.push('/rental/my-rentals')
   } catch (error) {

@@ -1,7 +1,5 @@
 import { reactive, computed } from 'vue'
-import axios from 'axios'
-
-const API_BASE = 'http://localhost:5332'
+import { apiClient } from '@/app/shared/infrastructure/apiClient.js'
 
 const state = reactive({
   notifications: [],
@@ -17,10 +15,9 @@ export const useNotificationStore = () => {
     
     try {
       // Obtener TODAS las notificaciones del db.json
-      const response = await axios.get(`${API_BASE}/notifications`)
-      
+      const data = await apiClient.get('/notifications')
       // Filtrar solo las notificaciones del usuario actual (normalizar tipos)
-      const userNotifications = response.data.filter(n => Number(n.userId) === Number(userId))
+      const userNotifications = data.filter(n => Number(n.userId) === Number(userId))
       
       // Ordenar por fecha (más recientes primero)
       state.notifications = userNotifications.sort((a, b) => 
@@ -40,7 +37,7 @@ export const useNotificationStore = () => {
   // Marcar notificación como leída
   const markAsRead = async (notificationId) => {
     try {
-      await axios.patch(`${API_BASE}/notifications/${notificationId}`, {
+      await apiClient.patch(`/notifications/${notificationId}`, {
         read: true,
         readAt: new Date().toISOString()
       })
@@ -65,7 +62,7 @@ export const useNotificationStore = () => {
       
       // Marcar cada una como leída
       for (const notif of unread) {
-        await axios.patch(`${API_BASE}/notifications/${notif.id}`, {
+        await apiClient.patch(`/notifications/${notif.id}`, {
           read: true,
           readAt: new Date().toISOString()
         })
@@ -82,7 +79,7 @@ export const useNotificationStore = () => {
   // Eliminar notificación
   const deleteNotification = async (notificationId) => {
     try {
-      await axios.delete(`${API_BASE}/notifications/${notificationId}`)
+      await apiClient.delete(`/notifications/${notificationId}`)
       
       // Remover del estado local
       state.notifications = state.notifications.filter(n => n.id !== notificationId)

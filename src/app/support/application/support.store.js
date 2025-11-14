@@ -1,7 +1,5 @@
 import { reactive, computed } from 'vue'
-import axios from 'axios'
-
-const API_BASE = 'http://localhost:5332'
+import { apiClient } from '@/app/shared/infrastructure/apiClient.js'
 
 const state = reactive({
   tickets: [],
@@ -18,7 +16,7 @@ export const useSupportStore = () => {
     
     try {
       // Obtener TODOS los tickets del db.json
-      const response = await axios.get(`${API_BASE}/support-tickets`)
+      const response = await apiClient.get('/support-tickets')
       
       // Filtrar solo los tickets del usuario actual
       // Normalizar ids a Number para evitar mismatch string/number
@@ -52,8 +50,7 @@ export const useSupportStore = () => {
         updatedAt: new Date().toISOString()
       }
       
-      const ticketResponse = await axios.post(`${API_BASE}/support-tickets`, newTicket)
-      const createdTicket = ticketResponse.data
+      const createdTicket = await apiClient.post('/support-tickets', newTicket)
       
       // 2. Si es un ticket de daño Y tiene renterId, crear notificación automática
       if (ticketData.type === 'damage' && ticketData.renterId) {
@@ -97,7 +94,7 @@ export const useSupportStore = () => {
         readAt: null
       }
       
-      await axios.post(`${API_BASE}/notifications`, notification)
+      await apiClient.post('/notifications', notification)
       console.log('✅ Notificación de daño creada para:', renterName)
     } catch (error) {
       console.error('Error creating damage notification:', error)
@@ -110,8 +107,7 @@ export const useSupportStore = () => {
     state.error = null
     
     try {
-      const response = await axios.get(`${API_BASE}/support-tickets/${ticketId}`)
-      state.currentTicket = response.data
+      state.currentTicket = await apiClient.get(`/support-tickets/${ticketId}`)
     } catch (error) {
       console.error('Error loading ticket:', error)
       state.error = 'Error al cargar el ticket'
@@ -127,7 +123,7 @@ export const useSupportStore = () => {
     state.error = null
     
     try {
-      await axios.patch(`${API_BASE}/support-tickets/${ticketId}`, {
+      await apiClient.patch(`/support-tickets/${ticketId}`, {
         status: 'closed',
         resolutionNotes,
         resolvedAt: new Date().toISOString(),
