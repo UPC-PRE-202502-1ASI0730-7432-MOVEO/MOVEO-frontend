@@ -110,9 +110,10 @@ function formatDate(dateString) {
 // Aceptar solicitud
 const acceptRequest = async (rentalId) => {
   try {
-    await rentalStore.updateRentalStatus(rentalId, 'accepted')
+    // Use 'confirmed' as the canonical status for accepted/confirmed rentals
+    await rentalStore.updateRentalStatus(rentalId, 'confirmed')
     await rentalStore.loadRentals()
-    console.log('✅ Solicitud aceptada')
+    console.log('✅ Solicitud confirmada')
   } catch (error) {
     console.error('Error accepting request:', error)
   }

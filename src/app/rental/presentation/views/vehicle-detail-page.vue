@@ -4,6 +4,8 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { RentalApi } from '@/app/rental/infrastructure/rental-api.js'
 import VehicleRentalHistory from '../components/vehicle-rental-history.vue'
+import RentalFlowModal from '../components/rental-flow-modal.vue'
+import { useUserStore } from '@/app/iam/application/user.store.js'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -11,6 +13,9 @@ const router = useRouter()
 
 const vehicle = ref(null)
 const loading = ref(true)
+
+const showRentalModal = ref(false)
+const userStore = useUserStore()
 
 const vehicleId = computed(() => parseInt(route.params.id))
 
@@ -31,6 +36,20 @@ async function loadVehicle() {
 
 function goBack() {
   router.push('/my-vehicles')
+}
+
+function openRentalModal() {
+  if (!userStore.currentUser.value || !userStore.currentUser.value.id) {
+    router.push('/auth/login')
+    return
+  }
+  showRentalModal.value = true
+}
+
+function onRentalConfirmed(rental) {
+  // Close modal and navigate to my rentals (modal also redirects, but keep safe)
+  showRentalModal.value = false
+  router.push('/rental/my-rentals')
 }
 </script>
 
@@ -122,6 +141,25 @@ function goBack() {
 
       <!-- Historial de Alquileres -->
       <VehicleRentalHistory :vehicle-id="vehicleId" />
+
+      <!-- Botón de reservar / comenzar aventura -->
+      <div class="actions-row" style="margin-top:1rem">
+        <button
+          v-if="vehicle && vehicle.status === 'active'"
+          @click="openRentalModal"
+          class="btn-primary btn-book"
+        >
+          <i class="pi pi-play"></i>
+          {{ t('rental.vehicleDetail.proceedToRent') || 'Alquilar / Comenzar Aventura' }}
+        </button>
+      </div>
+
+      <RentalFlowModal
+        v-if="showRentalModal"
+        :vehicle="vehicle"
+        @close="showRentalModal = false"
+        @rental-confirmed="onRentalConfirmed"
+      />
     </div>
 
     <!-- Error State -->

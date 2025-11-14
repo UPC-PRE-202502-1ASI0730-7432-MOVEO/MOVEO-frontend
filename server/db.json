@@ -123,6 +123,79 @@
       },
       "bankAccount": null,
       "id": 3
+    },
+    {
+      "role": "renter",
+      "firstName": "andreow",
+      "lastName": "Santiago",
+      "email": "andreow@123.com",
+      "phone": "512345677",
+      "dni": "12345678",
+      "licenseNumber": "12345678",
+      "avatar": null,
+      "verified": {
+        "email": false,
+        "phone": false,
+        "dni": false,
+        "license": false
+      },
+      "stats": {
+        "totalRentals": 0,
+        "totalSpent": 0,
+        "totalEarned": 0,
+        "activeRentals": 0,
+        "completedRentals": 0,
+        "canceledRentals": 0
+      },
+      "preferences": {
+        "language": "es",
+        "notifications": {
+          "email": true,
+          "push": true,
+          "sms": false
+        }
+      },
+      "bankAccount": null,
+      "id": 4
+    },
+    {
+      "role": "owner",
+      "firstName": "ron",
+      "lastName": "ron",
+      "email": "ron@123.com",
+      "phone": "5112345678",
+      "dni": "12345678",
+      "licenseNumber": "12345678",
+      "avatar": null,
+      "verified": {
+        "email": false,
+        "phone": false,
+        "dni": false,
+        "license": false
+      },
+      "stats": {
+        "totalRentals": 0,
+        "totalSpent": 0,
+        "totalEarned": 0,
+        "activeRentals": 0,
+        "completedRentals": 0,
+        "canceledRentals": 0
+      },
+      "preferences": {
+        "language": "es",
+        "notifications": {
+          "email": true,
+          "push": true,
+          "sms": false
+        }
+      },
+      "bankAccount": {
+        "bankName": "BBVA",
+        "accountType": "ahorro",
+        "accountNumber": "1234567812345678",
+        "verified": false
+      },
+      "id": 5
     }
   ],
   "vehicles": [
@@ -488,6 +561,29 @@
       "ownerId": 1,
       "createdAt": "2025-10-09T02:26:51.546Z",
       "id": 11
+    },
+    {
+      "brand": "aaa",
+      "model": "aaa",
+      "year": 2025,
+      "color": "Plata",
+      "transmission": "Automática",
+      "fuelType": "Eléctrico",
+      "seats": 5,
+      "licensePlate": "aaaaaaa",
+      "location": {
+        "district": "Barranco",
+        "address": "aaaa",
+        "lat": -12.0464,
+        "lng": -77.0428
+      },
+      "dailyPrice": 150,
+      "status": "active",
+      "description": "aaaa",
+      "images": [],
+      "ownerId": 5,
+      "createdAt": "2025-11-14T15:10:44.749Z",
+      "id": 12
     }
   ],
   "rentals": [
@@ -678,7 +774,7 @@
       "startDate": "2026-01-16",
       "endDate": "2026-03-19",
       "totalPrice": 2790,
-      "status": "pending",
+      "status": "accepted",
       "pickupLocation": "Av. Arequipa 123, Miraflores, Lima",
       "returnLocation": "Av. Arequipa 123, Miraflores, Lima",
       "notes": "Reserva realizada. Método de pago: cash",
@@ -692,12 +788,56 @@
       "startDate": "2025-11-12",
       "endDate": "2025-11-16",
       "totalPrice": 220,
-      "status": "pending",
+      "status": "accepted",
       "pickupLocation": "Av. Arequipa 123, Miraflores, Lima",
       "returnLocation": "Av. Arequipa 123, Miraflores, Lima",
       "notes": "Reserva realizada. Método de pago: cash",
       "createdAt": "2025-11-12T06:16:21.826Z",
       "id": 14
+    },
+    {
+      "vehicleId": 3,
+      "renterId": 2,
+      "ownerId": 1,
+      "startDate": "2025-11-14",
+      "endDate": "2025-11-21",
+      "totalPrice": 350,
+      "status": "accepted",
+      "pickupLocation": "Av. Javier Prado 234, San Isidro, Lima",
+      "returnLocation": "Av. Javier Prado 234, San Isidro, Lima",
+      "notes": "Reserva realizada. Método de pago: cash",
+      "createdAt": "2025-11-14T14:46:42.144Z",
+      "id": 15
+    },
+    {
+      "vehicleId": 1,
+      "renterId": 4,
+      "ownerId": 1,
+      "startDate": "2025-11-29",
+      "endDate": "2025-12-07",
+      "totalPrice": 360,
+      "status": "confirmed",
+      "pickupLocation": "Av. Arequipa 123, Miraflores, Lima",
+      "returnLocation": "Av. Arequipa 123, Miraflores, Lima",
+      "notes": "Reserva realizada. Método de pago: cash",
+      "createdAt": "2025-11-14T14:52:27.182Z",
+      "id": 16,
+      "acceptedAt": "2025-11-14T14:53:46.608Z"
+    },
+    {
+      "vehicleId": 2,
+      "renterId": 4,
+      "ownerId": 1,
+      "startDate": "2025-11-29",
+      "endDate": "2025-11-30",
+      "totalPrice": 55,
+      "status": "confirmed",
+      "pickupLocation": "Av. Arequipa 123, Miraflores, Lima",
+      "returnLocation": "Av. Arequipa 123, Miraflores, Lima",
+      "notes": "Reserva realizada. Método de pago: cash",
+      "createdAt": "2025-11-14T15:03:23.196Z",
+      "id": 17,
+      "acceptedAt": "2025-11-14T15:08:53.022Z"
     }
   ],
   "payments": [
@@ -848,6 +988,48 @@
       "description": "Alquiler de ToyotaXDDDD Corollaxdxdxdxd - 4 día(s)",
       "createdAt": "2025-11-12T06:16:21.861Z",
       "id": 11
+    },
+    {
+      "rentalId": 15,
+      "payerId": 2,
+      "recipientId": 1,
+      "amount": 350,
+      "currency": "PEN",
+      "method": "cash",
+      "status": "pending",
+      "transactionId": "txn_1763131602182",
+      "type": "rental_payment",
+      "description": "Alquiler de Honda Civic - 7 día(s)",
+      "createdAt": "2025-11-14T14:46:42.182Z",
+      "id": 12
+    },
+    {
+      "rentalId": 16,
+      "payerId": 4,
+      "recipientId": 1,
+      "amount": 360,
+      "currency": "PEN",
+      "method": "cash",
+      "status": "pending",
+      "transactionId": "txn_1763131947228",
+      "type": "rental_payment",
+      "description": "Alquiler de Toyota Corolla - 8 día(s)",
+      "createdAt": "2025-11-14T14:52:27.228Z",
+      "id": 13
+    },
+    {
+      "rentalId": 17,
+      "payerId": 4,
+      "recipientId": 1,
+      "amount": 55,
+      "currency": "PEN",
+      "method": "cash",
+      "status": "pending",
+      "transactionId": "txn_1763132603245",
+      "type": "rental_payment",
+      "description": "Alquiler de ToyotaXDDDD Corollaxdxdxdxd - 1 día(s)",
+      "createdAt": "2025-11-14T15:03:23.245Z",
+      "id": 14
     }
   ],
   "reviews": [
@@ -1446,6 +1628,91 @@
       "createdAt": "2025-11-12T06:27:01.685Z",
       "readAt": null,
       "id": 8
+    },
+    {
+      "userId": 2,
+      "type": "rental_confirmed",
+      "title": "🎉 ¡Solicitud Aceptada!",
+      "message": "Tu solicitud de alquiler del vehículo Toyota Corolla ha sido aceptada. Alquiler #13. Puedes recoger el vehículo el 15/1/2026",
+      "relatedId": 13,
+      "relatedType": "rental",
+      "read": false,
+      "actionUrl": "/rental/details/13",
+      "actionLabel": "Ver Detalles",
+      "metadata": {
+        "rentalId": 13,
+        "vehicleId": 1,
+        "ownerId": 1,
+        "totalPrice": 2790,
+        "startDate": "2026-01-16",
+        "endDate": "2026-03-19"
+      },
+      "createdAt": "2025-11-14T14:54:42.454Z",
+      "readAt": null,
+      "id": 9
+    },
+    {
+      "userId": 2,
+      "type": "rental_confirmed",
+      "title": "🎉 ¡Solicitud Aceptada!",
+      "message": "Tu solicitud de alquiler del vehículo ToyotaXDDDD Corollaxdxdxdxd ha sido aceptada. Alquiler #14. Puedes recoger el vehículo el 11/11/2025",
+      "relatedId": 14,
+      "relatedType": "rental",
+      "read": false,
+      "actionUrl": "/rental/details/14",
+      "actionLabel": "Ver Detalles",
+      "metadata": {
+        "rentalId": 14,
+        "vehicleId": 2,
+        "ownerId": 1,
+        "totalPrice": 220,
+        "startDate": "2025-11-12",
+        "endDate": "2025-11-16"
+      },
+      "createdAt": "2025-11-14T14:54:43.173Z",
+      "readAt": null,
+      "id": 10
+    },
+    {
+      "userId": 2,
+      "type": "rental_confirmed",
+      "title": "🎉 ¡Solicitud Aceptada!",
+      "message": "Tu solicitud de alquiler del vehículo Honda Civic ha sido aceptada. Alquiler #15. Puedes recoger el vehículo el 13/11/2025",
+      "relatedId": 15,
+      "relatedType": "rental",
+      "read": false,
+      "actionUrl": "/rental/details/15",
+      "actionLabel": "Ver Detalles",
+      "metadata": {
+        "rentalId": 15,
+        "vehicleId": 3,
+        "ownerId": 1,
+        "totalPrice": 350,
+        "startDate": "2025-11-14",
+        "endDate": "2025-11-21"
+      },
+      "createdAt": "2025-11-14T14:54:43.711Z",
+      "readAt": null,
+      "id": 11
+    },
+    {
+      "userId": 1,
+      "type": "rental_requested",
+      "title": "Nueva solicitud de alquiler",
+      "message": "El usuario andreow Santiago ha solicitado alquilar ToyotaXDDDD Corollaxdxdxdxd. Alquiler #17",
+      "relatedId": 17,
+      "relatedType": "rental",
+      "read": false,
+      "actionUrl": "/rental/details/17",
+      "actionLabel": "Ver solicitud",
+      "metadata": {
+        "rentalId": 17,
+        "vehicleId": 2,
+        "renterId": 4
+      },
+      "createdAt": "2025-11-14T15:03:23.295Z",
+      "readAt": null,
+      "id": 12
     }
   ],
   "support-tickets": [

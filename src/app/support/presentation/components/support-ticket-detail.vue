@@ -180,6 +180,7 @@ import Textarea from 'primevue/textarea'
 import ProgressSpinner from 'primevue/progressspinner'
 import Message from 'primevue/message'
 import { useSupportStore } from '@/app/support/application/support.store.js'
+import { useUserStore } from '@/app/iam/application/user.store.js'
 import { useToast } from 'primevue/usetoast'
 
 const { t } = useI18n()
@@ -197,13 +198,12 @@ const ticket = computed(() => supportStore.currentTicket)
 const loading = computed(() => supportStore.loading)
 const error = computed(() => supportStore.error)
 
+const userStore = useUserStore()
 const canCloseTicket = computed(() => {
   // Solo el dueño del ticket o un administrador puede cerrarlo
-  const userStr = localStorage.getItem('user')
-  if (!userStr || !ticket.value) return false
-  
-  const user = JSON.parse(userStr)
-  return ticket.value.userId === user.id || user.role === 'admin'
+  const currentUser = userStore.currentUser.value
+  if (!currentUser || !ticket.value) return false
+  return Number(ticket.value.userId) === Number(currentUser.id) || currentUser.role === 'admin'
 })
 
 const getPrioritySeverity = (priority) => {

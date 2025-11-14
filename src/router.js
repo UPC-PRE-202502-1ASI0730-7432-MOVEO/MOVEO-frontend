@@ -16,7 +16,8 @@ const routes = [
   { 
     path: '/', 
     redirect: '/auth/login',
-    meta: { title: 'MOVEO' }
+    // Hide main layout while redirecting to auth pages to avoid layout flash
+    meta: { title: 'MOVEO', hideLayout: true }
   },
   
   // Dashboard

@@ -141,32 +141,7 @@
           </div>
         </div>
 
-        <!-- Tab: Demo (solo desarrollo) -->
-        <div v-if="activeTab === 'demo'" class="tab-panel">
-          <div class="info-card demo-card">
-            <h3 class="card-title">🧪 Modo Desarrollo - Cambiar Usuario</h3>
-            <p class="demo-warning">
-              ⚠️ Esta sección es solo para desarrollo y será removida cuando tengamos login real.
-            </p>
-            <div class="demo-users">
-              <div 
-                v-for="(user, key) in DEMO_USERS" 
-                :key="key"
-                class="demo-user-card"
-                :class="{ active: currentUser?.id === user.id }"
-                @click="switchUser(key)"
-              >
-                <div class="demo-user-avatar">{{ user.firstName[0] }}{{ user.lastName[0] }}</div>
-                <div class="demo-user-info">
-                  <p class="demo-user-name">{{ user.firstName }} {{ user.lastName }}</p>
-                  <p class="demo-user-role">{{ user.role === 'renter' ? '👤 Cliente' : '🚗 Propietario' }}</p>
-                  <p class="demo-user-email">{{ user.email }}</p>
-                </div>
-                <span v-if="currentUser?.id === user.id" class="demo-user-active">✓ Actual</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <!-- demo tab removed -->
       </div>
     </div>
   </div>
@@ -178,7 +153,7 @@ import { useUserStore } from '@/app/iam/application/user.store.js'
 import { useProfileStore } from '@/app/profile/application/profile.store.js'
 import UserPreferences from '@/app/iam/components/user-preferences.vue'
 
-const { currentUser, userName, userInitials, switchToDemoUser, DEMO_USERS } = useUserStore()
+const { currentUser, userName, userInitials } = useUserStore()
 const profileStore = useProfileStore()
 
 const activeTab = ref('personal')
@@ -186,8 +161,7 @@ const activeTab = ref('personal')
 const tabs = [
   { value: 'personal', label: 'Información Personal', icon: '👤' },
   { value: 'preferences', label: 'Preferencias', icon: '⚙️' },
-  { value: 'security', label: 'Seguridad', icon: '🔒' },
-  { value: 'demo', label: 'Demo (DEV)', icon: '🧪' }
+  { value: 'security', label: 'Seguridad', icon: '🔒' }
 ]
 
 const joinedDate = computed(() => {
@@ -200,10 +174,7 @@ const profileData = computed(() => profileStore.profile)
 const verificationProgress = computed(() => profileStore.verificationLevel)
 const profileStats = computed(() => profileData.value?.stats || {})
 
-function switchUser(role) {
-  switchToDemoUser(role)
-  window.location.reload() // Recargar para actualizar el toolbar
-}
+// demo switch removed
 
 onMounted(async () => {
   if (currentUser.value?.id) {
