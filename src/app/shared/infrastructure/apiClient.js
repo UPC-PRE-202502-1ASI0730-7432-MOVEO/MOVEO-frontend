@@ -14,13 +14,30 @@ async function request(path, options = {}) {
     },
     ...options
   })
+  
+  // Read body once as text
+  const bodyText = await res.text()
+  
   if (!res.ok) {
-    let body
-    try { body = await res.json() } catch { body = await res.text() }
-    throw new Error(`API ${res.status} ${res.statusText}: ${typeof body === 'string' ? body : JSON.stringify(body)}`)
+    let errorBody
+    try { 
+      errorBody = JSON.parse(bodyText) 
+    } catch { 
+      errorBody = bodyText 
+    }
+    throw new Error(`API ${res.status} ${res.statusText}: ${typeof errorBody === 'string' ? errorBody : JSON.stringify(errorBody)}`)
   }
+  
+  // Parse response based on content type
   const ct = res.headers.get('content-type') || ''
-  return ct.includes('application/json') ? res.json() : res.text()
+  if (ct.includes('application/json') && bodyText) {
+    try {
+      return JSON.parse(bodyText)
+    } catch {
+      return bodyText
+    }
+  }
+  return bodyText
 }
 
 export const apiClient = {

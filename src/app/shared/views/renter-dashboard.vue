@@ -76,6 +76,11 @@ function formatDate(dateString) {
   })
 }
 
+// Verificar si el rental es una aventura (tiene ruta de aventura asociada)
+function isRentalAdventure(rental) {
+  return rental && rental.adventureRouteId != null
+}
+
 // Actions
 async function handleFinishRental(rental) {
   if (!confirm('¿Estás seguro de que deseas finalizar este viaje?')) return

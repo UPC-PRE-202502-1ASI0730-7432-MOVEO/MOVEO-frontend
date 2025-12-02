@@ -4,6 +4,15 @@ import { toUserEntity, toUserCollection } from './iam.assembler.js'
 
 export const IamApi = {
   /**
+   * Login with email and password
+   * Calls POST /api/v1/auth/login
+   */
+  async login(email, password) {
+    const data = await apiClient.post('/auth/login', { email, password })
+    return data
+  },
+
+  /**
    * Get all users
    */
   async listUsers() {

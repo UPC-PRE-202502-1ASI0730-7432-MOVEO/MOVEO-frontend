@@ -272,7 +272,7 @@ async function createDisputeNotification() {
       userId: ticket.value.userId,
       type: 'dispute_received',
       title: '⚠️ Disputa Recibida - Ticket #' + ticket.value.id,
-      message: `${renterName} ha disputado el reporte de daño. Motivo: "${disputeReason.value}". Puedes enviar pruebas adicionales para respaldar tu reclamo.`,
+      body: `${renterName} ha disputado el reporte de daño. Motivo: "${disputeReason.value}". Puedes enviar pruebas adicionales para respaldar tu reclamo.`,
       relatedId: ticket.value.id,
       relatedType: 'ticket',
       read: false,

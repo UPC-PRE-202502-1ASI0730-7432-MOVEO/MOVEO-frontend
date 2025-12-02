@@ -461,7 +461,7 @@ async function createProofSentNotification() {
       userId: ticket.value.renterId,
       type: 'dispute_proof_received',
       title: '📋 Pruebas Adicionales Recibidas',
-      message: `El propietario ha enviado pruebas adicionales para el ticket #${ticket.value.id}. Ya no puedes disputar nuevamente. Debes proceder con el pago.`,
+      body: `El propietario ha enviado pruebas adicionales para el ticket #${ticket.value.id}. Ya no puedes disputar nuevamente. Debes proceder con el pago.`,
       relatedId: ticket.value.id,
       relatedType: 'ticket',
       read: false,

@@ -19,8 +19,14 @@ export const useNotificationStore = () => {
       // Filtrar solo las notificaciones del usuario actual (normalizar tipos)
       const userNotifications = data.filter(n => Number(n.userId) === Number(userId))
       
+      // Mapear 'body' a 'message' si viene del backend con ese campo
+      const mappedNotifications = userNotifications.map(n => ({
+        ...n,
+        message: n.message || n.body || ''  // Usar message si existe, sino body
+      }))
+      
       // Ordenar por fecha (más recientes primero)
-      state.notifications = userNotifications.sort((a, b) => 
+      state.notifications = mappedNotifications.sort((a, b) => 
         new Date(b.createdAt) - new Date(a.createdAt)
       )
       
@@ -58,7 +64,7 @@ export const useNotificationStore = () => {
       userId: ownerId,
       type: 'rental_request',
       title: '¡Nueva Solicitud de Alquiler!',
-      message: `${renterName} quiere alquilar tu ${vehicleName}. Revisa los detalles y confirma la reserva.`,
+      body: `${renterName} quiere alquilar tu ${vehicleName}. Revisa los detalles y confirma la reserva.`,
       relatedId: rentalId,
       relatedType: 'rental',
       actionUrl: '/rental/rental-requests',
@@ -79,7 +85,7 @@ export const useNotificationStore = () => {
       userId: renterId,
       type: 'rental_confirmed',
       title: 'Reserva Confirmada',
-      message: `Tu reserva del ${vehicleName} ha sido confirmada. Puedes recoger el vehículo el ${pickupDate}.`,
+      body: `Tu reserva del ${vehicleName} ha sido confirmada. Puedes recoger el vehículo el ${pickupDate}.`,
       relatedId: rentalId,
       relatedType: 'rental',
       actionUrl: `/rental/my-rentals/${rentalId}`,

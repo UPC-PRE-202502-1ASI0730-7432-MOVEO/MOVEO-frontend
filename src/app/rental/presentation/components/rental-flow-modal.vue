@@ -567,7 +567,7 @@ async function confirmRental() {
         userId: props.vehicle.ownerId,
         type: 'rental_requested',
         title: 'Nueva solicitud de alquiler',
-        message: `El usuario ${currentUser.firstName || ''} ${currentUser.lastName || ''} ha solicitado alquilar ${props.vehicle.brand} ${props.vehicle.model}. Alquiler #${created.id}`,
+        body: `El usuario ${currentUser.firstName || ''} ${currentUser.lastName || ''} ha solicitado alquilar ${props.vehicle.brand} ${props.vehicle.model}. Alquiler #${created.id}`,
         relatedId: created.id,
         relatedType: 'rental',
         read: false,

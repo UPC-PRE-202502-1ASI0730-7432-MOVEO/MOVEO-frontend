@@ -42,9 +42,10 @@ export const useSupportStore = () => {
     state.error = null
     
     try {
-      // 1. Crear el ticket
+      // 1. Crear el ticket (asegurar que category siempre esté presente)
       const newTicket = {
         ...ticketData,
+        category: ticketData.category || ticketData.type || 'general',
         status: 'open',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
@@ -77,7 +78,7 @@ export const useSupportStore = () => {
         userId: renterId,
         type: 'damage_report',
         title: 'Reporte de Daño - Acción Requerida',
-        message: `Se ha reportado un daño en el vehículo ${ticket.vehicleName || 'alquilado'}. El propietario ha creado un ticket #${ticket.id}. Costo estimado: S/. ${ticket.estimatedCost || 0}`,
+        body: `Se ha reportado un daño en el vehículo ${ticket.vehicleName || 'alquilado'}. El propietario ha creado un ticket #${ticket.id}. Costo estimado: S/. ${ticket.estimatedCost || 0}`,
         relatedId: ticket.id,
         relatedType: 'ticket',
         read: false,

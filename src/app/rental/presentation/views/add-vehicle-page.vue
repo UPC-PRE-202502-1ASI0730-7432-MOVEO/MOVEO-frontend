@@ -588,10 +588,30 @@ async function handleSubmit() {
   try {
     isSubmitting.value = true
 
+    // Construir el payload según la especificación del backend
     const vehicleData = {
-      ...formData,
       ownerId: userStore.currentUser.value.id,
-      createdAt: new Date().toISOString()
+      brand: formData.brand,
+      model: formData.model,
+      year: formData.year,
+      color: formData.color,
+      transmission: formData.transmission,
+      fuelType: formData.fuelType,
+      seats: formData.seats,
+      licensePlate: formData.licensePlate,
+      location: {
+        district: formData.location.district,
+        address: formData.location.address || '',
+        lat: formData.location.lat,
+        lng: formData.location.lng
+      },
+      dailyPrice: formData.dailyPrice,
+      depositAmount: formData.dailyPrice * 3, // Depósito = 3 días
+      status: formData.status || 'active',
+      description: formData.description || '',
+      images: formData.images || [],
+      features: [],
+      restrictions: []
     }
 
     await RentalApi.createVehicle(vehicleData)
