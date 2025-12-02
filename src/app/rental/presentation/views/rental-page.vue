@@ -50,8 +50,8 @@
         <!-- Grid de vehículos -->
         <div v-if="filteredVehicles.length" class="vehicles-grid">
           <div 
-            v-for="vehicle in filteredVehicles" 
-            :key="vehicle.id"
+            v-for="(vehicle, index) in filteredVehicles" 
+            :key="vehicle.id ?? `vehicle-${index}`"
             class="vehicle-card"
             @click="openCalendar(vehicle)"
           >
@@ -114,8 +114,11 @@ const filtersExpanded = ref(false)
 const error = computed(() => state.error)
 
 async function reload() {
+  console.log('🚗 [rental-page] Iniciando recarga de vehículos...')
   loading.value = true
   await loadVehicles()
+  console.log('🚗 [rental-page] Vehículos cargados. filteredVehicles:', filteredVehicles.value)
+  console.log('🚗 [rental-page] IDs de vehículos filtrados:', filteredVehicles.value.map(v => ({ id: v.id, brand: v.brand, isNaN: isNaN(v.id) })))
   loading.value = false
 }
 
@@ -132,11 +135,16 @@ function clearAllFilters() {
 }
 
 function openCalendar(vehicle) {
+  console.log('🚗 [rental-page] openCalendar llamado con vehicle:', vehicle)
+  console.log('🚗 [rental-page] vehicle.id:', vehicle.id, 'tipo:', typeof vehicle.id)
   selectVehicle(vehicle.id)
+  console.log('🚗 [rental-page] selectedVehicle después de selectVehicle:', selectedVehicle.value)
   showRentalFlow.value = true
+  console.log('🚗 [rental-page] showRentalFlow:', showRentalFlow.value)
 }
 
 function closeCalendar() {
+  console.log('🚗 [rental-page] Cerrando calendario')
   selectVehicle(null)
   showRentalFlow.value = false
 }

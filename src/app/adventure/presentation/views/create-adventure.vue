@@ -257,6 +257,12 @@ const handleSubmit = async () => {
       imageUrl: formData.imageUrl,
       tags: tags,
       
+      // ✅ Campos requeridos por backend con valores por defecto
+      images: formData.imageUrl ? [formData.imageUrl] : [],
+      waypoints: [], // Por ahora vacío, se puede agregar funcionalidad después
+      estimatedTime: formData.duration || '1 hour',
+      distance: 0, // Valor por defecto
+      
       // Metadata
       ownerId: userStore.currentUser.value.id,
       rating: 0,

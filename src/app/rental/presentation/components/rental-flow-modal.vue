@@ -340,23 +340,30 @@ const activeRentalStatuses = new Set(['pending', 'confirmed', 'active', 'accepte
 // Cargar reservas existentes y reseñas al montar
 onMounted(async () => {
   try {
-    const [rentalsData, reviewsData] = await Promise.all([
-      apiClient.get('/rentals'),
-      apiClient.get('/reviews')
-    ])
+    // ✅ Cargar rentals y reviews por separado para manejar errores individuales
+    const rentalsData = await apiClient.get('/rentals')
     
     // Solo considerar rentas activas - excluir cancelled y completed
     existingRentals.value = rentalsData.filter(
-      rental => Number(rental.vehicleId) === Number(props.vehicle.id) && 
+      rental => String(rental.vehicleId) === String(props.vehicle.id) && 
                activeRentalStatuses.has(rental.status)
     )
     
-    // Filtrar reseñas del vehículo actual
-    vehicleReviews.value = reviewsData.filter(
-      review => Number(review.vehicleId) === Number(props.vehicle.id)
-    ).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    // ✅ Intentar cargar reviews pero no fallar si la tabla no existe
+    try {
+      const reviewsData = await apiClient.get('/reviews')
+      // Filtrar reseñas del vehículo actual
+      vehicleReviews.value = reviewsData.filter(
+        review => String(review.vehicleId) === String(props.vehicle.id)
+      ).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    } catch (reviewError) {
+      console.warn('⚠️ Reviews API no disponible (tabla reviews no existe):', reviewError.message)
+      vehicleReviews.value = [] // Continuar sin reviews
+    }
   } catch (error) {
     console.error('Error loading data:', error)
+    existingRentals.value = []
+    vehicleReviews.value = []
   }
 })
 
@@ -549,10 +556,9 @@ async function confirmRental() {
       recipientId: props.vehicle.ownerId, // ID del propietario que recibe el pago
       amount: totalPrice.value,
       currency: 'PEN',
-      method: selectedPaymentMethod.value,
+      paymentMethod: selectedPaymentMethod.value || 'card', // ✅ Backend espera 'paymentMethod'
       status: 'pending', // Estado inicial: pendiente
       transactionId: `txn_${Date.now()}`,
-      type: 'rental_payment',
       description: `Alquiler de ${props.vehicle.brand} ${props.vehicle.model} - ${rentalDays.value} día(s)`,
       createdAt: new Date().toISOString()
     }

@@ -165,7 +165,7 @@ const filteredRentals = computed(() => {
 // Obtener vehículo por ID
 function getVehicle(vehicleId) {
   if (!vehicleId) return null
-  return rentalStore.state.vehicles.find(v => Number(v.id) === Number(vehicleId))
+  return rentalStore.state.vehicles.find(v => String(v.id) === String(vehicleId))
 }
 
 // Formatear fecha

@@ -131,22 +131,40 @@ export async function loadVehicles() {
   state.loading = true
   state.error = null
   try {
+    console.log('🚗 [rental.store] Iniciando carga de vehículos...')
+    
     // Load both vehicles and rentals to determine availability
     const [vehicles, rentals] = await Promise.all([
       RentalApi.listVehicles(),
       RentalApi.listRentals()
     ])
-    // Normalize numeric fields to avoid string/number mismatches from the API
-    const normalizeVehicle = v => ({
-      ...v,
-      id: Number(v.id),
-      ownerId: v.ownerId != null ? Number(v.ownerId) : v.ownerId
-    })
+    
+    console.log('🚗 [rental.store] Vehículos recibidos del API:', vehicles)
+    console.log('🚗 [rental.store] Tipo de vehicles:', typeof vehicles, Array.isArray(vehicles))
+    
+    // Normalize fields from the API. Keep IDs as strings (GUIDs) to avoid NaN conversion.
+    const normalizeVehicle = v => {
+      const normalized = {
+        ...v,
+        id: v.id != null ? String(v.id) : null,
+        ownerId: v.ownerId != null ? Number(v.ownerId) : v.ownerId,
+        dailyPrice: typeof v.dailyPrice === 'object' ? v.dailyPrice.amount : Number(v.dailyPrice),
+        depositAmount: typeof v.depositAmount === 'object' ? v.depositAmount.amount : Number(v.depositAmount)
+      }
+      console.log('🚗 [rental.store] Vehículo normalizado:', {
+        id: normalized.id,
+        idIsNaN: isNaN(normalized.id),
+        originalId: v.id,
+        brand: normalized.brand,
+        dailyPrice: normalized.dailyPrice
+      })
+      return normalized
+    }
 
     const normalizeRental = r => ({
       ...r,
-      id: Number(r.id),
-      vehicleId: r.vehicleId != null ? Number(r.vehicleId) : r.vehicleId,
+      id: r.id != null ? String(r.id) : null,
+      vehicleId: r.vehicleId != null ? String(r.vehicleId) : r.vehicleId,
       renterId: r.renterId != null ? Number(r.renterId) : r.renterId,
       ownerId: r.ownerId != null ? Number(r.ownerId) : r.ownerId,
       totalPrice: r.totalPrice != null ? Number(r.totalPrice) : r.totalPrice
@@ -155,6 +173,9 @@ export async function loadVehicles() {
     state.vehicles = vehicles.map(normalizeVehicle)
     state.rentals = rentals.map(normalizeRental)
     
+    console.log('🚗 [rental.store] Vehículos normalizados en state:', state.vehicles.length)
+    console.log('🚗 [rental.store] IDs de vehículos:', state.vehicles.map(v => ({ id: v.id, isNaN: isNaN(v.id) })))
+    
     // Mark vehicles as unavailable if they have active rentals
     state.vehicles.forEach(vehicle => {
       if (!isVehicleCurrentlyAvailable(vehicle.id)) {
@@ -162,6 +183,7 @@ export async function loadVehicles() {
       }
     })
   } catch (e) {
+    console.error('🚗 [rental.store] Error cargando vehículos:', e)
     state.error = e.message
   } finally { state.loading = false }
 }
@@ -174,8 +196,8 @@ export async function loadRentals() {
     // Normalize numeric fields
     state.rentals = Array.isArray(rentals) ? rentals.map(r => ({
       ...r,
-      id: Number(r.id),
-      vehicleId: r.vehicleId != null ? Number(r.vehicleId) : r.vehicleId,
+      id: r.id != null ? String(r.id) : null,
+      vehicleId: r.vehicleId != null ? String(r.vehicleId) : r.vehicleId,
       renterId: r.renterId != null ? Number(r.renterId) : r.renterId,
       ownerId: r.ownerId != null ? Number(r.ownerId) : r.ownerId,
       totalPrice: r.totalPrice != null ? Number(r.totalPrice) : r.totalPrice
@@ -474,9 +496,18 @@ async function createRentalRejectedNotification(rental) {
   }
 }
 
-export function selectVehicle(id) { state.selectedVehicleId = id }
+export function selectVehicle(id) {
+  console.log('🚗 [rental.store] selectVehicle llamado con id:', id, 'tipo:', typeof id)
+  state.selectedVehicleId = id != null ? String(id) : null
+  console.log('🚗 [rental.store] selectedVehicleId establecido a:', state.selectedVehicleId)
+  console.log('🚗 [rental.store] Vehículos disponibles para búsqueda:', state.vehicles.map(v => ({ id: v.id, tipo: typeof v.id })))
+}
 
-export const selectedVehicle = computed(() => state.vehicles.find(v => v.id === state.selectedVehicleId) || null)
+export const selectedVehicle = computed(() => {
+  const found = state.vehicles.find(v => v.id === state.selectedVehicleId)
+  console.log('🚗 [rental.store] selectedVehicle computed - buscando id:', state.selectedVehicleId, 'encontrado:', found ? found.brand : 'null')
+  return found || null
+})
 
 // Computed: Get filtered and sorted vehicles
 export const filteredVehicles = computed(() => {
