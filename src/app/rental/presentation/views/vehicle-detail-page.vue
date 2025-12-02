@@ -20,7 +20,7 @@ const loadingReviews = ref(false)
 const showRentalModal = ref(false)
 const userStore = useUserStore()
 
-const vehicleId = computed(() => parseInt(route.params.id))
+const vehicleId = computed(() => String(route.params.id))
 
 // Computed: Calificación promedio
 const averageRating = computed(() => {

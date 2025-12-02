@@ -398,7 +398,7 @@ async function loadVehicle() {
     console.log('👤 Current User ID:', userStore.currentUser.value?.id, typeof userStore.currentUser.value?.id)
     
     // Verificar que el usuario es el dueño (comparación flexible)
-    if (Number(vehicle.value.ownerId) !== Number(userStore.currentUser.value?.id)) {
+    if (String(vehicle.value.ownerId) !== String(userStore.currentUser.value?.id)) {
       alert('No tienes permiso para editar este vehículo')
       router.push('/rental/my-vehicles')
       return
