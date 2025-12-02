@@ -215,33 +215,60 @@ export async function updateRentalStatus(rentalId, newStatus) {
   }
 }
 
-export async function rateRental(rentalId, rating, comment) {
+export async function rateRental(rentalId, rating, comment, adventureRating = null, adventureComment = null) {
   state.loading = true
   state.error = null
   try {
     const rental = state.rentals.find(r => r.id === rentalId)
     if (!rental) throw new Error('Rental not found')
 
-    // 1. Create Review
-    const reviewData = {
-      rentalId: rentalId,
-      vehicleId: rental.vehicleId,
-      renterId: rental.renterId,
-      ownerId: rental.ownerId,
-      rating: rating,
-      comment: comment,
-      createdAt: new Date().toISOString()
+    // 1. Create Vehicle Review (si tiene vehicleId)
+    if (rental.vehicleId) {
+      const vehicleReviewData = {
+        rentalId: rentalId,
+        vehicleId: rental.vehicleId,
+        renterId: rental.renterId,
+        ownerId: rental.ownerId,
+        rating: rating,
+        comment: comment,
+        type: 'vehicle', // Marcar como reseña de vehículo
+        createdAt: new Date().toISOString()
+      }
+      await RentalApi.createReview(vehicleReviewData)
+      
+      // Notificar al owner sobre la reseña del vehículo
+      await createReviewNotification(rental, rating, comment)
     }
-    await RentalApi.createReview(reviewData)
 
-    // 2. Update Rental to mark as rated
+    // 2. Si es una aventura, crear también reseña de aventura
+    if (rental.adventureRouteId) {
+      const advRating = adventureRating ?? rating
+      const advComment = adventureComment ?? comment
+      
+      const adventureReviewData = {
+        rentalId: rentalId,
+        adventureRouteId: rental.adventureRouteId,
+        renterId: rental.renterId,
+        rating: advRating,
+        comment: advComment,
+        type: 'adventure', // Marcar como reseña de aventura
+        createdAt: new Date().toISOString()
+      }
+      await RentalApi.createReview(adventureReviewData)
+      
+      // Actualizar el rating promedio de la aventura
+      await updateAdventureRating(rental.adventureRouteId)
+      
+      // Notificar al owner sobre la reseña de la aventura
+      await createAdventureReviewNotification(rental, advRating, advComment)
+    }
+
+    // 3. Update Rental to mark as rated
     await RentalApi.updateRentalRating(rentalId, { 
       isRated: true,
-      rating: rating 
+      rating: rating,
+      adventureRating: rental.adventureRouteId ? (adventureRating || rating) : null
     })
-
-    // 3. Create notification for owner
-    await createReviewNotification(rental, rating, comment)
 
     // 4. Reload rentals
     await loadRentals()
@@ -252,6 +279,66 @@ export async function rateRental(rentalId, rating, comment) {
     throw e
   } finally {
     state.loading = false
+  }
+}
+
+// Actualizar el rating promedio de una aventura
+async function updateAdventureRating(adventureRouteId) {
+  try {
+    // Obtener todas las reseñas de esta aventura
+    const reviews = await apiClient.get('/reviews')
+    const adventureReviews = reviews.filter(r => 
+      Number(r.adventureRouteId) === Number(adventureRouteId) && r.type === 'adventure'
+    )
+    
+    if (adventureReviews.length > 0) {
+      const avgRating = adventureReviews.reduce((sum, r) => sum + r.rating, 0) / adventureReviews.length
+      
+      // Actualizar la aventura con el nuevo rating
+      await apiClient.patch(`/adventure-routes/${adventureRouteId}`, {
+        rating: Number.parseFloat(avgRating.toFixed(1)),
+        reviewsCount: adventureReviews.length
+      })
+      
+      console.log(`✅ Aventura ${adventureRouteId} actualizada: rating=${avgRating.toFixed(1)}, reviews=${adventureReviews.length}`)
+    }
+  } catch (error) {
+    console.error('Error updating adventure rating:', error)
+  }
+}
+
+// Crear notificación cuando se recibe una reseña de aventura
+async function createAdventureReviewNotification(rental, rating, comment) {
+  try {
+    // Obtener info de la aventura
+    const adventure = await apiClient.get(`/adventure-routes/${rental.adventureRouteId}`)
+    const starsText = '⭐'.repeat(rating)
+    
+    const notification = {
+      userId: adventure.ownerId,
+      type: 'adventure_review_received',
+      title: '🌟 Nueva Calificación de Aventura',
+      message: `Tu aventura "${adventure.title}" ha recibido una calificación de ${starsText} (${rating}/5). ${comment ? `Comentario: "${comment}"` : ''}`,
+      relatedId: rental.adventureRouteId,
+      relatedType: 'adventure',
+      read: false,
+      actionUrl: `/adventure/my-adventures`,
+      actionLabel: 'Ver Mis Aventuras',
+      metadata: {
+        rentalId: rental.id,
+        adventureRouteId: rental.adventureRouteId,
+        renterId: rental.renterId,
+        rating: rating,
+        comment: comment
+      },
+      createdAt: new Date().toISOString(),
+      readAt: null
+    }
+    
+    await apiClient.post('/notifications', notification)
+    console.log('✅ Notificación de calificación de aventura creada para owner:', adventure.ownerId)
+  } catch (error) {
+    console.error('Error creating adventure review notification:', error)
   }
 }
 

@@ -6,9 +6,9 @@
       "lastName": "santiago",
       "email": "andreow@andreow.com",
       "password": "123123123",
-      "phone": "123456783",
-      "dni": "98765542",
-      "licenseNumber": "Q123567",
+      "phone": "999999999",
+      "dni": "87654321",
+      "licenseNumber": "A987654321",
       "avatar": null,
       "verified": {
         "email": false,
@@ -41,9 +41,9 @@
       "lastName": "pena",
       "email": "jomark@jomark.com",
       "password": "123123123",
-      "phone": "786456323",
-      "dni": "42352343",
-      "licenseNumber": "123214315",
+      "phone": "909999999",
+      "dni": "87654321",
+      "licenseNumber": "QA1234325",
       "avatar": null,
       "verified": {
         "email": false,
@@ -68,260 +68,116 @@
         }
       },
       "bankAccount": {
-        "bankName": "BanBif",
-        "accountType": "corriente",
-        "accountNumber": "21321432542345",
+        "bankName": "Interbank",
+        "accountType": "ahorro",
+        "accountNumber": "1233253465347645",
         "verified": false
       },
       "id": 2
+    },
+    {
+      "role": "owner",
+      "firstName": "Mahitas",
+      "lastName": "Santiago",
+      "email": "mathias@mathias.com",
+      "password": "123123123",
+      "phone": "1233333333",
+      "dni": "45432156",
+      "licenseNumber": "A124235456",
+      "avatar": null,
+      "verified": {
+        "email": false,
+        "phone": false,
+        "dni": false,
+        "license": false
+      },
+      "stats": {
+        "totalRentals": 0,
+        "totalSpent": 0,
+        "totalEarned": 0,
+        "activeRentals": 0,
+        "completedRentals": 0,
+        "canceledRentals": 0
+      },
+      "preferences": {
+        "language": "es",
+        "notifications": {
+          "email": true,
+          "push": true,
+          "sms": false
+        }
+      },
+      "bankAccount": {
+        "bankName": "GNB",
+        "accountType": "ahorro",
+        "accountNumber": "124243534543635",
+        "verified": false
+      },
+      "id": 3
     }
   ],
   "vehicles": [
     {
-      "brand": "toya yaris",
-      "model": "honda civic",
+      "brand": "TOYOTA",
+      "model": "GRANDE",
       "year": 2025,
       "color": "Gris",
-      "transmission": "Manual",
-      "fuelType": "Diésel",
+      "transmission": "Automática",
+      "fuelType": "Gasolina",
       "seats": 5,
-      "licensePlate": "123123",
+      "licensePlate": "12312312",
       "location": {
-        "district": "San Isidro",
-        "address": "23123123",
+        "district": "Barranco",
+        "address": "aVCV SANIU",
         "lat": -12.0464,
         "lng": -77.0428
       },
-      "dailyPrice": 300,
+      "dailyPrice": 400,
       "status": "active",
-      "description": "",
+      "description": "hace RUNNNN",
       "images": [],
       "ownerId": 2,
-      "createdAt": "2025-12-01T23:28:17.344Z",
+      "createdAt": "2025-12-02T08:35:02.941Z",
       "id": 1
+    },
+    {
+      "brand": "Kia",
+      "model": "rio ga",
+      "year": 2025,
+      "color": "Rojo",
+      "transmission": "Automática",
+      "fuelType": "Eléctrico",
+      "seats": 5,
+      "licensePlate": "123124",
+      "location": {
+        "district": "La Molina",
+        "address": "Av rosal",
+        "lat": -12.0464,
+        "lng": -77.0428
+      },
+      "dailyPrice": 500,
+      "status": "active",
+      "description": "esta god",
+      "images": [],
+      "ownerId": 3,
+      "createdAt": "2025-12-02T08:36:45.094Z",
+      "id": 2
     }
   ],
   "rentals": [
     {
-      "vehicleId": 1,
+      "vehicleId": 2,
       "renterId": 1,
-      "ownerId": 2,
-      "startDate": "2025-12-03",
-      "endDate": "2025-12-19",
-      "totalPrice": 4800,
-      "status": "completed",
-      "pickupLocation": "23123123",
-      "returnLocation": "23123123",
-      "notes": "Reserva realizada. Método de pago: cash",
-      "createdAt": "2025-12-01T23:29:38.466Z",
-      "id": 1,
-      "acceptedAt": "2025-12-01T23:30:50.972Z",
-      "isRated": true,
-      "rating": 1
-    },
-    {
-      "vehicleId": null,
-      "renterId": 1,
-      "startDate": "2025-12-01T23:36:00.811Z",
-      "endDate": "2025-12-04T23:36:00.811Z",
-      "status": "completed",
-      "totalPrice": 300,
-      "adventureRouteId": 1,
-      "id": 2,
-      "acceptedAt": "2025-12-02T01:45:21.076Z"
-    },
-    {
-      "vehicleId": 1,
-      "renterId": 1,
-      "ownerId": 2,
-      "startDate": "2025-12-20",
-      "endDate": "2025-12-21",
-      "totalPrice": 300,
-      "status": "completed",
-      "pickupLocation": "23123123",
-      "returnLocation": "23123123",
-      "notes": "Reserva realizada. Método de pago: card",
-      "createdAt": "2025-12-01T23:52:08.243Z",
-      "id": 3,
-      "acceptedAt": "2025-12-01T23:52:48.959Z"
-    },
-    {
-      "vehicleId": 1,
-      "renterId": 1,
-      "startDate": "2025-12-01T23:53:49.632Z",
-      "endDate": "2025-12-04T23:53:49.632Z",
-      "status": "completed",
-      "totalPrice": 300,
-      "adventureRouteId": 1,
-      "id": 4,
-      "acceptedAt": "2025-12-01T23:54:13.768Z",
-      "ownerRatedRenter": true,
-      "ownerRatingForRenter": 1,
-      "isRated": true,
-      "rating": 1
-    },
-    {
-      "vehicleId": 1,
-      "renterId": 1,
-      "startDate": "2025-12-02T00:59:55.735Z",
-      "endDate": "2025-12-05T00:59:55.735Z",
-      "status": "completed",
-      "totalPrice": 300,
-      "adventureRouteId": 1,
-      "id": 5,
-      "acceptedAt": "2025-12-02T01:00:17.774Z",
-      "isRated": true,
-      "rating": 5
-    },
-    {
-      "vehicleId": 1,
-      "renterId": 1,
-      "startDate": "2025-12-02T01:44:56.861Z",
-      "endDate": "2025-12-07T01:44:56.861Z",
-      "status": "completed",
-      "totalPrice": 500,
-      "adventureRouteId": 2,
-      "id": 6,
-      "acceptedAt": "2025-12-02T01:45:17.033Z",
-      "isRated": true,
-      "rating": 5
-    },
-    {
-      "vehicleId": 1,
-      "renterId": 1,
-      "startDate": "2025-12-02T01:46:23.669Z",
-      "endDate": "2025-12-07T01:46:23.669Z",
-      "status": "completed",
-      "totalPrice": 500,
-      "adventureRouteId": 2,
-      "id": 7,
-      "isRated": true,
-      "rating": 5
-    }
-  ],
-  "payments": [
-    {
-      "rentalId": 1,
-      "payerId": 1,
-      "recipientId": 2,
-      "amount": 4800,
-      "currency": "PEN",
-      "method": "cash",
+      "startDate": "2025-12-02T08:37:07.019Z",
+      "endDate": "2025-12-04T08:37:07.019Z",
       "status": "pending",
-      "transactionId": "txn_1764631778514",
-      "type": "rental_payment",
-      "description": "Alquiler de toya yaris honda civic - 16 día(s)",
-      "createdAt": "2025-12-01T23:29:38.514Z",
+      "totalPrice": 300,
+      "adventureRouteId": 1,
       "id": 1
-    },
-    {
-      "rentalId": 3,
-      "payerId": 1,
-      "recipientId": 2,
-      "amount": 300,
-      "currency": "PEN",
-      "method": "card",
-      "status": "pending",
-      "transactionId": "txn_1764633128280",
-      "type": "rental_payment",
-      "description": "Alquiler de toya yaris honda civic - 1 día(s)",
-      "createdAt": "2025-12-01T23:52:08.280Z",
-      "id": 2
-    },
-    {
-      "ticketId": 1,
-      "payerId": 1,
-      "currency": "PEN",
-      "method": "card",
-      "status": "completed",
-      "stripeToken": "tok_1SZiQzBJEHGVCWjro1PrTntN",
-      "type": "damage_payment",
-      "description": "Pago de daños - Ticket #1",
-      "createdAt": "2025-12-02T01:31:17.395Z",
-      "id": 3
-    },
-    {
-      "ticketId": 2,
-      "payerId": 1,
-      "amount": 30000,
-      "currency": "PEN",
-      "method": "card",
-      "status": "completed",
-      "stripeToken": "tok_1SZiS5BJEHGVCWjr8d8PXUBd",
-      "type": "damage_payment",
-      "description": "Pago de daños - Ticket #2",
-      "createdAt": "2025-12-02T01:32:25.824Z",
-      "id": 4
     }
   ],
-  "reviews": [
-    {
-      "rentalId": 1,
-      "vehicleId": 1,
-      "renterId": 1,
-      "ownerId": 2,
-      "rating": 5,
-      "comment": "td bien",
-      "createdAt": "2025-12-02T00:22:16.543Z",
-      "id": 1
-    },
-    {
-      "rentalId": 1,
-      "vehicleId": 1,
-      "renterId": 1,
-      "ownerId": 2,
-      "rating": 5,
-      "comment": "10/10 comodo",
-      "createdAt": "2025-12-02T00:38:43.057Z",
-      "id": 2
-    },
-    {
-      "rentalId": 1,
-      "vehicleId": 1,
-      "renterId": 1,
-      "ownerId": 2,
-      "rating": 1,
-      "comment": "",
-      "createdAt": "2025-12-02T00:39:04.910Z",
-      "id": 3
-    },
-    {
-      "rentalId": 4,
-      "vehicleId": 1,
-      "renterId": 1,
-      "rating": 1,
-      "comment": "habia caca ",
-      "createdAt": "2025-12-02T01:32:42.119Z",
-      "id": 4
-    },
-    {
-      "rentalId": 5,
-      "vehicleId": 1,
-      "renterId": 1,
-      "rating": 5,
-      "comment": "10/10 todo bien",
-      "createdAt": "2025-12-02T01:33:00.520Z",
-      "id": 5
-    },
-    {
-      "rentalId": 6,
-      "vehicleId": 1,
-      "renterId": 1,
-      "rating": 5,
-      "comment": "10/10\\\n",
-      "createdAt": "2025-12-02T01:45:52.632Z",
-      "id": 6
-    },
-    {
-      "rentalId": 7,
-      "vehicleId": 1,
-      "renterId": 1,
-      "rating": 5,
-      "comment": "bacan",
-      "createdAt": "2025-12-02T01:46:54.096Z",
-      "id": 7
-    }
-  ],
+  "payments": [],
+  "reviews": [],
   "incidents": [],
   "pricingPlans": [
     {
@@ -353,752 +209,53 @@
   ],
   "adventure-routes": [
     {
-      "name": "costa ica",
-      "title": "costa ica",
-      "description": "123",
-      "endLocation": "Ica",
-      "destination": "Ica",
+      "name": "Ruta cos verde - para turistas",
+      "title": "Ruta cos verde - para turistas",
+      "description": "puedes ver paisajes",
+      "endLocation": "playas",
+      "destination": "playas",
       "startLocation": "Lima",
       "type": "beach",
-      "duration": 3,
+      "duration": 2,
       "difficulty": "moderate",
       "estimatedCost": 300,
       "price": 300,
-      "vehicleName": "toya yaris honda civic",
+      "vehicleName": "TOYOTA GRANDE",
       "imageUrl": "",
       "tags": [
         "beach",
-        "Ica",
+        "playas",
         "Lima",
-        "toya yaris"
+        "TOYOTA"
       ],
       "ownerId": 2,
       "rating": 0,
       "reviewsCount": 0,
-      "createdAt": "2025-12-01T23:34:24.701Z",
+      "createdAt": "2025-12-02T08:35:32.552Z",
       "featured": false,
       "id": 1
-    },
-    {
-      "name": "puno",
-      "title": "puno",
-      "description": "no se",
-      "endLocation": "Punooo",
-      "destination": "Punooo",
-      "startLocation": "Lima",
-      "type": "beach",
-      "duration": 5,
-      "difficulty": "moderate",
-      "estimatedCost": 500,
-      "price": 500,
-      "vehicleName": "toya yaris honda civic",
-      "imageUrl": "",
-      "tags": [
-        "beach",
-        "Punooo",
-        "Lima",
-        "toya yaris"
-      ],
-      "ownerId": 2,
-      "rating": 0,
-      "reviewsCount": 0,
-      "createdAt": "2025-12-02T01:44:43.713Z",
-      "featured": false,
-      "id": 2
     }
   ],
   "notifications": [
     {
-      "userId": 2,
-      "type": "rental_completed",
-      "title": "✅ Alquiler Completado",
-      "message": "El cliente  ha completado el alquiler del vehículo toya yaris honda civic. Alquiler #1. Total: S/. 4800",
+      "userId": 3,
+      "type": "rental_request",
+      "title": "¡Nueva Solicitud de Alquiler!",
+      "message": "andreow santiago quiere alquilar tu Kia rio ga. Revisa los detalles y confirma la reserva.",
       "relatedId": 1,
       "relatedType": "rental",
-      "read": true,
-      "actionUrl": "/rental/vehicles/1",
-      "actionLabel": "Ver Vehículo",
+      "actionUrl": "/rental/rental-requests",
+      "actionLabel": "Ver Solicitud",
       "metadata": {
         "rentalId": 1,
-        "vehicleId": 1,
-        "renterId": 1,
-        "totalPrice": 4800
+        "vehicleId": 2,
+        "renterName": "andreow santiago"
       },
-      "createdAt": "2025-12-01T23:31:40.169Z",
-      "readAt": "2025-12-01T23:32:05.788Z",
+      "read": false,
+      "createdAt": "2025-12-02T08:37:07.060Z",
       "id": 1
-    },
-    {
-      "userId": 1,
-      "type": "damage_report",
-      "title": "Reporte de Daño - Acción Requerida",
-      "message": "Se ha reportado un daño en el vehículo toya yaris honda civic 2025 - undefined. El propietario ha creado un ticket #1. Costo estimado: $0",
-      "relatedId": 1,
-      "relatedType": "ticket",
-      "read": true,
-      "actionUrl": "/payments/ticket/1",
-      "actionLabel": "Ver Ticket y Pagar",
-      "metadata": {
-        "ticketId": 1,
-        "vehicleId": 1,
-        "estimatedCost": 0,
-        "ownerName": "jomark pena",
-        "renterName": "andreow santiago"
-      },
-      "createdAt": "2025-12-01T23:32:27.428Z",
-      "readAt": "2025-12-01T23:32:42.521Z",
-      "id": 2
-    },
-    {
-      "userId": 2,
-      "type": "rental_requested",
-      "title": "Nueva solicitud de alquiler",
-      "message": "El usuario andreow santiago ha solicitado alquilar toya yaris honda civic. Alquiler #3",
-      "relatedId": 3,
-      "relatedType": "rental",
-      "read": true,
-      "actionUrl": "/rental/rental-requests",
-      "actionLabel": "Ver solicitud",
-      "metadata": {
-        "rentalId": 3,
-        "vehicleId": 1,
-        "renterId": 1
-      },
-      "createdAt": "2025-12-01T23:52:08.327Z",
-      "readAt": "2025-12-01T23:52:43.952Z",
-      "id": 3
-    },
-    {
-      "userId": 1,
-      "type": "rental_accepted",
-      "title": "¡Solicitud aceptada!",
-      "message": "Tu solicitud de alquiler para toya yaris honda civic ha sido aceptada. ¡Prepárate para tu aventura!",
-      "relatedId": 3,
-      "relatedType": "rental",
-      "read": true,
-      "actionUrl": "/rental/my-rentals",
-      "actionLabel": "Ver mis alquileres",
-      "metadata": {
-        "rentalId": 3,
-        "vehicleId": 1,
-        "ownerId": 2
-      },
-      "createdAt": "2025-12-01T23:52:49.012Z",
-      "readAt": "2025-12-01T23:53:11.000Z",
-      "id": 4
-    },
-    {
-      "userId": 2,
-      "type": "rental_request",
-      "title": "¡Nueva Solicitud de Alquiler!",
-      "message": "andreow santiago quiere alquilar tu toya yaris honda civic. Revisa los detalles y confirma la reserva.",
-      "relatedId": 4,
-      "relatedType": "rental",
-      "actionUrl": "/rental/rental-requests",
-      "actionLabel": "Ver Solicitud",
-      "metadata": {
-        "rentalId": 4,
-        "vehicleId": 1,
-        "renterName": "andreow santiago"
-      },
-      "read": true,
-      "createdAt": "2025-12-01T23:53:49.671Z",
-      "id": 5,
-      "readAt": "2025-12-01T23:54:08.204Z"
-    },
-    {
-      "userId": 1,
-      "type": "rental_accepted",
-      "title": "¡Solicitud aceptada!",
-      "message": "Tu solicitud de alquiler para toya yaris honda civic ha sido aceptada. ¡Prepárate para tu aventura!",
-      "relatedId": 4,
-      "relatedType": "rental",
-      "read": true,
-      "actionUrl": "/rental/my-rentals",
-      "actionLabel": "Ver mis alquileres",
-      "metadata": {
-        "rentalId": 4,
-        "vehicleId": 1,
-        "ownerId": 2
-      },
-      "createdAt": "2025-12-01T23:54:13.812Z",
-      "readAt": "2025-12-02T00:00:29.287Z",
-      "id": 6
-    },
-    {
-      "userId": 2,
-      "type": "rental_completed",
-      "title": "✅ Alquiler Completado",
-      "message": "El cliente  ha completado el alquiler del vehículo toya yaris honda civic. Alquiler #3. Total: S/. 300",
-      "relatedId": 3,
-      "relatedType": "rental",
-      "read": true,
-      "actionUrl": "/rental/vehicles/1",
-      "actionLabel": "Ver Vehículo",
-      "metadata": {
-        "rentalId": 3,
-        "vehicleId": 1,
-        "renterId": 1,
-        "totalPrice": 300
-      },
-      "createdAt": "2025-12-01T23:54:37.328Z",
-      "readAt": "2025-12-01T23:55:08.215Z",
-      "id": 7
-    },
-    {
-      "type": "rental_completed",
-      "title": "✅ Alquiler Completado",
-      "message": "El cliente  ha completado el alquiler del vehículo toya yaris honda civic. Alquiler #4. Total: S/. 300",
-      "relatedId": 4,
-      "relatedType": "rental",
-      "read": false,
-      "actionUrl": "/rental/vehicles/1",
-      "actionLabel": "Ver Vehículo",
-      "metadata": {
-        "rentalId": 4,
-        "vehicleId": 1,
-        "renterId": 1,
-        "totalPrice": 300
-      },
-      "createdAt": "2025-12-01T23:54:41.323Z",
-      "readAt": null,
-      "id": 8
-    },
-    {
-      "userId": 2,
-      "type": "review_received",
-      "title": "🌟 Nueva Calificación Recibida",
-      "message": "Tu vehículo toya yaris honda civic ha recibido una calificación de ⭐⭐⭐⭐⭐ (5/5). Comentario: \"td bien\"",
-      "relatedId": 1,
-      "relatedType": "rental",
-      "read": true,
-      "actionUrl": "/rental/my-vehicles",
-      "actionLabel": "Ver Mis Vehículos",
-      "metadata": {
-        "rentalId": 1,
-        "vehicleId": 1,
-        "renterId": 1,
-        "rating": 5,
-        "comment": "td bien"
-      },
-      "createdAt": "2025-12-02T00:22:16.655Z",
-      "readAt": "2025-12-02T01:25:51.124Z",
-      "id": 9
-    },
-    {
-      "userId": 2,
-      "type": "review_received",
-      "title": "🌟 Nueva Calificación Recibida",
-      "message": "Tu vehículo toya yaris honda civic ha recibido una calificación de ⭐⭐⭐⭐⭐ (5/5). Comentario: \"10/10 comodo\"",
-      "relatedId": 1,
-      "relatedType": "rental",
-      "read": true,
-      "actionUrl": "/rental/my-vehicles",
-      "actionLabel": "Ver Mis Vehículos",
-      "metadata": {
-        "rentalId": 1,
-        "vehicleId": 1,
-        "renterId": 1,
-        "rating": 5,
-        "comment": "10/10 comodo"
-      },
-      "createdAt": "2025-12-02T00:38:43.137Z",
-      "readAt": "2025-12-02T01:25:51.091Z",
-      "id": 10
-    },
-    {
-      "userId": 2,
-      "type": "review_received",
-      "title": "🌟 Nueva Calificación Recibida",
-      "message": "Tu vehículo toya yaris honda civic ha recibido una calificación de ⭐ (1/5). ",
-      "relatedId": 1,
-      "relatedType": "rental",
-      "read": true,
-      "actionUrl": "/rental/my-vehicles",
-      "actionLabel": "Ver Mis Vehículos",
-      "metadata": {
-        "rentalId": 1,
-        "vehicleId": 1,
-        "renterId": 1,
-        "rating": 1,
-        "comment": ""
-      },
-      "createdAt": "2025-12-02T00:39:05.014Z",
-      "readAt": "2025-12-02T01:25:51.045Z",
-      "id": 11
-    },
-    {
-      "userId": 2,
-      "type": "dispute_received",
-      "title": "⚠️ Disputa Recibida - Ticket #1",
-      "message": "andreow santiago ha disputado el reporte de daño. Motivo: \"damage_preexisting\". Puedes enviar pruebas adicionales para respaldar tu reclamo.",
-      "relatedId": 1,
-      "relatedType": "ticket",
-      "read": true,
-      "actionUrl": "/support/tickets/1",
-      "actionLabel": "Ver y Responder",
-      "metadata": {
-        "disputeReason": "damage_preexisting",
-        "disputeDescription": "xd",
-        "renterName": "andreow santiago"
-      },
-      "createdAt": "2025-12-02T00:58:24.727Z",
-      "id": 12,
-      "readAt": "2025-12-02T00:58:37.406Z"
-    },
-    {
-      "userId": 1,
-      "type": "user_review_received",
-      "title": "⭐ Nueva calificación recibida",
-      "message": "Has recibido una calificación de ⭐ como inquilino.",
-      "relatedId": 4,
-      "relatedType": "user-review",
-      "read": true,
-      "actionUrl": "/profile",
-      "actionLabel": "Ver mi perfil",
-      "metadata": {
-        "rentalId": 4,
-        "rating": 1
-      },
-      "createdAt": "2025-12-02T00:59:27.507Z",
-      "readAt": "2025-12-02T01:25:28.885Z",
-      "id": 13
-    },
-    {
-      "userId": 2,
-      "type": "rental_request",
-      "title": "¡Nueva Solicitud de Alquiler!",
-      "message": "andreow santiago quiere alquilar tu toya yaris honda civic. Revisa los detalles y confirma la reserva.",
-      "relatedId": 5,
-      "relatedType": "rental",
-      "actionUrl": "/rental/rental-requests",
-      "actionLabel": "Ver Solicitud",
-      "metadata": {
-        "rentalId": 5,
-        "vehicleId": 1,
-        "renterName": "andreow santiago"
-      },
-      "read": true,
-      "createdAt": "2025-12-02T00:59:55.788Z",
-      "id": 14,
-      "readAt": "2025-12-02T01:25:51.012Z"
-    },
-    {
-      "userId": 1,
-      "type": "rental_accepted",
-      "title": "¡Solicitud aceptada!",
-      "message": "Tu solicitud de alquiler para toya yaris honda civic ha sido aceptada. ¡Prepárate para tu aventura!",
-      "relatedId": 5,
-      "relatedType": "rental",
-      "read": true,
-      "actionUrl": "/rental/my-rentals",
-      "actionLabel": "Ver mis alquileres",
-      "metadata": {
-        "rentalId": 5,
-        "vehicleId": 1,
-        "ownerId": 2
-      },
-      "createdAt": "2025-12-02T01:00:17.818Z",
-      "readAt": "2025-12-02T01:25:28.829Z",
-      "id": 15
-    },
-    {
-      "userId": 1,
-      "type": "dispute_proof_received",
-      "title": "📋 Pruebas Adicionales Recibidas",
-      "message": "El propietario ha enviado pruebas adicionales para el ticket #1. Ya no puedes disputar nuevamente. Debes proceder con el pago.",
-      "relatedId": 1,
-      "relatedType": "ticket",
-      "read": true,
-      "actionUrl": "/payments/ticket/1",
-      "actionLabel": "Ver Ticket y Pagar",
-      "metadata": {
-        "ticketId": 1,
-        "vehicleId": 1
-      },
-      "createdAt": "2025-12-02T01:30:47.740Z",
-      "id": 16,
-      "readAt": "2025-12-02T01:31:00.848Z"
-    },
-    {
-      "userId": 2,
-      "type": "payment_completed",
-      "title": "💳 Pago de Daños Recibido",
-      "message": "El renter ha pagado S/. undefined por el ticket #1. El caso ha sido resuelto.",
-      "relatedId": 1,
-      "relatedType": "ticket",
-      "read": true,
-      "actionUrl": "/support/tickets/1",
-      "actionLabel": "Ver Ticket",
-      "createdAt": "2025-12-02T01:31:17.486Z",
-      "id": 17,
-      "readAt": "2025-12-02T01:31:32.557Z"
-    },
-    {
-      "userId": 1,
-      "type": "damage_report",
-      "title": "Reporte de Daño - Acción Requerida",
-      "message": "Se ha reportado un daño en el vehículo toya yaris honda civic 2025 - undefined. El propietario ha creado un ticket #2. Costo estimado: S/. 30000",
-      "relatedId": 2,
-      "relatedType": "ticket",
-      "read": true,
-      "actionUrl": "/payments/ticket/2",
-      "actionLabel": "Ver Ticket y Pagar",
-      "metadata": {
-        "ticketId": 2,
-        "vehicleId": 1,
-        "estimatedCost": 30000,
-        "ownerName": "jomark pena",
-        "renterName": "andreow santiago"
-      },
-      "createdAt": "2025-12-02T01:31:55.999Z",
-      "readAt": "2025-12-02T01:32:07.710Z",
-      "id": 18
-    },
-    {
-      "userId": 2,
-      "type": "payment_completed",
-      "title": "💳 Pago de Daños Recibido",
-      "message": "El renter ha pagado S/. 30000.00 por el ticket #2. El caso ha sido resuelto.",
-      "relatedId": 2,
-      "relatedType": "ticket",
-      "read": true,
-      "actionUrl": "/support/tickets/2",
-      "actionLabel": "Ver Ticket",
-      "createdAt": "2025-12-02T01:32:25.930Z",
-      "id": 19,
-      "readAt": "2025-12-02T01:34:43.709Z"
-    },
-    {
-      "type": "review_received",
-      "title": "🌟 Nueva Calificación Recibida",
-      "message": "Tu vehículo toya yaris honda civic ha recibido una calificación de ⭐ (1/5). Comentario: \"habia caca \"",
-      "relatedId": 4,
-      "relatedType": "rental",
-      "read": false,
-      "actionUrl": "/rental/my-vehicles",
-      "actionLabel": "Ver Mis Vehículos",
-      "metadata": {
-        "rentalId": 4,
-        "vehicleId": 1,
-        "renterId": 1,
-        "rating": 1,
-        "comment": "habia caca "
-      },
-      "createdAt": "2025-12-02T01:32:42.220Z",
-      "readAt": null,
-      "id": 20
-    },
-    {
-      "type": "rental_completed",
-      "title": "✅ Alquiler Completado",
-      "message": "El cliente  ha completado el alquiler del vehículo toya yaris honda civic. Alquiler #5. Total: S/. 300",
-      "relatedId": 5,
-      "relatedType": "rental",
-      "read": false,
-      "actionUrl": "/rental/vehicles/1",
-      "actionLabel": "Ver Vehículo",
-      "metadata": {
-        "rentalId": 5,
-        "vehicleId": 1,
-        "renterId": 1,
-        "totalPrice": 300
-      },
-      "createdAt": "2025-12-02T01:32:55.528Z",
-      "readAt": null,
-      "id": 21
-    },
-    {
-      "type": "review_received",
-      "title": "🌟 Nueva Calificación Recibida",
-      "message": "Tu vehículo toya yaris honda civic ha recibido una calificación de ⭐⭐⭐⭐⭐ (5/5). Comentario: \"10/10 todo bien\"",
-      "relatedId": 5,
-      "relatedType": "rental",
-      "read": false,
-      "actionUrl": "/rental/my-vehicles",
-      "actionLabel": "Ver Mis Vehículos",
-      "metadata": {
-        "rentalId": 5,
-        "vehicleId": 1,
-        "renterId": 1,
-        "rating": 5,
-        "comment": "10/10 todo bien"
-      },
-      "createdAt": "2025-12-02T01:33:00.637Z",
-      "readAt": null,
-      "id": 22
-    },
-    {
-      "userId": 2,
-      "type": "rental_request",
-      "title": "¡Nueva Solicitud de Alquiler!",
-      "message": "andreow santiago quiere alquilar tu toya yaris honda civic. Revisa los detalles y confirma la reserva.",
-      "relatedId": 6,
-      "relatedType": "rental",
-      "actionUrl": "/rental/rental-requests",
-      "actionLabel": "Ver Solicitud",
-      "metadata": {
-        "rentalId": 6,
-        "vehicleId": 1,
-        "renterName": "andreow santiago"
-      },
-      "read": true,
-      "createdAt": "2025-12-02T01:44:56.908Z",
-      "id": 23,
-      "readAt": "2025-12-02T01:45:11.269Z"
-    },
-    {
-      "userId": 1,
-      "type": "rental_accepted",
-      "title": "¡Solicitud aceptada!",
-      "message": "Tu solicitud de alquiler para toya yaris honda civic ha sido aceptada. ¡Prepárate para tu aventura!",
-      "relatedId": 6,
-      "relatedType": "rental",
-      "read": true,
-      "actionUrl": "/rental/my-rentals",
-      "actionLabel": "Ver mis alquileres",
-      "metadata": {
-        "rentalId": 6,
-        "vehicleId": 1,
-        "ownerId": 2
-      },
-      "createdAt": "2025-12-02T01:45:17.100Z",
-      "readAt": "2025-12-02T01:45:56.906Z",
-      "id": 24
-    },
-    {
-      "userId": 1,
-      "type": "rental_accepted",
-      "title": "¡Solicitud aceptada!",
-      "message": "Tu solicitud de alquiler para toya yaris honda civic ha sido aceptada. ¡Prepárate para tu aventura!",
-      "relatedId": 2,
-      "relatedType": "rental",
-      "read": true,
-      "actionUrl": "/rental/my-rentals",
-      "actionLabel": "Ver mis alquileres",
-      "metadata": {
-        "rentalId": 2,
-        "vehicleId": null,
-        "ownerId": 2
-      },
-      "createdAt": "2025-12-02T01:45:21.145Z",
-      "readAt": "2025-12-02T01:45:30.045Z",
-      "id": 25
-    },
-    {
-      "type": "rental_completed",
-      "title": "✅ Alquiler Completado",
-      "message": "El cliente  ha completado el alquiler del vehículo undefined undefined. Alquiler #2. Total: S/. 300",
-      "relatedId": 2,
-      "relatedType": "rental",
-      "read": false,
-      "actionUrl": "/rental/vehicles/null",
-      "actionLabel": "Ver Vehículo",
-      "metadata": {
-        "rentalId": 2,
-        "vehicleId": null,
-        "renterId": 1,
-        "totalPrice": 300
-      },
-      "createdAt": "2025-12-02T01:45:32.070Z",
-      "readAt": null,
-      "id": 26
-    },
-    {
-      "type": "rental_completed",
-      "title": "✅ Alquiler Completado",
-      "message": "El cliente  ha completado el alquiler del vehículo toya yaris honda civic. Alquiler #6. Total: S/. 500",
-      "relatedId": 6,
-      "relatedType": "rental",
-      "read": false,
-      "actionUrl": "/rental/vehicles/1",
-      "actionLabel": "Ver Vehículo",
-      "metadata": {
-        "rentalId": 6,
-        "vehicleId": 1,
-        "renterId": 1,
-        "totalPrice": 500
-      },
-      "createdAt": "2025-12-02T01:45:32.966Z",
-      "readAt": null,
-      "id": 27
-    },
-    {
-      "type": "review_received",
-      "title": "🌟 Nueva Calificación Recibida",
-      "message": "Tu vehículo toya yaris honda civic ha recibido una calificación de ⭐⭐⭐⭐⭐ (5/5). Comentario: \"10/10\\\n\"",
-      "relatedId": 6,
-      "relatedType": "rental",
-      "read": false,
-      "actionUrl": "/rental/my-vehicles",
-      "actionLabel": "Ver Mis Vehículos",
-      "metadata": {
-        "rentalId": 6,
-        "vehicleId": 1,
-        "renterId": 1,
-        "rating": 5,
-        "comment": "10/10\\\n"
-      },
-      "createdAt": "2025-12-02T01:45:52.734Z",
-      "readAt": null,
-      "id": 28
-    },
-    {
-      "userId": 2,
-      "type": "rental_request",
-      "title": "¡Nueva Solicitud de Alquiler!",
-      "message": "andreow santiago quiere alquilar tu toya yaris honda civic. Revisa los detalles y confirma la reserva.",
-      "relatedId": 7,
-      "relatedType": "rental",
-      "actionUrl": "/rental/rental-requests",
-      "actionLabel": "Ver Solicitud",
-      "metadata": {
-        "rentalId": 7,
-        "vehicleId": 1,
-        "renterName": "andreow santiago"
-      },
-      "read": false,
-      "createdAt": "2025-12-02T01:46:23.708Z",
-      "id": 29
-    },
-    {
-      "userId": 1,
-      "type": "rental_confirmed",
-      "title": "🎉 ¡Solicitud Aceptada!",
-      "message": "Tu solicitud de alquiler del vehículo toya yaris honda civic ha sido aceptada. Alquiler #7. Puedes recoger el vehículo el 1/12/2025",
-      "relatedId": 7,
-      "relatedType": "rental",
-      "read": false,
-      "actionUrl": "/rental/details/7",
-      "actionLabel": "Ver Detalles",
-      "metadata": {
-        "rentalId": 7,
-        "vehicleId": 1,
-        "totalPrice": 500,
-        "startDate": "2025-12-02T01:46:23.669Z",
-        "endDate": "2025-12-07T01:46:23.669Z"
-      },
-      "createdAt": "2025-12-02T01:46:41.454Z",
-      "readAt": null,
-      "id": 30
-    },
-    {
-      "type": "rental_completed",
-      "title": "✅ Alquiler Completado",
-      "message": "El cliente  ha completado el alquiler del vehículo toya yaris honda civic. Alquiler #7. Total: S/. 500",
-      "relatedId": 7,
-      "relatedType": "rental",
-      "read": false,
-      "actionUrl": "/rental/vehicles/1",
-      "actionLabel": "Ver Vehículo",
-      "metadata": {
-        "rentalId": 7,
-        "vehicleId": 1,
-        "renterId": 1,
-        "totalPrice": 500
-      },
-      "createdAt": "2025-12-02T01:46:49.902Z",
-      "readAt": null,
-      "id": 31
-    },
-    {
-      "type": "review_received",
-      "title": "🌟 Nueva Calificación Recibida",
-      "message": "Tu vehículo toya yaris honda civic ha recibido una calificación de ⭐⭐⭐⭐⭐ (5/5). Comentario: \"bacan\"",
-      "relatedId": 7,
-      "relatedType": "rental",
-      "read": false,
-      "actionUrl": "/rental/my-vehicles",
-      "actionLabel": "Ver Mis Vehículos",
-      "metadata": {
-        "rentalId": 7,
-        "vehicleId": 1,
-        "renterId": 1,
-        "rating": 5,
-        "comment": "bacan"
-      },
-      "createdAt": "2025-12-02T01:46:54.174Z",
-      "readAt": null,
-      "id": 32
     }
   ],
-  "support-tickets": [
-    {
-      "userId": 2,
-      "userName": "jomark pena",
-      "userRole": "owner",
-      "type": "damage",
-      "subject": "da;o mi auto ",
-      "description": "123",
-      "priority": "medium",
-      "attachments": [],
-      "vehicleId": 1,
-      "vehicleName": "toya yaris honda civic 2025 - undefined",
-      "rentalId": 1,
-      "renterId": 1,
-      "renterName": "andreow santiago",
-      "status": "resolved",
-      "createdAt": "2025-12-01T23:32:27.394Z",
-      "updatedAt": "2025-12-02T01:30:47.700Z",
-      "id": 1,
-      "disputeStatus": "owner_proof_sent",
-      "disputeReason": "damage_preexisting",
-      "disputeDescription": "xd",
-      "disputedAt": "2025-12-02T00:58:24.675Z",
-      "disputedBy": 1,
-      "additionalProof": [
-        "https://placehold.co/400x300/f59e0b/ffffff?text=Prueba+1"
-      ],
-      "additionalProofMessage": "no lo estaba el miente uwu",
-      "additionalProofSentAt": "2025-12-02T01:30:47.700Z",
-      "paymentStatus": "paid",
-      "paidAt": "2025-12-02T01:31:17.441Z",
-      "resolvedAt": "2025-12-02T01:31:17.441Z"
-    },
-    {
-      "userId": 2,
-      "userName": "jomark pena",
-      "userRole": "owner",
-      "type": "damage",
-      "subject": "XD",
-      "description": "xd uwu se cago en el auto",
-      "priority": "medium",
-      "attachments": [],
-      "vehicleId": 1,
-      "vehicleName": "toya yaris honda civic 2025 - undefined",
-      "rentalId": 1,
-      "renterId": 1,
-      "renterName": "andreow santiago",
-      "estimatedCost": 30000,
-      "status": "resolved",
-      "createdAt": "2025-12-02T01:31:55.947Z",
-      "updatedAt": "2025-12-02T01:31:55.947Z",
-      "id": 2,
-      "paymentStatus": "paid",
-      "paidAt": "2025-12-02T01:32:25.882Z",
-      "resolvedAt": "2025-12-02T01:32:25.882Z"
-    }
-  ],
-  "user-reviews": [
-    {
-      "id": 1,
-      "reviewerId": 2,
-      "reviewedUserId": 1,
-      "rentalId": 1,
-      "rating": 5,
-      "comment": "Excelente inquilino, muy puntual y cuidadoso con el vehículo.",
-      "type": "owner_to_renter",
-      "createdAt": "2025-12-01T23:32:27.394Z"
-    },
-    {
-      "reviewerId": 2,
-      "reviewedUserId": 1,
-      "rentalId": 4,
-      "rating": 1,
-      "comment": "",
-      "type": "owner_to_renter",
-      "createdAt": "2025-12-02T00:59:27.433Z",
-      "id": 2
-    }
-  ]
+  "support-tickets": [],
+  "user-reviews": []
 }

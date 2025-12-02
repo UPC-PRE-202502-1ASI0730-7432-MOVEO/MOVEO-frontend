@@ -37,22 +37,12 @@
       </div>
 
       <div class="stat-card">
-        <div class="stat-icon" style="background: linear-gradient(135deg, #f39c12 0%, #d68910 100%);">
-          ⭐
+        <div class="stat-icon" style="background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%);">
+          ✅
         </div>
         <div class="stat-info">
-          <div class="stat-value">{{ averageRating.toFixed(1) }}</div>
-          <div class="stat-label">Calificación Promedio</div>
-        </div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-icon" style="background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);">
-          💬
-        </div>
-        <div class="stat-info">
-          <div class="stat-value">{{ totalReviews }}</div>
-          <div class="stat-label">Reseñas Totales</div>
+          <div class="stat-value">{{ completedAdventures }}</div>
+          <div class="stat-label">Completadas</div>
         </div>
       </div>
     </div>
@@ -157,20 +147,16 @@
 
           <div class="adventure-stats">
             <div class="stat-item">
-              <span class="stat-icon">⭐</span>
-              <span>{{ adventure.rating?.toFixed(1) || '0.0' }}/5</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-icon">💬</span>
-              <span>{{ adventure.reviewsCount || 0 }} reseñas</span>
-            </div>
-            <div class="stat-item">
               <span class="stat-icon">📋</span>
               <span>{{ adventure.requestsCount || 0 }} solicitudes</span>
             </div>
             <div v-if="adventure.pendingRequestsCount > 0" class="stat-item pending">
               <span class="stat-icon">🔔</span>
               <span>{{ adventure.pendingRequestsCount }} pendientes</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-icon">✅</span>
+              <span>{{ adventure.completedCount || 0 }} completadas</span>
             </div>
           </div>
 
@@ -180,11 +166,7 @@
               Solicitudes
               <span v-if="adventure.pendingRequestsCount > 0" class="badge">{{ adventure.pendingRequestsCount }}</span>
             </button>
-            <button @click="viewReviews(adventure)" class="btn-action btn-reviews">
-              <span class="icon">⭐</span>
-              Reseñas
-              <span v-if="adventure.reviewsCount > 0" class="badge-reviews">{{ adventure.reviewsCount }}</span>
-            </button>
+
             <button @click="editAdventure(adventure)" class="btn-action btn-edit">
               <span class="icon">✏️</span>
               Editar
@@ -362,43 +344,30 @@ const showReviewsModal = ref(false)
 const adventureToDelete = ref(null)
 const selectedAdventure = ref(null)
 const loadingRequests = ref(false)
-const loadingReviews = ref(false)
 const adventureRequests = ref([])
-const adventureReviews = ref([])
 
 // Data loaded from API
 const allRentals = ref([])
-const allReviews = ref([])
 
 const myAdventures = computed(() => {
   const userId = userStore.currentUser.value?.id
   if (!userId) return []
   const adventures = adventureStore.adventures.value || []
   
-  // Enrich adventures with real request counts and ratings
+  // Enrich adventures with real request counts
   return adventures
     .filter(a => Number(a.ownerId) === Number(userId))
     .map(adventure => {
       // Count requests for this adventure
       const requests = allRentals.value.filter(r => Number(r.adventureRouteId) === Number(adventure.id))
       const pendingRequests = requests.filter(r => r.status === 'pending').length
-      
-      // Get reviews for this adventure (reviews from rentals with this adventureRouteId)
-      const adventureRentalIds = requests.map(r => r.id)
-      const reviews = allReviews.value.filter(rev => adventureRentalIds.includes(rev.rentalId))
-      
-      // Calculate average rating
-      const avgRating = reviews.length > 0 
-        ? reviews.reduce((sum, r) => sum + (r.rating || 0), 0) / reviews.length 
-        : 0
+      const completedRequests = requests.filter(r => r.status === 'completed').length
       
       return {
         ...adventure,
         requestsCount: requests.length,
         pendingRequestsCount: pendingRequests,
-        reviewsCount: reviews.length,
-        rating: avgRating,
-        reviews: reviews
+        completedCount: completedRequests
       }
     })
 })
@@ -411,15 +380,8 @@ const pendingRequestsTotal = computed(() => {
   return myAdventures.value.reduce((sum, adv) => sum + (adv.pendingRequestsCount || 0), 0)
 })
 
-const averageRating = computed(() => {
-  const adventuresWithRating = myAdventures.value.filter(a => a.rating > 0)
-  if (adventuresWithRating.length === 0) return 0
-  const total = adventuresWithRating.reduce((sum, adv) => sum + adv.rating, 0)
-  return total / adventuresWithRating.length
-})
-
-const totalReviews = computed(() => {
-  return myAdventures.value.reduce((sum, adv) => sum + (adv.reviewsCount || 0), 0)
+const completedAdventures = computed(() => {
+  return myAdventures.value.reduce((sum, adv) => sum + (adv.completedCount || 0), 0)
 })
 
 onMounted(async () => {
@@ -429,17 +391,8 @@ onMounted(async () => {
     await rentalStore.loadVehicles()
     await rentalStore.loadRentals()
     
-    // Load all rentals and reviews
+    // Load all rentals
     allRentals.value = rentalStore.state.rentals || []
-    
-    // Load reviews from API
-    try {
-      const reviewsData = await apiClient.get('/reviews')
-      allReviews.value = reviewsData || []
-    } catch (e) {
-      console.log('Could not load reviews:', e)
-      allReviews.value = []
-    }
   } catch (error) {
     console.error('Error loading data:', error)
   } finally {
@@ -661,20 +614,26 @@ const viewReviews = async (adventure) => {
   loadingReviews.value = true
   
   try {
-    // Get all rentals for this adventure
-    const adventureRentals = allRentals.value.filter(r => 
-      Number(r.adventureRouteId) === Number(adventure.id)
-    )
-    
-    const adventureRentalIds = adventureRentals.map(r => r.id)
-    
-    // Filter reviews for these rentals
+    // Filtrar reseñas directamente por adventureRouteId 
+    // Las reseñas de aventura ahora tienen el campo adventureRouteId
     const reviews = allReviews.value.filter(rev => 
-      adventureRentalIds.includes(rev.rentalId)
+      Number(rev.adventureRouteId) === Number(adventure.id) && rev.type === 'adventure'
     )
+    
+    // Si no hay reseñas con adventureRouteId, buscar por rentals (compatibilidad con reseñas antiguas)
+    let finalReviews = reviews
+    if (reviews.length === 0) {
+      const adventureRentals = allRentals.value.filter(r => 
+        Number(r.adventureRouteId) === Number(adventure.id)
+      )
+      const adventureRentalIds = adventureRentals.map(r => r.id)
+      finalReviews = allReviews.value.filter(rev => 
+        adventureRentalIds.includes(rev.rentalId)
+      )
+    }
     
     // Enrich reviews with renter names
-    adventureReviews.value = await Promise.all(reviews.map(async (review) => {
+    adventureReviews.value = await Promise.all(finalReviews.map(async (review) => {
       let renterName = 'Usuario'
       
       if (review.renterId) {

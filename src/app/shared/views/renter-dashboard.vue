@@ -14,10 +14,13 @@ const user = computed(() => userStore.currentUser.value)
 // Modal State
 const showRatingModal = ref(false)
 const selectedRental = ref(null)
+
+// Vehicle Rating
 const ratingValue = ref(0)
 const ratingComment = ref('')
-const submittingRating = ref(false)
 const hoverRating = ref(0)
+
+const submittingRating = ref(false)
 
 // Cargar datos al montar
 onMounted(async () => {
@@ -95,6 +98,11 @@ function openRatingModal(rental) {
   showRatingModal.value = true
 }
 
+function skipRating() {
+  showRatingModal.value = false
+  selectedRental.value = null
+}
+
 function getRatingLabel(stars) {
   const labels = {
     0: 'Selecciona una calificación',
@@ -117,8 +125,6 @@ async function submitRating() {
   try {
     await rentalStore.rateRental(selectedRental.value.id, ratingValue.value, ratingComment.value)
     showRatingModal.value = false
-    
-    // Refresh rentals to show the rating
     await rentalStore.loadRentals()
   } catch (error) {
     console.error('Error submitting rating:', error)
@@ -232,20 +238,31 @@ async function submitRating() {
           v-for="rental in completedRentals.slice(0, 6)" 
           :key="rental.id" 
           class="completed-rental-card"
+          :class="{ 'is-adventure-rental': isRentalAdventure(rental) }"
         >
           <!-- Vehicle Image Placeholder -->
-          <div class="vehicle-image">
+          <div class="vehicle-image" :class="{ 'adventure-bg': isRentalAdventure(rental) }">
             <div class="image-placeholder">
-              <i class="pi pi-car"></i>
+              <i :class="isRentalAdventure(rental) ? 'pi pi-compass' : 'pi pi-car'"></i>
             </div>
             <div class="completed-badge">
               <i class="pi pi-check"></i>
               Completado
             </div>
+            <!-- Adventure Badge -->
+            <div v-if="isRentalAdventure(rental)" class="adventure-badge">
+              <i class="pi pi-compass"></i> Aventura
+            </div>
           </div>
           
           <!-- Card Content -->
           <div class="card-body">
+            <!-- Adventure Title (si es aventura) -->
+            <div v-if="isRentalAdventure(rental) && getAdventureData(rental.adventureRouteId)" class="adventure-title">
+              <i class="pi pi-map"></i>
+              {{ getAdventureData(rental.adventureRouteId).title }}
+            </div>
+            
             <h3 class="vehicle-name">
               {{ getVehicleData(rental.vehicleId)?.brand }} {{ getVehicleData(rental.vehicleId)?.model }}
             </h3>
@@ -288,7 +305,7 @@ async function submitRating() {
       </div>
     </div>
 
-    <!-- Rating Modal - Modern Design -->
+    <!-- Rating Modal - Simplified Vehicle Only (Optional) -->
     <Teleport to="body">
       <Transition name="modal">
         <div v-if="showRatingModal" class="rating-modal-overlay" @click="showRatingModal = false">
@@ -305,46 +322,58 @@ async function submitRating() {
               </div>
               <h2>¿Cómo fue tu viaje?</h2>
               <p class="hero-subtitle">
-                <strong>{{ getVehicleData(selectedRental?.vehicleId)?.brand }} {{ getVehicleData(selectedRental?.vehicleId)?.model }}</strong>
+                Tu opinión nos ayuda a mejorar
               </p>
             </div>
             
-            <!-- Rating Stars -->
-            <div class="rating-container">
-              <div class="stars-row">
-                <span 
-                  v-for="star in 5" 
-                  :key="star" 
-                  class="rating-star" 
-                  :class="{ active: star <= ratingValue, hover: star <= hoverRating }"
-                  @click="ratingValue = star"
-                  @mouseenter="hoverRating = star"
-                  @mouseleave="hoverRating = 0"
-                >
-                  ★
-                </span>
+            <!-- Vehicle Rating Section -->
+            <div class="rating-section-block" v-if="selectedRental?.vehicleId">
+              <div class="section-header">
+                <i class="pi pi-car"></i>
+                <span>Califica el Vehículo</span>
+                <span class="optional-badge">Opcional</span>
               </div>
-              <p class="rating-feedback">{{ getRatingLabel(ratingValue || hoverRating) }}</p>
-            </div>
-            
-            <!-- Comment Section -->
-            <div class="comment-section">
-              <label for="rating-comment">
-                <i class="pi pi-comment"></i>
-                Cuéntanos más (opcional)
-              </label>
-              <textarea 
-                id="rating-comment"
-                v-model="ratingComment" 
-                rows="3" 
-                placeholder="¿Qué te gustó? ¿Qué podría mejorar?"
-              ></textarea>
+              <p class="section-subtitle">
+                <strong>{{ getVehicleData(selectedRental?.vehicleId)?.brand }} {{ getVehicleData(selectedRental?.vehicleId)?.model }}</strong>
+              </p>
+              
+              <!-- Vehicle Rating Stars -->
+              <div class="rating-container">
+                <div class="stars-row">
+                  <span 
+                    v-for="star in 5" 
+                    :key="'vehicle-' + star" 
+                    class="rating-star" 
+                    :class="{ active: star <= ratingValue, hover: star <= hoverRating }"
+                    @click="ratingValue = star"
+                    @mouseenter="hoverRating = star"
+                    @mouseleave="hoverRating = 0"
+                  >
+                    ★
+                  </span>
+                </div>
+                <p class="rating-feedback">{{ getRatingLabel(ratingValue || hoverRating) }}</p>
+              </div>
+              
+              <!-- Vehicle Comment -->
+              <div class="comment-section">
+                <label>
+                  <i class="pi pi-comment"></i>
+                  Comentario (opcional)
+                </label>
+                <textarea 
+                  v-model="ratingComment" 
+                  rows="2" 
+                  placeholder="¿Cómo estuvo el vehículo? ¿Limpio? ¿En buen estado?"
+                ></textarea>
+              </div>
             </div>
             
             <!-- Actions -->
             <div class="modal-footer">
-              <button @click="showRatingModal = false" class="btn-secondary">
-                Cancelar
+              <button @click="skipRating" class="btn-skip">
+                <i class="pi pi-forward"></i>
+                Omitir
               </button>
               <button 
                 @click="submitRating" 
@@ -790,6 +819,39 @@ async function submitRating() {
   background: #e2e8f0;
 }
 
+.btn-skip {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem;
+  background: transparent;
+  color: #64748b;
+  border: 2px dashed #cbd5e1;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-skip:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: #475569;
+}
+
+.optional-badge {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 20px;
+  font-weight: 600;
+  margin-left: auto;
+}
+
 .btn-primary-rating {
   flex: 2;
   display: flex;
@@ -1000,5 +1062,79 @@ async function submitRating() {
   font-size: 0.75rem;
   color: #64748b;
   font-weight: 600;
+}
+
+/* ======================== */
+/* RATING MODAL STYLES */
+/* ======================== */
+
+.rating-section-block {
+  background: #f8fafc;
+  border-radius: 16px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  border: 2px solid #e2e8f0;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #1e293b;
+  margin-bottom: 0.25rem;
+}
+
+.section-header i {
+  font-size: 1.1rem;
+  color: #3b82f6;
+}
+
+.section-subtitle {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin: 0 0 0.75rem 0;
+}
+
+.section-subtitle strong {
+  color: #1e293b;
+}
+
+.rating-section-block .rating-container {
+  background: white;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.rating-section-block .comment-section {
+  margin-bottom: 0;
+}
+
+.rating-section-block .comment-section label {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.rating-section-block .comment-section textarea {
+  border: 1px solid #e2e8f0;
+  font-size: 0.85rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .renter-dashboard {
+    padding: 1rem;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .rating-modal {
+    max-width: 95vw;
+    margin: 0.5rem;
+  }
 }
 </style>
