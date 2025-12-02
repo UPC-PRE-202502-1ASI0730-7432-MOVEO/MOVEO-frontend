@@ -54,7 +54,7 @@ const handlePaymentSuccess = async (token) => {
       currency: 'PEN',
       description: description.value,
       status: 'completed',
-      method: 'stripe',
+      paymentMethod: 'card',
       transactionId: token.id, // Stripe token ID
       referenceId: referenceId.value,
       date: new Date().toISOString()

@@ -529,7 +529,7 @@ async function confirmRental() {
       throw new Error('Usuario no autenticado')
     }
 
-    const renterId = Number(currentUser.id)
+    const renterId = currentUser.id
 
     const rentalData = {
       vehicleId: props.vehicle.id,

@@ -110,10 +110,10 @@ const router = useRouter()
 const rentalStore = useRentalStore()
 
 const loading = ref(true)
-const rentalId = parseInt(route.params.id)
+const rentalId = String(route.params.id)
 
 const rental = computed(() => {
-  return rentalStore.state.rentals.find(r => r.id === rentalId)
+  return rentalStore.state.rentals.find(r => String(r.id) === rentalId)
 })
 
 const vehicle = computed(() => {

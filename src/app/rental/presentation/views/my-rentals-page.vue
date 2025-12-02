@@ -144,7 +144,7 @@ const userRentals = computed(() => {
     return []
   }
   console.log(`🔍 Filtrando alquileres para usuario ID: ${currentUser.value.id}`)
-  const filtered = rentalStore.state.rentals.filter(r => Number(r.renterId) === Number(currentUser.value.id))
+  const filtered = rentalStore.state.rentals.filter(r => String(r.renterId) === String(currentUser.value.id))
   console.log(`✅ Se encontraron ${filtered.length} alquileres del usuario`)
   return filtered
 })

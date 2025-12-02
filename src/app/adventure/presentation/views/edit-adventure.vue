@@ -234,13 +234,13 @@ onMounted(async () => {
     await adventureStore.fetchAdventures()
     await rentalStore.loadVehicles()
 
-    const adventureId = Number(route.params.id)
+    const adventureId = String(route.params.id)
     adventure.value = adventureStore.getAdventureById(adventureId)
 
     if (adventure.value) {
       // Verify ownership
       const userId = userStore.currentUser.value?.id
-      if (Number(adventure.value.ownerId) !== Number(userId)) {
+      if (String(adventure.value.ownerId) !== String(userId)) {
         alert('⚠️ No tienes permiso para editar esta aventura')
         router.push('/adventure/my-adventures')
         return
