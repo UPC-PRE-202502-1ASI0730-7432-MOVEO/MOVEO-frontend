@@ -26,7 +26,11 @@ export class AdventureRoute {
     rating = 0,
     reviewsCount = 0,
     createdAt = null,
-    updatedAt = null
+    updatedAt = null,
+    ownerId = null,
+    vehicleName = '',
+    title = '',
+    price = 0
   } = {}) {
     this.id = id
     this.name = name
@@ -51,6 +55,10 @@ export class AdventureRoute {
     this.reviewsCount = reviewsCount
     this.createdAt = createdAt
     this.updatedAt = updatedAt
+    this.ownerId = ownerId
+    this.vehicleName = vehicleName
+    this.title = title || name
+    this.price = price || estimatedCost
   }
 
   // Computed properties

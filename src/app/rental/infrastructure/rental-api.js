@@ -75,5 +75,17 @@ export const RentalApi = {
   async updateRentalStatus(rentalId, newStatus) {
     const data = await apiClient.patch(`/rentals/${rentalId}`, { status: newStatus })
     return toRentalEntity(data)
+  },
+
+  // Crear una reseña
+  async createReview(reviewData) {
+    const data = await apiClient.post('/reviews', reviewData)
+    return data
+  },
+
+  // Actualizar rental con datos de reseña (para marcar como calificado)
+  async updateRentalRating(rentalId, ratingData) {
+    const data = await apiClient.patch(`/rentals/${rentalId}`, ratingData)
+    return toRentalEntity(data)
   }
 }

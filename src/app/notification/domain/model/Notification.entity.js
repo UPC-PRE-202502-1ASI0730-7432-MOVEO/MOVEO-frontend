@@ -9,6 +9,7 @@ export class Notification {
     type = 'info', // info, warning, success, error, damage_report, payment_required
     title = '',
     message = '',
+    body = '',      // Backend puede enviar 'body' en vez de 'message'
     relatedId = null, // ID del rental, vehicle, ticket, etc.
     relatedType = null, // 'rental', 'vehicle', 'ticket', 'payment'
     read = false,
@@ -22,7 +23,8 @@ export class Notification {
     this.userId = userId
     this.type = type
     this.title = title
-    this.message = message
+    // Usar 'message' si existe, sino usar 'body' (compatibilidad con backend)
+    this.message = message || body || ''
     this.relatedId = relatedId
     this.relatedType = relatedType
     this.read = read

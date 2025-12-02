@@ -55,5 +55,43 @@ export const AdventureRouteApi = {
       console.error('Error fetching featured routes:', error)
       throw error
     }
+  },
+
+  /**
+   * Crear una nueva ruta de aventura
+   */
+  async createRoute(routeData) {
+    try {
+      const data = await apiClient.post('/adventure-routes', routeData)
+      return AdventureAssembler.toRouteEntity(data)
+    } catch (error) {
+      console.error('Error creating adventure route:', error)
+      throw error
+    }
+  },
+
+  /**
+   * Actualizar una ruta de aventura
+   */
+  async updateRoute(id, routeData) {
+    try {
+      const data = await apiClient.put(`/adventure-routes/${id}`, routeData)
+      return AdventureAssembler.toRouteEntity(data)
+    } catch (error) {
+      console.error(`Error updating adventure route ${id}:`, error)
+      throw error
+    }
+  },
+
+  /**
+   * Eliminar una ruta de aventura
+   */
+  async deleteRoute(id) {
+    try {
+      await apiClient.delete(`/adventure-routes/${id}`)
+    } catch (error) {
+      console.error(`Error deleting adventure route ${id}:`, error)
+      throw error
+    }
   }
 }

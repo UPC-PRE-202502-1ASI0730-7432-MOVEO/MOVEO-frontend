@@ -1,8 +1,12 @@
 <script setup>
 import { ref, computed } from "vue";
 import { useI18n } from 'vue-i18n'
+import StripeCheckout from '@/app/payment/presentation/components/stripe-checkout.vue'
 
 const { t } = useI18n()
+
+// Control para mostrar/ocultar Stripe
+const showStripeForm = ref(false)
 
 // Props para recibir datos del modal
 const props = defineProps({
@@ -40,6 +44,10 @@ function selectMethod(method) {
   // Limpiar datos al cambiar de método
   if (method !== 'card') {
     cardInfo.value = { number: "", name: "", expiry: "", ccv: "" };
+    showStripeForm.value = false;
+  } else {
+    // Mostrar formulario de Stripe cuando selecciona tarjeta
+    showStripeForm.value = true;
   }
   if (method !== 'yape') {
     yapeReceipt.value = null;
@@ -125,6 +133,29 @@ function formatExpiry(event) {
 function formatCCV(event) {
   cardInfo.value.ccv = event.target.value.replace(/\D/g, '').substring(0, 4);
 }
+
+// Manejo de éxito de Stripe
+function handleStripeSuccess(token) {
+  console.log('✅ Pago con Stripe exitoso:', token);
+  // Guardar referencia del token para procesamiento
+  cardInfo.value.stripeToken = token;
+  
+  const paymentData = {
+    method: 'card',
+    amount: props.amount,
+    description: props.description,
+    stripeToken: token,
+    isStripe: true
+  };
+  
+  emit('payment-confirmed', paymentData);
+}
+
+// Manejo de error de Stripe
+function handleStripeError(error) {
+  console.error('❌ Error de Stripe:', error);
+  alert('Error al procesar el pago: ' + (error.message || 'Error desconocido'));
+}
 </script>
 
 <template>
@@ -181,78 +212,21 @@ function formatCCV(event) {
       </div>
     </div>
 
-    <!-- Formulario de tarjeta -->
+    <!-- Formulario de tarjeta con Stripe -->
     <div v-if="selectedMethod === 'card'" class="payment-form card-payment">
-      <div class="credit-card-preview">
-        <div class="card-chip"></div>
-        <div class="card-number">{{ formattedCardNumber }}</div>
-        <div class="card-info">
-          <div class="card-holder">{{ cardInfo.name || t('payment.management.card.cardHolderDefault') }}</div>
-          <div class="card-expiry">{{ cardInfo.expiry || t('payment.management.card.expiryDefault') }}</div>
+      <div class="stripe-container">
+        <div class="stripe-header">
+          <i class="pi pi-shield"></i>
+          <span>Pago seguro con Stripe</span>
         </div>
-        <div class="card-brand">VISA</div>
-      </div>
-
-      <div class="form-fields">
-        <div class="form-field">
-          <label class="form-label">
-            <i class="pi pi-credit-card"></i>
-            {{ t('payment.management.card.cardNumber') }}
-          </label>
-          <input
-            type="text"
-            class="form-input"
-            v-model="cardInfo.number"
-            @input="formatCardNumber"
-            :placeholder="t('payment.management.card.cardNumberPlaceholder')"
-            maxlength="16"
-          />
-        </div>
-
-        <div class="form-field">
-          <label class="form-label">
-            <i class="pi pi-user"></i>
-            {{ t('payment.management.card.cardHolder') }}
-          </label>
-          <input
-            type="text"
-            class="form-input"
-            v-model="cardInfo.name"
-            :placeholder="t('payment.management.card.cardHolderPlaceholder')"
-            style="text-transform: uppercase"
-          />
-        </div>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">
-              <i class="pi pi-calendar"></i>
-              {{ t('payment.management.card.expiry') }}
-            </label>
-            <input
-              type="text"
-              class="form-input"
-              v-model="cardInfo.expiry"
-              @input="formatExpiry"
-              :placeholder="t('payment.management.card.expiryPlaceholder')"
-              maxlength="5"
-            />
-          </div>
-
-          <div class="form-field">
-            <label class="form-label">
-              <i class="pi pi-lock"></i>
-              {{ t('payment.management.card.ccv') }}
-            </label>
-            <input
-              type="text"
-              class="form-input"
-              v-model="cardInfo.ccv"
-              @input="formatCCV"
-              :placeholder="t('payment.management.card.ccvPlaceholder')"
-              maxlength="4"
-            />
-          </div>
+        <StripeCheckout 
+          :amount="amount" 
+          @success="handleStripeSuccess" 
+          @error="handleStripeError"
+        />
+        <div class="stripe-info">
+          <i class="pi pi-lock"></i>
+          <p>Tu información de pago está protegida con encriptación de grado bancario</p>
         </div>
       </div>
     </div>
@@ -441,6 +415,51 @@ function formatCCV(event) {
   border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
+}
+
+/* Stripe container */
+.stripe-container {
+  text-align: center;
+}
+
+.stripe-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #635BFF 0%, #7B73FF 100%);
+  border-radius: 12px 12px 0 0;
+  margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.stripe-header i {
+  font-size: 1.25rem;
+}
+
+.stripe-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding: 0.75rem 1rem;
+  background: #e8f5e9;
+  border-radius: 8px;
+  color: #2e7d32;
+  font-size: 0.85rem;
+}
+
+.stripe-info i {
+  font-size: 1rem;
+  color: #4caf50;
+}
+
+.stripe-info p {
+  margin: 0;
 }
 
 /* Tarjeta de crédito */

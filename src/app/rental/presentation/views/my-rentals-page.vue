@@ -144,7 +144,7 @@ const userRentals = computed(() => {
     return []
   }
   console.log(`🔍 Filtrando alquileres para usuario ID: ${currentUser.value.id}`)
-  const filtered = rentalStore.state.rentals.filter(r => r.renterId === currentUser.value.id)
+  const filtered = rentalStore.state.rentals.filter(r => Number(r.renterId) === Number(currentUser.value.id))
   console.log(`✅ Se encontraron ${filtered.length} alquileres del usuario`)
   return filtered
 })
@@ -164,7 +164,8 @@ const filteredRentals = computed(() => {
 
 // Obtener vehículo por ID
 function getVehicle(vehicleId) {
-  return rentalStore.state.vehicles.find(v => v.id === vehicleId)
+  if (!vehicleId) return null
+  return rentalStore.state.vehicles.find(v => Number(v.id) === Number(vehicleId))
 }
 
 // Formatear fecha

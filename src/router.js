@@ -2,6 +2,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import DashboardPage from '@/app/shared/views/dashboard-page.vue'
 import PageNotFound from '@/app/shared/views/page-not-found.vue'
+import NotificationsPage from '@/app/notification/presentation/views/notifications-page.vue'
 import { useUserStore } from '@/app/iam/application/user.store.js'
 
 // Import nested route modules
@@ -28,6 +29,14 @@ const routes = [
     meta: { title: 'Dashboard', requiresAuth: true }
   },
   
+  // Notifications Page
+  {
+    path: '/notifications',
+    name: 'notifications',
+    component: NotificationsPage,
+    meta: { title: 'Notificaciones', requiresAuth: true }
+  },
+  
   // IAM Module (Identity and Access Management) - Auth routes
   {
     path: '/auth',
@@ -40,11 +49,11 @@ const routes = [
     children: rentalRoutes
   },
   
-  // Adventure Module - Themed Travel Routes (Only for Renters)
+  // Adventure Module - Themed Travel Routes (For Both Renters and Owners)
   {
     path: '/adventure',
-    children: adventureRoutes,
-    meta: { requiresAuth: true, requiresRole: 'renter' }
+    children: adventureRoutes
+    // Note: Auth and role requirements are defined at child route level
   },
   
   // Payment Module
@@ -53,11 +62,11 @@ const routes = [
     children: paymentRoutes
   },
   
-  // Support Module - Tickets and Customer Service (Only for Owners)
+  // Support Module - Tickets and Customer Service (For both roles)
   {
     path: '/support',
     children: supportRoutes,
-    meta: { requiresAuth: true, requiresRole: 'owner' }
+    meta: { requiresAuth: true }
   },
   
   // Legacy routes redirects for backwards compatibility

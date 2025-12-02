@@ -2,7 +2,7 @@
   <div class="route-detail-page">
     <!-- Loading State -->
     <div v-if="loading" class="loading-container">
-      <i class="pi pi-spin pi-spinner loading-icon"></i>
+      <div class="spinner"></div>
       <p>Cargando detalles de la ruta...</p>
     </div>
 
@@ -15,6 +15,35 @@
         <i class="pi pi-arrow-left"></i>
         Volver a Rutas
       </button>
+    </div>
+
+    <!-- Success State (Adventure Requested) -->
+    <div v-else-if="requestSent" class="success-container">
+      <div class="success-card">
+        <div class="success-icon-wrapper">
+          <i class="pi pi-check-circle success-icon"></i>
+        </div>
+        <h2>¡Aventura Solicitada!</h2>
+        <p>Tu solicitud para <strong>{{ currentRoute.name }}</strong> ha sido enviada con éxito.</p>
+        
+        <div class="request-details" v-if="selectedVehicle">
+          <div class="detail-row">
+            <span>Vehículo:</span>
+            <strong>{{ selectedVehicle.brand }} {{ selectedVehicle.model }}</strong>
+          </div>
+          <div class="detail-row">
+            <span>Fecha estimada:</span>
+            <strong>Próximamente</strong>
+          </div>
+        </div>
+
+        <p class="success-note">El propietario revisará tu solicitud y te notificaremos pronto.</p>
+        
+        <div class="success-actions">
+          <button @click="goToMyAdventures" class="btn-primary">Ver Mis Aventuras</button>
+          <button @click="goBack" class="btn-secondary">Explorar más rutas</button>
+        </div>
+      </div>
     </div>
 
     <!-- Route Content -->
@@ -101,26 +130,33 @@
               </div>
             </div>
 
-            <!-- Recommended Vehicles -->
+            <!-- Available Vehicles (Carousel Selection) -->
             <div class="section-card" v-if="recommendedVehicles.length > 0">
               <h2 class="section-title">
                 <i class="pi pi-car"></i>
-                Vehículos Recomendados para esta Ruta
+                Elige tu Vehículo
               </h2>
-              <p class="section-subtitle">Selecciona el vehículo perfecto para tu aventura</p>
+              <p class="section-subtitle">Selecciona cualquier vehículo disponible para esta aventura</p>
               
-              <div class="vehicles-grid">
-                <div v-for="vehicle in recommendedVehicles" :key="vehicle.id" class="vehicle-card" @click="viewVehicle(vehicle.id)">
-                  <img :src="vehicle.imageUrl || '/placeholder-car.jpg'" :alt="vehicle.fullName" class="vehicle-image" />
-                  <div class="vehicle-info">
-                    <h4 class="vehicle-name">{{ vehicle.brand }} {{ vehicle.model }}</h4>
-                    <p class="vehicle-specs">{{ vehicle.year }} · {{ vehicle.transmission }}</p>
-                    <div class="vehicle-footer">
-                      <span class="vehicle-price">S/. {{ vehicle.dailyPrice }}/día</span>
-                      <button class="btn-select-vehicle">
-                        Ver Detalles
-                        <i class="pi pi-arrow-right"></i>
-                      </button>
+              <div class="vehicles-carousel-container">
+                <div class="vehicles-carousel">
+                  <div 
+                    v-for="vehicle in recommendedVehicles" 
+                    :key="vehicle.id" 
+                    class="vehicle-card-select"
+                    :class="{ 'selected': selectedVehicleId === vehicle.id }"
+                    @click="selectVehicle(vehicle.id)"
+                  >
+                    <div class="vehicle-image-wrapper">
+                      <img :src="vehicle.imageUrl || 'https://via.placeholder.com/300x200/FF6F00/ffffff?text=🚗'" :alt="vehicle.fullName" />
+                      <div class="selected-overlay" v-if="selectedVehicleId === vehicle.id">
+                        <i class="pi pi-check"></i>
+                      </div>
+                    </div>
+                    <div class="vehicle-info-compact">
+                      <h4>{{ vehicle.brand }} {{ vehicle.model }}</h4>
+                      <p>{{ vehicle.year }} · {{ vehicle.transmission }}</p>
+                      <span class="price">S/. {{ vehicle.dailyPrice }}/día</span>
                     </div>
                   </div>
                 </div>
@@ -132,7 +168,7 @@
           <div class="right-column">
             <!-- Info Card -->
             <div class="info-card sticky-card">
-              <h3 class="info-title">Información de la Ruta</h3>
+              <h3 class="info-title">Resumen de Aventura</h3>
               
               <div class="info-grid">
                 <div class="info-item">
@@ -166,30 +202,29 @@
                     <span class="info-value">{{ currentRoute.formattedCost }}</span>
                   </div>
                 </div>
+              </div>
 
-                <div class="info-item" v-if="currentRoute.bestSeason">
-                  <i class="pi pi-sun"></i>
-                  <div>
-                    <span class="info-label">Mejor Época</span>
-                    <span class="info-value">{{ currentRoute.bestSeason }}</span>
-                  </div>
+              <div class="selected-vehicle-summary" v-if="selectedVehicle">
+                <div class="summary-header">Vehículo Seleccionado</div>
+                <div class="summary-content">
+                  <span>{{ selectedVehicle.brand }} {{ selectedVehicle.model }}</span>
+                  <span class="summary-price">S/. {{ selectedVehicle.dailyPrice }}</span>
                 </div>
               </div>
 
-              <div class="info-tags" v-if="currentRoute.tags && currentRoute.tags.length > 0">
-                <span v-for="(tag, index) in currentRoute.tags" :key="index" class="tag">
-                  {{ tag }}
-                </span>
-              </div>
-
-              <button @click="startAdventure" class="btn-start-adventure">
-                <i class="pi pi-play"></i>
-                Comenzar Aventura
+              <button 
+                @click="handleStartAdventure" 
+                class="btn-start-adventure"
+                :disabled="!selectedVehicleId && recommendedVehicles.length > 0"
+              >
+                <i class="pi pi-play" v-if="!processing"></i>
+                <span v-if="processing" class="spinner-small"></span>
+                {{ processing ? 'Procesando...' : 'Comenzar Aventura' }}
               </button>
 
-              <p class="info-note">
+              <p class="info-note" v-if="!selectedVehicleId && recommendedVehicles.length > 0">
                 <i class="pi pi-info-circle"></i>
-                Los vehículos se alquilan por separado según disponibilidad
+                Por favor selecciona un vehículo para continuar
               </p>
             </div>
           </div>
@@ -204,13 +239,24 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAdventureRoutesStore } from '../../application/adventure-routes.store.js'
 import { RentalApi } from '@/app/rental/infrastructure/rental-api.js'
+import { useUserStore } from '@/app/iam/application/user.store.js'
+import { useNotificationStore } from '@/app/notification/application/notification.store.js'
 
 const router = useRouter()
 const route = useRoute()
 const store = useAdventureRoutesStore()
+const userStore = useUserStore()
+const notificationStore = useNotificationStore()
 
 const { currentRoute, loading, error, fetchRoute } = store
 const recommendedVehicles = ref([])
+const selectedVehicleId = ref(null)
+const requestSent = ref(false)
+const processing = ref(false)
+
+const selectedVehicle = computed(() => {
+  return recommendedVehicles.value.find(v => v.id === selectedVehicleId.value)
+})
 
 const defaultImage = computed(() => {
   if (!currentRoute.value) return ''
@@ -229,35 +275,93 @@ onMounted(async () => {
   const routeId = route.params.id
   await fetchRoute(routeId)
   
-  if (currentRoute.value && currentRoute.value.recommendedVehicles) {
-    await loadRecommendedVehicles()
-  }
+  // Siempre cargar todos los vehículos disponibles
+  await loadAllAvailableVehicles()
 })
 
-async function loadRecommendedVehicles() {
+async function loadAllAvailableVehicles() {
   try {
     const allVehicles = await RentalApi.listVehicles()
-    recommendedVehicles.value = allVehicles
-      .filter(v => currentRoute.value.recommendedVehicles.includes(v.id))
-      .slice(0, 3)
+    
+    // Obtener todos los vehículos disponibles (activos, no pausados)
+    const availableVehicles = allVehicles.filter(v => v.status !== 'paused')
+    
+    // Ordenar: primero los recomendados (si existen), luego los demás
+    const recommendedIds = currentRoute.value?.recommendedVehicles || []
+    
+    // Separar vehículos recomendados y otros
+    const recommended = availableVehicles.filter(v => recommendedIds.includes(v.id))
+    const others = availableVehicles.filter(v => !recommendedIds.includes(v.id))
+    
+    // Combinar: recomendados primero, luego los demás
+    recommendedVehicles.value = [...recommended, ...others]
+    
+    console.log(`🚗 Vehículos cargados: ${recommended.length} recomendados, ${others.length} adicionales`)
   } catch (err) {
-    console.error('Error loading recommended vehicles:', err)
+    console.error('Error loading vehicles:', err)
   }
+}
+
+function selectVehicle(id) {
+  selectedVehicleId.value = id
 }
 
 function goBack() {
   router.push({ name: 'adventure-routes' })
 }
 
-function viewVehicle(vehicleId) {
-  router.push({ name: 'rental-vehicle-detail', params: { id: vehicleId } })
+function goToMyAdventures() {
+  router.push({ name: 'my-rentals' }) // Assuming this is where they see their requests
 }
 
-function startAdventure() {
-  if (recommendedVehicles.value.length > 0) {
-    viewVehicle(recommendedVehicles.value[0].id)
-  } else {
-    router.push({ name: 'rental-browse' })
+async function handleStartAdventure() {
+  if (!selectedVehicleId.value && recommendedVehicles.value.length > 0) return
+  
+  processing.value = true
+  
+  try {
+    const vehicle = selectedVehicle.value
+    const currentUser = userStore.currentUser.value
+    
+    const rentalData = {
+      vehicleId: selectedVehicleId.value,
+      renterId: currentUser?.id,
+      startDate: new Date().toISOString(),
+      endDate: new Date(Date.now() + 86400000 * currentRoute.value.duration).toISOString(),
+      status: 'pending',
+      totalPrice: currentRoute.value.estimatedCost || 0,
+      adventureRouteId: currentRoute.value.id
+    }
+    
+    const createdRental = await RentalApi.createRental(rentalData)
+    
+    // Enviar notificación al dueño del vehículo
+    if (vehicle && vehicle.ownerId && currentUser) {
+      const renterFullName = `${currentUser.firstName} ${currentUser.lastName}`
+      const vehicleName = `${vehicle.brand} ${vehicle.model}`
+      
+      await notificationStore.notifyOwnerRentalRequest({
+        ownerId: vehicle.ownerId,
+        renterName: renterFullName,
+        vehicleName: vehicleName,
+        rentalId: createdRental?.id || Date.now(),
+        vehicleId: vehicle.id
+      })
+      
+      console.log(`📬 Notificación enviada al dueño (ID: ${vehicle.ownerId})`)
+    }
+    
+    // Show success state
+    setTimeout(() => {
+      requestSent.value = true
+      processing.value = false
+      window.scrollTo(0, 0)
+    }, 1000)
+    
+  } catch (err) {
+    console.error('Error starting adventure:', err)
+    alert('Hubo un error al procesar tu solicitud. Por favor intenta nuevamente.')
+    processing.value = false
   }
 }
 </script>
@@ -270,7 +374,8 @@ function startAdventure() {
 
 /* Loading & Error States */
 .loading-container,
-.error-container {
+.error-container,
+.success-container {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -279,10 +384,19 @@ function startAdventure() {
   padding: 2rem;
 }
 
-.loading-icon {
-  font-size: 4rem;
-  color: #3A5E5E;
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3A5E5E;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
   margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .error-icon {
@@ -291,35 +405,105 @@ function startAdventure() {
   margin-bottom: 1rem;
 }
 
-.error-container h2 {
-  font-size: 2rem;
+/* Success State */
+.success-card {
+  background: white;
+  padding: 3rem;
+  border-radius: 24px;
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.success-icon-wrapper {
+  width: 80px;
+  height: 80px;
+  background: #e6fffa;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+}
+
+.success-icon {
+  font-size: 3rem;
+  color: #059669;
+}
+
+.success-card h2 {
   color: #2C3E50;
-  margin: 0 0 0.5rem 0;
+  font-size: 2rem;
+  margin-bottom: 1rem;
 }
 
-.error-container p {
+.success-card p {
   color: #666;
-  margin: 0 0 2rem 0;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
 }
 
-.btn-back-error {
-  padding: 1rem 2rem;
+.request-details {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  color: #4a5568;
+}
+
+.detail-row:last-child {
+  margin-bottom: 0;
+}
+
+.success-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.btn-primary {
   background: #3A5E5E;
   color: white;
   border: none;
+  padding: 0.875rem;
   border-radius: 10px;
-  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: all 0.3s ease;
+  transition: all 0.2s;
 }
 
-.btn-back-error:hover {
+.btn-primary:hover {
   background: #2C5050;
-  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: #666;
+  border: 2px solid #e2e8f0;
+  padding: 0.875rem;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+  border-color: #cbd5e0;
+  color: #2d3748;
 }
 
 /* Hero Section */
@@ -402,20 +586,9 @@ function startAdventure() {
   color: #2C3E50;
 }
 
-.type-badge.type-beach {
-  background: rgba(255, 140, 0, 0.95);
-  color: white;
-}
-
-.type-badge.type-mountain {
-  background: rgba(65, 105, 225, 0.95);
-  color: white;
-}
-
-.type-badge.type-cultural {
-  background: rgba(139, 69, 19, 0.95);
-  color: white;
-}
+.type-badge.type-beach { background: rgba(255, 140, 0, 0.95); color: white; }
+.type-badge.type-mountain { background: rgba(65, 105, 225, 0.95); color: white; }
+.type-badge.type-cultural { background: rgba(139, 69, 19, 0.95); color: white; }
 
 .featured-badge {
   background: rgba(255, 215, 0, 0.95);
@@ -565,80 +738,99 @@ function startAdventure() {
   flex-shrink: 0;
 }
 
-/* Vehicles Grid */
-.vehicles-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1.5rem;
+/* Vehicles Carousel */
+.vehicles-carousel-container {
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  margin: 0 -1rem;
+  padding: 0 1rem 1rem 1rem;
 }
 
-.vehicle-card {
+.vehicles-carousel {
+  display: flex;
+  gap: 1.5rem;
+  min-width: min-content;
+}
+
+.vehicle-card-select {
+  width: 280px;
   background: #f8f9fa;
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
   transition: all 0.3s ease;
+  border: 2px solid transparent;
+  position: relative;
 }
 
-.vehicle-card:hover {
+.vehicle-card-select:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
-.vehicle-image {
+.vehicle-card-select.selected {
+  border-color: #3A5E5E;
+  background: #f0fdfa;
+  box-shadow: 0 4px 12px rgba(58, 94, 94, 0.2);
+}
+
+.vehicle-image-wrapper {
+  position: relative;
+  height: 160px;
+}
+
+.vehicle-image-wrapper img {
   width: 100%;
-  height: 180px;
+  height: 100%;
   object-fit: cover;
 }
 
-.vehicle-info {
-  padding: 1.25rem;
-}
-
-.vehicle-name {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #2C3E50;
-  margin: 0 0 0.5rem 0;
-}
-
-.vehicle-specs {
-  font-size: 0.9rem;
-  color: #666;
-  margin: 0 0 1rem 0;
-}
-
-.vehicle-footer {
+.selected-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(58, 94, 94, 0.6);
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
 }
 
-.vehicle-price {
-  font-size: 1.25rem;
+.selected-overlay i {
+  font-size: 3rem;
+  color: white;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  padding: 1rem;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.vehicle-info-compact {
+  padding: 1rem;
+}
+
+.vehicle-info-compact h4 {
+  margin: 0 0 0.25rem 0;
+  color: #2C3E50;
+  font-size: 1rem;
+}
+
+.vehicle-info-compact p {
+  margin: 0 0 0.5rem 0;
+  color: #666;
+  font-size: 0.85rem;
+}
+
+.vehicle-info-compact .price {
   font-weight: 700;
   color: #3A5E5E;
-}
-
-.btn-select-vehicle {
-  padding: 0.625rem 1rem;
-  background: #FF6F00;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: all 0.3s ease;
-}
-
-.btn-select-vehicle:hover {
-  background: #E66500;
+  font-size: 1.1rem;
 }
 
 /* Right Column (Sidebar) */
@@ -701,23 +893,33 @@ function startAdventure() {
   color: #2C3E50;
 }
 
-.info-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+.selected-vehicle-summary {
+  background: #f0fdfa;
+  border: 1px solid #ccfbf1;
+  padding: 1rem;
+  border-radius: 10px;
   margin-bottom: 1.5rem;
-  padding: 1rem 0;
-  border-top: 2px solid #f0f0f0;
-  border-bottom: 2px solid #f0f0f0;
 }
 
-.tag {
-  padding: 0.5rem 1rem;
-  background: #e9ecef;
-  border-radius: 20px;
+.summary-header {
   font-size: 0.85rem;
-  font-weight: 500;
+  color: #3A5E5E;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.summary-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
   color: #2C3E50;
+}
+
+.summary-price {
+  color: #3A5E5E;
 }
 
 .btn-start-adventure {
@@ -739,10 +941,17 @@ function startAdventure() {
   margin-bottom: 1rem;
 }
 
-.btn-start-adventure:hover {
+.btn-start-adventure:hover:not(:disabled) {
   background: linear-gradient(135deg, #E66500 0%, #E67E00 100%);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(255, 111, 0, 0.4);
+}
+
+.btn-start-adventure:disabled {
+  background: #cbd5e0;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
 }
 
 .info-note {
@@ -761,6 +970,15 @@ function startAdventure() {
   color: #3A5E5E;
   margin-top: 0.125rem;
   flex-shrink: 0;
+}
+
+.spinner-small {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
 }
 
 /* Responsive */
@@ -797,10 +1015,6 @@ function startAdventure() {
 
   .section-card {
     padding: 1.5rem;
-  }
-
-  .vehicles-grid {
-    grid-template-columns: 1fr;
   }
 
   .highlights-grid {

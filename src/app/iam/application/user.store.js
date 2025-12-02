@@ -43,29 +43,30 @@ export const userInitials = computed(() => {
 
 /**
  * Login con email y password
+ * Llama a POST /api/v1/auth/login
  */
 export async function login(email, password) {
   userState.loading = true
   userState.error = null
   
   try {
-    // Buscar usuario por email
-    const user = await IamApi.getUserByEmail(email)
+    // Llamar al endpoint de autenticación del backend
+    const response = await IamApi.login(email, password)
     
-    if (!user) {
-      throw new Error('Usuario no encontrado')
-    }
+    console.log('✅ Login exitoso para:', response.email)
     
-    // 🚀 DESARROLLO: Bypass de contraseña - cualquier password funciona
-    // En producción, aquí validarías la contraseña hasheada
-    console.log('✅ Login exitoso (modo desarrollo - sin validación de contraseña)')
-    
-    setUser(user)
+    // El backend ya retorna los datos del usuario sin la contraseña
+    setUser(response)
     userState.loading = false
-    return user
+    return response
   } catch (error) {
     userState.loading = false
-    userState.error = error.message || 'Error al iniciar sesión'
+    // Manejar error 401 (credenciales incorrectas)
+    if (error.message && error.message.includes('401')) {
+      userState.error = 'Email o contraseña incorrectos'
+    } else {
+      userState.error = error.message || 'Error al iniciar sesión'
+    }
     throw error
   }
 }
@@ -84,6 +85,7 @@ export async function register(userData) {
       firstName: userData.firstName,
       lastName: userData.lastName,
       email: userData.email,
+      password: userData.password, // Include password
       phone: userData.phone,
       dni: userData.dni,
       licenseNumber: userData.licenseNumber || null,

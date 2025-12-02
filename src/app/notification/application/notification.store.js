@@ -19,8 +19,14 @@ export const useNotificationStore = () => {
       // Filtrar solo las notificaciones del usuario actual (normalizar tipos)
       const userNotifications = data.filter(n => Number(n.userId) === Number(userId))
       
+      // Mapear 'body' a 'message' si viene del backend con ese campo
+      const mappedNotifications = userNotifications.map(n => ({
+        ...n,
+        message: n.message || n.body || ''  // Usar message si existe, sino body
+      }))
+      
       // Ordenar por fecha (más recientes primero)
-      state.notifications = userNotifications.sort((a, b) => 
+      state.notifications = mappedNotifications.sort((a, b) => 
         new Date(b.createdAt) - new Date(a.createdAt)
       )
       
@@ -32,6 +38,65 @@ export const useNotificationStore = () => {
     } finally {
       state.loading = false
     }
+  }
+
+  // Crear nueva notificación
+  const createNotification = async (notification) => {
+    try {
+      const newNotification = {
+        ...notification,
+        read: false,
+        createdAt: new Date().toISOString()
+      }
+      
+      const created = await apiClient.post('/notifications', newNotification)
+      console.log('📬 Notificación creada:', created)
+      return created
+    } catch (error) {
+      console.error('Error creating notification:', error)
+      throw error
+    }
+  }
+
+  // Notificar al dueño sobre solicitud de alquiler
+  const notifyOwnerRentalRequest = async ({ ownerId, renterName, vehicleName, rentalId, vehicleId }) => {
+    const notification = {
+      userId: ownerId,
+      type: 'rental_request',
+      title: '¡Nueva Solicitud de Alquiler!',
+      body: `${renterName} quiere alquilar tu ${vehicleName}. Revisa los detalles y confirma la reserva.`,
+      relatedId: rentalId,
+      relatedType: 'rental',
+      actionUrl: '/rental/rental-requests',
+      actionLabel: 'Ver Solicitud',
+      metadata: {
+        rentalId,
+        vehicleId,
+        renterName
+      }
+    }
+    
+    return await createNotification(notification)
+  }
+
+  // Notificar al arrendatario sobre confirmación
+  const notifyRenterRentalConfirmed = async ({ renterId, vehicleName, rentalId, vehicleId, pickupDate }) => {
+    const notification = {
+      userId: renterId,
+      type: 'rental_confirmed',
+      title: 'Reserva Confirmada',
+      body: `Tu reserva del ${vehicleName} ha sido confirmada. Puedes recoger el vehículo el ${pickupDate}.`,
+      relatedId: rentalId,
+      relatedType: 'rental',
+      actionUrl: `/rental/my-rentals/${rentalId}`,
+      actionLabel: 'Ver Reserva',
+      metadata: {
+        rentalId,
+        vehicleId
+      }
+    }
+    
+    return await createNotification(notification)
   }
 
   // Marcar notificación como leída
@@ -114,6 +179,9 @@ export const useNotificationStore = () => {
     unreadCount,
     recentNotifications,
     fetchNotifications,
+    createNotification,
+    notifyOwnerRentalRequest,
+    notifyRenterRentalConfirmed,
     markAsRead,
     markAllAsRead,
     deleteNotification

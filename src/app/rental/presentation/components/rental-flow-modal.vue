@@ -15,7 +15,7 @@
               <i class="pi pi-calendar"></i>
               Selecciona las fechas
             </h2>
-            
+
             <div class="vehicle-summary">
               <div class="vehicle-summary-image">
                 <i class="pi pi-car"></i>
@@ -92,6 +92,70 @@
               Continuar al pago
               <i class="pi pi-arrow-right"></i>
             </button>
+
+            <!-- Sección de Calificaciones del Vehículo -->
+            <div class="reviews-section">
+              <div class="reviews-header">
+                <div class="reviews-rating-badge">
+                  <i class="pi pi-star-fill"></i>
+                  <span class="rating-value">{{ averageRating.toFixed(1) }}</span>
+                  <span class="rating-count">({{ vehicleReviews.length }} reseñas)</span>
+                </div>
+                <button 
+                  v-if="vehicleReviews.length > 0" 
+                  class="btn-toggle-reviews"
+                  @click="showReviews = !showReviews"
+                >
+                  {{ showReviews ? 'Ocultar' : 'Ver comentarios' }}
+                  <i :class="showReviews ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"></i>
+                </button>
+              </div>
+              
+              <!-- Rating bars -->
+              <div class="rating-bars">
+                <div v-for="star in 5" :key="star" class="rating-bar-row">
+                  <span class="star-label">{{ 6 - star }}</span>
+                  <i class="pi pi-star-fill star-icon"></i>
+                  <div class="bar-container">
+                    <div class="bar-fill" :style="{ width: getRatingPercentage(6 - star) + '%' }"></div>
+                  </div>
+                  <span class="bar-count">{{ getRatingCount(6 - star) }}</span>
+                </div>
+              </div>
+
+              <!-- Lista de comentarios -->
+              <transition name="slide">
+                <div v-if="showReviews && vehicleReviews.length > 0" class="reviews-list">
+                  <div v-for="review in vehicleReviews.slice(0, 3)" :key="review.id" class="review-card">
+                    <div class="review-header">
+                      <div class="reviewer-avatar">
+                        <i class="pi pi-user"></i>
+                      </div>
+                      <div class="reviewer-info">
+                        <span class="reviewer-name">Usuario verificado</span>
+                        <span class="review-date">{{ formatReviewDate(review.createdAt) }}</span>
+                      </div>
+                      <div class="review-stars">
+                        <i v-for="s in 5" :key="s" 
+                           :class="s <= review.rating ? 'pi pi-star-fill' : 'pi pi-star'" 
+                           class="star"></i>
+                      </div>
+                    </div>
+                    <p v-if="review.comment" class="review-comment">{{ review.comment }}</p>
+                    <p v-else class="review-comment no-comment">Sin comentario</p>
+                  </div>
+                  <p v-if="vehicleReviews.length > 3" class="more-reviews">
+                    +{{ vehicleReviews.length - 3 }} reseñas más
+                  </p>
+                </div>
+              </transition>
+
+              <!-- Sin reseñas -->
+              <div v-if="vehicleReviews.length === 0" class="no-reviews">
+                <i class="pi pi-inbox"></i>
+                <span>Este vehículo aún no tiene reseñas</span>
+              </div>
+            </div>
           </div>
 
           <!-- Paso 2: Método de pago -->
@@ -267,19 +331,67 @@ const selectedPaymentMethod = ref('')
 const acceptedTerms = ref(false)
 const isConfirming = ref(false)
 const existingRentals = ref([])
+const vehicleReviews = ref([])
+const showReviews = ref(false)
 
-// Cargar reservas existentes al montar
+// Estados de renta que bloquean fechas (excluye cancelled y completed)
+const activeRentalStatuses = new Set(['pending', 'confirmed', 'active', 'accepted'])
+
+// Cargar reservas existentes y reseñas al montar
 onMounted(async () => {
   try {
-    const data = await apiClient.get('/rentals')
-    existingRentals.value = data.filter(
+    const [rentalsData, reviewsData] = await Promise.all([
+      apiClient.get('/rentals'),
+      apiClient.get('/reviews')
+    ])
+    
+    // Solo considerar rentas activas - excluir cancelled y completed
+    existingRentals.value = rentalsData.filter(
       rental => Number(rental.vehicleId) === Number(props.vehicle.id) && 
-               rental.status !== 'cancelled'
+               activeRentalStatuses.has(rental.status)
     )
+    
+    // Filtrar reseñas del vehículo actual
+    vehicleReviews.value = reviewsData.filter(
+      review => Number(review.vehicleId) === Number(props.vehicle.id)
+    ).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
   } catch (error) {
-    console.error('Error loading existing rentals:', error)
+    console.error('Error loading data:', error)
   }
 })
+
+// Calcular rating promedio
+const averageRating = computed(() => {
+  if (vehicleReviews.value.length === 0) return 0
+  const sum = vehicleReviews.value.reduce((acc, review) => acc + review.rating, 0)
+  return sum / vehicleReviews.value.length
+})
+
+// Obtener conteo de ratings por estrella
+function getRatingCount(stars) {
+  return vehicleReviews.value.filter(r => r.rating === stars).length
+}
+
+// Obtener porcentaje de ratings por estrella
+function getRatingPercentage(stars) {
+  if (vehicleReviews.value.length === 0) return 0
+  return (getRatingCount(stars) / vehicleReviews.value.length) * 100
+}
+
+// Formatear fecha de reseña
+function formatReviewDate(dateString) {
+  if (!dateString) return ''
+  const date = new Date(dateString)
+  const now = new Date()
+  const diff = now - date
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+  
+  if (days === 0) return 'Hoy'
+  if (days === 1) return 'Ayer'
+  if (days < 7) return `Hace ${days} días`
+  if (days < 30) return `Hace ${Math.floor(days / 7)} semanas`
+  return date.toLocaleDateString('es-ES', { month: 'short', day: 'numeric' })
+}
 
 // Fecha mínima (hoy)
 const today = computed(() => {
@@ -455,11 +567,11 @@ async function confirmRental() {
         userId: props.vehicle.ownerId,
         type: 'rental_requested',
         title: 'Nueva solicitud de alquiler',
-        message: `El usuario ${currentUser.firstName || ''} ${currentUser.lastName || ''} ha solicitado alquilar ${props.vehicle.brand} ${props.vehicle.model}. Alquiler #${created.id}`,
+        body: `El usuario ${currentUser.firstName || ''} ${currentUser.lastName || ''} ha solicitado alquilar ${props.vehicle.brand} ${props.vehicle.model}. Alquiler #${created.id}`,
         relatedId: created.id,
         relatedType: 'rental',
         read: false,
-        actionUrl: `/rental/details/${response.data.id}`,
+        actionUrl: `/rental/rental-requests`,
         actionLabel: 'Ver solicitud',
         metadata: {
           rentalId: created.id,
@@ -631,6 +743,233 @@ watch(startDate, (newStart) => {
 
 .step-title i {
   color: #FF6F00;
+}
+
+/* Reviews Section */
+.reviews-section {
+  background: #f8f9fa;
+  border-radius: 16px;
+  padding: 1.25rem;
+  margin-top: 2rem;
+  border-top: 2px dashed #e0e0e0;
+  padding-top: 1.5rem;
+}
+
+.reviews-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.reviews-rating-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.reviews-rating-badge i {
+  color: #FFB800;
+  font-size: 1.25rem;
+}
+
+.rating-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #2C3E50;
+}
+
+.rating-count {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.btn-toggle-reviews {
+  background: transparent;
+  border: 1px solid #e0e0e0;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  transition: all 0.2s ease;
+}
+
+.btn-toggle-reviews:hover {
+  border-color: #FF6F00;
+  color: #FF6F00;
+}
+
+.rating-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.rating-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.star-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #666;
+  width: 12px;
+}
+
+.star-icon {
+  color: #FFB800;
+  font-size: 0.75rem;
+}
+
+.bar-container {
+  flex: 1;
+  height: 6px;
+  background: #e0e0e0;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FF6F00, #FFB800);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.bar-count {
+  font-size: 0.7rem;
+  color: #999;
+  width: 20px;
+  text-align: right;
+}
+
+/* Reviews List */
+.reviews-list {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.review-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.review-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.reviewer-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF6F00 0%, #FF8F00 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.reviewer-avatar i {
+  color: white;
+  font-size: 1rem;
+}
+
+.reviewer-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.reviewer-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #2C3E50;
+}
+
+.review-date {
+  font-size: 0.75rem;
+  color: #999;
+}
+
+.review-stars {
+  display: flex;
+  gap: 2px;
+}
+
+.review-stars .star {
+  font-size: 0.75rem;
+  color: #FFB800;
+}
+
+.review-stars .pi-star {
+  color: #ddd;
+}
+
+.review-comment {
+  font-size: 0.875rem;
+  color: #444;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.review-comment.no-comment {
+  color: #999;
+  font-style: italic;
+}
+
+.more-reviews {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #FF6F00;
+  font-weight: 600;
+  margin: 0.5rem 0 0;
+}
+
+.no-reviews {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  color: #999;
+  font-size: 0.875rem;
+}
+
+.no-reviews i {
+  font-size: 1.25rem;
+}
+
+/* Slide transition */
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  opacity: 0;
+  max-height: 0;
+}
+
+.slide-enter-to,
+.slide-leave-from {
+  opacity: 1;
+  max-height: 500px;
 }
 
 /* Vehicle summary */

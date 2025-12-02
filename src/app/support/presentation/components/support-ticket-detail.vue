@@ -28,6 +28,26 @@
         </div>
       </div>
 
+      <!-- Dispute Alert Banner -->
+      <div v-if="ticket.disputeStatus === 'disputed'" class="dispute-alert-banner">
+        <i class="pi pi-exclamation-triangle"></i>
+        <div class="dispute-alert-content">
+          <h4>⚠️ Este ticket ha sido disputado por el arrendatario</h4>
+          <p><strong>Motivo:</strong> {{ getDisputeReasonLabel(ticket.disputeReason) }}</p>
+          <p><strong>Descripción:</strong> {{ ticket.disputeDescription }}</p>
+          <p class="dispute-date">Disputado el: {{ formatDate(ticket.disputedAt) }}</p>
+        </div>
+      </div>
+
+      <!-- Proof Sent Banner -->
+      <div v-if="ticket.disputeStatus === 'owner_proof_sent'" class="proof-sent-banner">
+        <i class="pi pi-check-circle"></i>
+        <div>
+          <h4>✅ Pruebas adicionales enviadas</h4>
+          <p>Has enviado pruebas adicionales. El arrendatario deberá proceder con el pago.</p>
+        </div>
+      </div>
+
       <!-- Main Info -->
       <Card class="ticket-main-card">
         <template #content>
@@ -86,6 +106,24 @@
             </div>
           </div>
 
+          <!-- Additional Proof Section (if sent) -->
+          <Divider v-if="ticket.additionalProof && ticket.additionalProof.length > 0" />
+
+          <div v-if="ticket.additionalProof && ticket.additionalProof.length > 0" class="additional-proof-section">
+            <h3><i class="pi pi-folder-open"></i> Pruebas Adicionales Enviadas</h3>
+            <p v-if="ticket.additionalProofMessage" class="proof-message">"{{ ticket.additionalProofMessage }}"</p>
+            <div class="attachments-grid">
+              <Image
+                v-for="(proof, index) in ticket.additionalProof"
+                :key="index"
+                :src="proof"
+                :alt="`Prueba adicional ${index + 1}`"
+                width="150"
+                preview
+              />
+            </div>
+          </div>
+
           <Divider v-if="ticket.resolutionNotes" />
 
           <div v-if="ticket.resolutionNotes" class="ticket-resolution">
@@ -105,6 +143,15 @@
           <h3>{{ $t('support.actions') }}</h3>
           
           <div class="actions-buttons">
+            <!-- Si hay disputa y el owner aún no ha respondido -->
+            <Button
+              v-if="ticket.disputeStatus === 'disputed'"
+              label="Enviar Pruebas Adicionales"
+              icon="pi pi-upload"
+              severity="warning"
+              @click="showProofDialog = true"
+            />
+            
             <Button
               v-if="ticket.requiresPayment"
               :label="$t('support.proceedToPayment')"
@@ -162,6 +209,73 @@
           />
         </template>
       </Dialog>
+
+      <!-- Send Additional Proof Dialog -->
+      <Dialog
+        v-model:visible="showProofDialog"
+        header="Enviar Pruebas Adicionales"
+        modal
+        :style="{ width: '600px' }"
+      >
+        <div class="proof-dialog-content">
+          <div class="proof-info">
+            <i class="pi pi-info-circle"></i>
+            <p>El arrendatario ha disputado este reporte. Envía pruebas adicionales para respaldar tu reclamo. Una vez enviadas, el arrendatario ya no podrá disputar nuevamente y deberá proceder con el pago.</p>
+          </div>
+
+          <div class="form-group">
+            <label>Mensaje para el arrendatario</label>
+            <Textarea
+              v-model="proofMessage"
+              placeholder="Explica por qué las pruebas adicionales respaldan tu reclamo..."
+              rows="3"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Subir pruebas adicionales (imágenes)</label>
+            <div class="upload-area">
+              <input 
+                type="file" 
+                accept="image/*" 
+                multiple 
+                @change="handleProofUpload"
+                id="proof-upload"
+              />
+              <label for="proof-upload" class="upload-label">
+                <i class="pi pi-cloud-upload"></i>
+                <span>{{ proofFiles.length > 0 ? `${proofFiles.length} archivo(s) seleccionado(s)` : 'Clic para seleccionar imágenes' }}</span>
+              </label>
+            </div>
+          </div>
+
+          <div v-if="proofFiles.length > 0" class="selected-files">
+            <div v-for="(file, index) in proofFiles" :key="index" class="file-item">
+              <i class="pi pi-image"></i>
+              <span>{{ file.name }}</span>
+              <button @click="removeProofFile(index)" class="remove-btn">
+                <i class="pi pi-times"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <template #footer>
+          <Button
+            label="Cancelar"
+            severity="secondary"
+            @click="showProofDialog = false"
+          />
+          <Button
+            label="Enviar Pruebas"
+            icon="pi pi-send"
+            severity="warning"
+            :loading="sendingProof"
+            :disabled="proofFiles.length === 0"
+            @click="sendAdditionalProof"
+          />
+        </template>
+      </Dialog>
     </div>
   </div>
 </template>
@@ -181,6 +295,7 @@ import ProgressSpinner from 'primevue/progressspinner'
 import Message from 'primevue/message'
 import { useSupportStore } from '@/app/support/application/support.store.js'
 import { useUserStore } from '@/app/iam/application/user.store.js'
+import { apiClient } from '@/app/shared/infrastructure/apiClient.js'
 import { useToast } from 'primevue/usetoast'
 
 const { t } = useI18n()
@@ -191,20 +306,46 @@ const supportStore = useSupportStore()
 
 const showCloseDialog = ref(false)
 const showUpdateDialog = ref(false)
+const showProofDialog = ref(false)
 const resolutionNotes = ref('')
 const updating = ref(false)
+const sendingProof = ref(false)
+const proofMessage = ref('')
+const proofFiles = ref([])
 
-const ticket = computed(() => supportStore.currentTicket)
-const loading = computed(() => supportStore.loading)
-const error = computed(() => supportStore.error)
+const ticket = computed(() => supportStore.state.currentTicket)
+const loading = computed(() => supportStore.state.loading)
+const error = computed(() => supportStore.state.error)
 
 const userStore = useUserStore()
 const canCloseTicket = computed(() => {
-  // Solo el dueño del ticket o un administrador puede cerrarlo
   const currentUser = userStore.currentUser.value
   if (!currentUser || !ticket.value) return false
   return Number(ticket.value.userId) === Number(currentUser.id) || currentUser.role === 'admin'
 })
+
+const disputeReasonLabels = {
+  damage_preexisting: 'El daño ya existía antes del alquiler',
+  not_caused_by_me: 'No fue responsable del daño',
+  exaggerated_cost: 'El costo está exagerado',
+  false_report: 'El reporte es falso',
+  other: 'Otro motivo'
+}
+
+function getDisputeReasonLabel(reason) {
+  return disputeReasonLabels[reason] || reason
+}
+
+function formatDate(dateString) {
+  if (!dateString) return '-'
+  return new Date(dateString).toLocaleDateString('es-ES', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}
 
 const getPrioritySeverity = (priority) => {
   const severityMap = {
@@ -252,6 +393,93 @@ const closeTicket = async () => {
   }
 }
 
+function handleProofUpload(event) {
+  const files = Array.from(event.target.files)
+  proofFiles.value = [...proofFiles.value, ...files]
+}
+
+function removeProofFile(index) {
+  proofFiles.value.splice(index, 1)
+}
+
+async function sendAdditionalProof() {
+  if (proofFiles.value.length === 0) {
+    alert('Por favor selecciona al menos una imagen')
+    return
+  }
+  
+  sendingProof.value = true
+  
+  try {
+    // En un escenario real, subiríamos las imágenes a un servidor
+    // Por ahora, simulamos URLs de imágenes
+    const proofUrls = proofFiles.value.map((file, index) => 
+      `https://placehold.co/400x300/f59e0b/ffffff?text=Prueba+${index + 1}`
+    )
+    
+    // Actualizar ticket
+    await apiClient.patch(`/support-tickets/${ticket.value.id}`, {
+      disputeStatus: 'owner_proof_sent',
+      additionalProof: proofUrls,
+      additionalProofMessage: proofMessage.value,
+      additionalProofSentAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    })
+    
+    // Notificar al renter
+    await createProofSentNotification()
+    
+    toast.add({
+      severity: 'success',
+      summary: 'Éxito',
+      detail: 'Pruebas adicionales enviadas correctamente',
+      life: 3000
+    })
+    
+    showProofDialog.value = false
+    proofFiles.value = []
+    proofMessage.value = ''
+    
+    // Recargar ticket
+    await loadTicket()
+  } catch (err) {
+    console.error('Error sending proof:', err)
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Error al enviar las pruebas',
+      life: 3000
+    })
+  } finally {
+    sendingProof.value = false
+  }
+}
+
+async function createProofSentNotification() {
+  try {
+    const notification = {
+      userId: ticket.value.renterId,
+      type: 'dispute_proof_received',
+      title: '📋 Pruebas Adicionales Recibidas',
+      body: `El propietario ha enviado pruebas adicionales para el ticket #${ticket.value.id}. Ya no puedes disputar nuevamente. Debes proceder con el pago.`,
+      relatedId: ticket.value.id,
+      relatedType: 'ticket',
+      read: false,
+      actionUrl: `/payments/ticket/${ticket.value.id}`,
+      actionLabel: 'Ver Ticket y Pagar',
+      metadata: {
+        ticketId: ticket.value.id,
+        vehicleId: ticket.value.vehicleId
+      },
+      createdAt: new Date().toISOString()
+    }
+    
+    await apiClient.post('/notifications', notification)
+  } catch (err) {
+    console.error('Error creating notification:', err)
+  }
+}
+
 const loadTicket = async () => {
   const ticketId = route.params.id
   await supportStore.fetchTicket(ticketId)
@@ -285,6 +513,70 @@ onMounted(() => {
 .header-actions {
   display: flex;
   gap: 0.5rem;
+}
+
+/* Dispute Alert Banner */
+.dispute-alert-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  border-left: 5px solid #f59e0b;
+}
+
+.dispute-alert-banner > i {
+  font-size: 2rem;
+  color: #d97706;
+  flex-shrink: 0;
+}
+
+.dispute-alert-content h4 {
+  margin: 0 0 0.75rem 0;
+  color: #92400e;
+  font-size: 1.1rem;
+}
+
+.dispute-alert-content p {
+  margin: 0 0 0.5rem 0;
+  color: #78350f;
+  line-height: 1.5;
+}
+
+.dispute-date {
+  font-size: 0.85rem;
+  color: #a16207;
+  margin-top: 0.5rem !important;
+}
+
+/* Proof Sent Banner */
+.proof-sent-banner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  border-left: 5px solid #22c55e;
+}
+
+.proof-sent-banner > i {
+  font-size: 2rem;
+  color: #16a34a;
+}
+
+.proof-sent-banner h4 {
+  margin: 0 0 0.25rem 0;
+  color: #166534;
+}
+
+.proof-sent-banner p {
+  margin: 0;
+  color: #15803d;
+  font-size: 0.9rem;
 }
 
 .ticket-main-card {
@@ -380,6 +672,30 @@ onMounted(() => {
   gap: 1rem;
 }
 
+/* Additional Proof Section */
+.additional-proof-section {
+  padding: 1rem;
+  background: #ecfdf5;
+  border-radius: 8px;
+  border-left: 4px solid #22c55e;
+}
+
+.additional-proof-section h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #166534;
+}
+
+.additional-proof-section .proof-message {
+  font-style: italic;
+  color: #15803d;
+  padding: 0.75rem;
+  background: rgba(255,255,255,0.5);
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
 .resolved-date {
   display: flex;
   align-items: center;
@@ -417,5 +733,124 @@ onMounted(() => {
 .close-dialog-content p {
   margin: 0;
   color: var(--text-color-secondary);
+}
+
+/* Proof Dialog Styles */
+.proof-dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.proof-info {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #fef3c7;
+  border-radius: 8px;
+  border-left: 4px solid #f59e0b;
+}
+
+.proof-info i {
+  color: #d97706;
+  flex-shrink: 0;
+  font-size: 1.25rem;
+}
+
+.proof-info p {
+  margin: 0;
+  color: #92400e;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #475569;
+}
+
+.upload-area {
+  position: relative;
+}
+
+.upload-area input[type="file"] {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: #f8fafc;
+  border: 2px dashed #e2e8f0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.upload-label:hover {
+  border-color: #f59e0b;
+  background: #fffbeb;
+}
+
+.upload-label i {
+  font-size: 2.5rem;
+  color: #94a3b8;
+  margin-bottom: 0.5rem;
+}
+
+.upload-label span {
+  color: #64748b;
+  font-weight: 500;
+}
+
+.selected-files {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: #f1f5f9;
+  border-radius: 6px;
+}
+
+.file-item i {
+  color: #64748b;
+}
+
+.file-item span {
+  flex: 1;
+  font-size: 0.9rem;
+  color: #475569;
+}
+
+.file-item .remove-btn {
+  background: none;
+  border: none;
+  padding: 0.25rem;
+  cursor: pointer;
+  color: #94a3b8;
+  transition: color 0.2s;
+}
+
+.file-item .remove-btn:hover {
+  color: #ef4444;
 }
 </style>

@@ -4,6 +4,15 @@ import { toUserEntity, toUserCollection } from './iam.assembler.js'
 
 export const IamApi = {
   /**
+   * Login with email and password
+   * Calls POST /api/v1/auth/login
+   */
+  async login(email, password) {
+    const data = await apiClient.post('/auth/login', { email, password })
+    return data
+  },
+
+  /**
    * Get all users
    */
   async listUsers() {
@@ -20,9 +29,18 @@ export const IamApi = {
   },
 
   /**
-   * Get user by email
+   * Get user by email (returns raw data for authentication)
    */
   async getUserByEmail(email) {
+    const users = await apiClient.get(`/users?email=${email}`)
+    // Return raw user data (including password) for authentication
+    return users.length > 0 ? users[0] : null
+  },
+
+  /**
+   * Get user by email as entity (without sensitive data)
+   */
+  async getUserByEmailAsEntity(email) {
     const users = await apiClient.get(`/users?email=${email}`)
     return users.length > 0 ? toUserEntity(users[0]) : null
   },

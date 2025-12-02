@@ -12,37 +12,45 @@
       v-tooltip.bottom="$t('notification.notifications')"
     />
     
-    <OverlayPanel ref="panel" :style="{ width: '400px', maxWidth: '90vw' }">
+    <OverlayPanel ref="panel" class="notification-overlay">
       <div class="notification-panel">
+        <!-- Header minimalista -->
         <div class="notification-header">
-          <h3>{{ $t('notification.notifications') }}</h3>
-          <div class="notification-header-actions">
-            <Button
-              v-if="unreadCount > 0"
-              :label="$t('notification.markAllAsRead')"
-              size="small"
-              text
-              @click="markAllAsRead"
-            />
+          <div class="header-left">
+            <span class="header-title">Notificaciones</span>
+            <span v-if="unreadCount > 0" class="unread-badge">{{ unreadCount }}</span>
           </div>
+          <button 
+            v-if="unreadCount > 0"
+            class="btn-mark-all"
+            @click="markAllAsRead"
+          >
+            Marcar leídas
+          </button>
         </div>
         
-        <div v-if="loading" class="notification-loading">
-          <ProgressSpinner style="width: 50px; height: 50px" />
+        <!-- Loading -->
+        <div v-if="loading" class="notification-state">
+          <div class="loading-spinner"></div>
+          <span>Cargando...</span>
         </div>
         
-        <div v-else-if="error" class="notification-error">
-          <Message severity="error" :closable="false">
-            {{ $t('notification.loadError') }}
-          </Message>
+        <!-- Error -->
+        <div v-else-if="error" class="notification-state error">
+          <i class="pi pi-exclamation-circle"></i>
+          <span>Error al cargar</span>
         </div>
         
-        <div v-else-if="notifications.length === 0" class="notification-empty">
-          <i class="pi pi-bell-slash" style="font-size: 3rem; color: var(--text-color-secondary); margin-bottom: 1rem;"></i>
-          <p style="font-size: 1rem; color: var(--text-color-secondary); margin: 0;">{{ $t('notification.noNotifications') }}</p>
-          <p style="font-size: 0.875rem; color: var(--text-color-secondary); margin-top: 0.5rem;">{{ $t('notification.noNotificationsDesc') }}</p>
+        <!-- Empty -->
+        <div v-else-if="notifications.length === 0" class="notification-state empty">
+          <div class="empty-icon">
+            <i class="pi pi-bell-slash"></i>
+          </div>
+          <span class="empty-title">Sin notificaciones</span>
+          <span class="empty-desc">Estás al día</span>
         </div>
         
+        <!-- List -->
         <div v-else class="notification-list">
           <NotificationItem
             v-for="notification in notifications"
@@ -54,12 +62,12 @@
           />
         </div>
         
+        <!-- Footer -->
         <div v-if="notifications.length > 0" class="notification-footer">
-          <Button
-            :label="$t('notification.viewAll')"
-            text
-            @click="viewAllNotifications"
-          />
+          <button class="btn-view-all" @click="viewAllNotifications">
+            Ver todas
+            <i class="pi pi-arrow-right"></i>
+          </button>
         </div>
       </div>
     </OverlayPanel>
@@ -147,59 +155,186 @@ onMounted(() => {
   position: relative;
 }
 
+/* Override del OverlayPanel para bordes redondeados */
+:deep(.notification-overlay) {
+  border-radius: 16px !important;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12) !important;
+  border: none !important;
+}
+
+:deep(.notification-overlay .p-overlaypanel-content) {
+  padding: 0 !important;
+}
+
 .notification-panel {
   display: flex;
   flex-direction: column;
-  max-height: 600px;
+  width: 380px;
+  max-width: 90vw;
+  max-height: 520px;
+  background: #fff;
 }
 
+/* Header */
 .notification-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
-  border-bottom: 1px solid var(--surface-border);
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #f0f0f0;
 }
 
-.notification-header h3 {
-  margin: 0;
-  font-size: 1.1rem;
-  font-weight: 600;
-}
-
-.notification-header-actions {
+.header-left {
   display: flex;
-  gap: 0.5rem;
+  align-items: center;
+  gap: 0.75rem;
 }
 
-.notification-loading,
-.notification-error,
-.notification-empty {
+.header-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  letter-spacing: -0.02em;
+}
+
+.unread-badge {
+  background: #FF6F00;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 10px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.btn-mark-all {
+  background: none;
+  border: none;
+  color: #3A5E5E;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.btn-mark-all:hover {
+  background: #f0fdfa;
+}
+
+/* States */
+.notification-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
-  text-align: center;
+  padding: 3rem 2rem;
+  gap: 0.75rem;
+  color: #94a3b8;
 }
 
-.notification-empty p {
-  margin-top: 1rem;
-  color: var(--text-color-secondary);
+.notification-state.error {
+  color: #ef4444;
 }
 
+.notification-state i {
+  font-size: 1.5rem;
+}
+
+.loading-spinner {
+  width: 28px;
+  height: 28px;
+  border: 2.5px solid #f0f0f0;
+  border-top-color: #3A5E5E;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.empty-icon {
+  width: 56px;
+  height: 56px;
+  background: #f8f9fa;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.empty-icon i {
+  font-size: 1.5rem;
+  color: #cbd5e1;
+}
+
+.empty-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.empty-desc {
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+/* List */
 .notification-list {
   overflow-y: auto;
-  max-height: 450px;
+  max-height: 380px;
 }
 
+.notification-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.notification-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.notification-list::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 4px;
+}
+
+/* Footer */
 .notification-footer {
-  padding: 0.75rem;
-  border-top: 1px solid var(--surface-border);
-  text-align: center;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #f0f0f0;
 }
 
-/* Notification Bell Button Styles */
+.btn-view-all {
+  width: 100%;
+  background: #f8f9fa;
+  border: none;
+  color: #3A5E5E;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.75rem;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.btn-view-all:hover {
+  background: #f0fdfa;
+}
+
+.btn-view-all i {
+  font-size: 0.75rem;
+}
+
+/* Bell Button */
 .notification-bell-button {
   color: white !important;
   background: transparent !important;
@@ -214,12 +349,11 @@ onMounted(() => {
 
 .notification-bell-button.bell-active {
   background: white !important;
-  color: #000 !important;
+  color: #1a1a1a !important;
   border-color: white !important;
 }
 
 .notification-bell-button.bell-active :deep(.pi-bell) {
   color: #FF6F00 !important;
 }
-
 </style>

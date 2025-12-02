@@ -2,7 +2,7 @@
 <template>
   <div class="bg-white rounded-xl shadow-lg p-4 hover:shadow-2xl transition duration-300">
     <img
-        :src="vehicle.photos[0]"
+        :src="vehicle.photos?.[0] || 'https://via.placeholder.com/400x300/FF6F00/ffffff?text=🚗+Vehículo+MOVEO'"
         alt="Foto del vehículo"
         class="w-full h-48 object-cover rounded-md mb-4"
     />

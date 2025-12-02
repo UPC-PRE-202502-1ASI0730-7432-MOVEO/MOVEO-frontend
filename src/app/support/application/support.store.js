@@ -21,7 +21,7 @@ export const useSupportStore = () => {
       // Filtrar solo los tickets del usuario actual
       // Normalizar ids a Number para evitar mismatch string/number
       const uid = Number(userId)
-      const userTickets = response.data.filter(ticket => 
+      const userTickets = response.filter(ticket => 
         Number(ticket.userId) === uid || Number(ticket.renterId) === uid
       )
       
@@ -42,9 +42,10 @@ export const useSupportStore = () => {
     state.error = null
     
     try {
-      // 1. Crear el ticket
+      // 1. Crear el ticket (asegurar que category siempre esté presente)
       const newTicket = {
         ...ticketData,
+        category: ticketData.category || ticketData.type || 'general',
         status: 'open',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
@@ -77,11 +78,11 @@ export const useSupportStore = () => {
         userId: renterId,
         type: 'damage_report',
         title: 'Reporte de Daño - Acción Requerida',
-        message: `Se ha reportado un daño en el vehículo ${ticket.vehicleName || 'alquilado'}. El propietario ha creado un ticket #${ticket.id}. Costo estimado: $${ticket.estimatedCost || 0}`,
+        body: `Se ha reportado un daño en el vehículo ${ticket.vehicleName || 'alquilado'}. El propietario ha creado un ticket #${ticket.id}. Costo estimado: S/. ${ticket.estimatedCost || 0}`,
         relatedId: ticket.id,
         relatedType: 'ticket',
         read: false,
-        actionUrl: `/support/tickets/${ticket.id}`,
+        actionUrl: `/payments/ticket/${ticket.id}`,
         actionLabel: 'Ver Ticket y Pagar',
         metadata: {
           ticketId: ticket.id,
@@ -107,7 +108,64 @@ export const useSupportStore = () => {
     state.error = null
     
     try {
-      state.currentTicket = await apiClient.get(`/support-tickets/${ticketId}`)
+      const rawTicket = await apiClient.get(`/support-tickets/${ticketId}`)
+      
+      // Procesar ticket para agregar propiedades de vista
+      const typeIcons = {
+        'damage': 'pi-exclamation-triangle',
+        'complaint': 'pi-comment',
+        'question': 'pi-question-circle',
+        'technical': 'pi-wrench',
+        'other': 'pi-info-circle'
+      }
+      
+      const typeLabels = {
+        'damage': 'Reporte de daño',
+        'complaint': 'Queja',
+        'question': 'Consulta',
+        'technical': 'Problema técnico',
+        'other': 'Otro'
+      }
+      
+      const statusLabels = {
+        'open': 'Abierto',
+        'in_progress': 'En proceso',
+        'resolved': 'Resuelto',
+        'closed': 'Cerrado'
+      }
+      
+      const priorityLabels = {
+        'low': 'Baja',
+        'medium': 'Media',
+        'high': 'Alta',
+        'urgent': 'Urgente'
+      }
+      
+      const statusClasses = {
+        'open': 'status-open',
+        'in_progress': 'status-progress',
+        'resolved': 'status-resolved',
+        'closed': 'status-closed'
+      }
+      
+      state.currentTicket = {
+        ...rawTicket,
+        typeIcon: typeIcons[rawTicket.type] || 'pi-ticket',
+        typeLabel: typeLabels[rawTicket.type] || rawTicket.type,
+        statusLabel: statusLabels[rawTicket.status] || rawTicket.status,
+        statusClass: statusClasses[rawTicket.status] || '',
+        priorityLabel: priorityLabels[rawTicket.priority] || rawTicket.priority,
+        formattedDate: rawTicket.createdAt ? new Date(rawTicket.createdAt).toLocaleDateString('es-ES', {
+          day: '2-digit',
+          month: 'long',
+          year: 'numeric'
+        }) : '',
+        formattedCost: rawTicket.estimatedCost ? `S/. ${rawTicket.estimatedCost.toFixed(2)}` : '',
+        isOpen: rawTicket.status === 'open' || rawTicket.status === 'in_progress',
+        requiresPayment: rawTicket.type === 'damage' && rawTicket.estimatedCost > 0 && rawTicket.status !== 'closed'
+      }
+      
+      console.log('📋 Ticket cargado:', state.currentTicket)
     } catch (error) {
       console.error('Error loading ticket:', error)
       state.error = 'Error al cargar el ticket'
@@ -153,10 +211,10 @@ export const useSupportStore = () => {
 
   return {
     state,
-    tickets: computed(() => state.tickets),
-    currentTicket: computed(() => state.currentTicket),
-    loading: computed(() => state.loading),
-    error: computed(() => state.error),
+    get tickets() { return state.tickets },
+    get currentTicket() { return state.currentTicket },
+    get loading() { return state.loading },
+    get error() { return state.error },
     stats,
     fetchTickets,
     createTicket,
