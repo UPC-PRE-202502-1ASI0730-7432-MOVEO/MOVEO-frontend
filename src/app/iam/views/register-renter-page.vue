@@ -333,15 +333,19 @@ const handleSubmit = async () => {
       }
     }
 
-    await register(userData)
+    const user = await register(userData)
 
     // Show success message
-    alert('✅ Cuenta creada exitosamente! Redirigiendo al login...')
+    alert('✅ Cuenta creada exitosamente! Bienvenido a MOVEO')
 
-    // Redirect to login page
+    // Redirect based on role (user is already authenticated with JWT)
     setTimeout(() => {
-      router.push('/auth/login')
-    }, 1500)
+      if (user.role === 'renter') {
+        router.push('/rental/browse')
+      } else {
+        router.push('/dashboard')
+      }
+    }, 500)
   } catch (error) {
     console.error('Error creating account:', error)
     alert('Hubo un error al crear tu cuenta. Por favor intenta nuevamente.')

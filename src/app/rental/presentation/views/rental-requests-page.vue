@@ -705,7 +705,7 @@ async function loadRequests() {
     // Filtrar rentals: de mis vehículos O de mis aventuras O donde soy el ownerId
     const myRentals = allRentals.filter(r => {
       // Rental de mi vehículo
-      if (r.vehicleId && myVehicleIds.has(Number(r.vehicleId))) return true
+      if (r.vehicleId && myVehicleIds.has(String(r.vehicleId))) return true
       // Rental de mi aventura
       if (r.adventureRouteId && myAdventureIds.has(Number(r.adventureRouteId))) return true
       // Soy el owner directamente
@@ -718,7 +718,7 @@ async function loadRequests() {
     
     // Enriquecer los datos
     requests.value = myRentals.map(rental => {
-      const vehicle = myVehicles.find(v => v.id === Number(rental.vehicleId))
+      const vehicle = myVehicles.find(v => String(v.id) === String(rental.vehicleId))
       const renter = users.find(u => u.id === Number(rental.renterId))
       const adventure = myAdventures.find(a => a.id === Number(rental.adventureRouteId))
       
