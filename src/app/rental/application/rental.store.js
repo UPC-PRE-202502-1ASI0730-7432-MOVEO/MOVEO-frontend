@@ -215,6 +215,80 @@ export async function updateRentalStatus(rentalId, newStatus) {
   }
 }
 
+export async function rateRental(rentalId, rating, comment) {
+  state.loading = true
+  state.error = null
+  try {
+    const rental = state.rentals.find(r => r.id === rentalId)
+    if (!rental) throw new Error('Rental not found')
+
+    // 1. Create Review
+    const reviewData = {
+      rentalId: rentalId,
+      vehicleId: rental.vehicleId,
+      renterId: rental.renterId,
+      ownerId: rental.ownerId,
+      rating: rating,
+      comment: comment,
+      createdAt: new Date().toISOString()
+    }
+    await RentalApi.createReview(reviewData)
+
+    // 2. Update Rental to mark as rated
+    await RentalApi.updateRentalRating(rentalId, { 
+      isRated: true,
+      rating: rating 
+    })
+
+    // 3. Create notification for owner
+    await createReviewNotification(rental, rating, comment)
+
+    // 4. Reload rentals
+    await loadRentals()
+    
+    return true
+  } catch (e) {
+    state.error = e.message
+    throw e
+  } finally {
+    state.loading = false
+  }
+}
+
+// Crear notificación cuando se recibe una calificación
+async function createReviewNotification(rental, rating, comment) {
+  try {
+    const vehicle = state.vehicles.find(v => v.id === rental.vehicleId)
+    const starsText = '⭐'.repeat(rating)
+    
+    const notification = {
+      userId: rental.ownerId,
+      type: 'review_received',
+      title: '🌟 Nueva Calificación Recibida',
+      message: `Tu vehículo ${vehicle?.brand} ${vehicle?.model} ha recibido una calificación de ${starsText} (${rating}/5). ${comment ? `Comentario: "${comment}"` : ''}`,
+      relatedId: rental.id,
+      relatedType: 'rental',
+      read: false,
+      actionUrl: `/rental/my-vehicles`,
+      actionLabel: 'Ver Mis Vehículos',
+      metadata: {
+        rentalId: rental.id,
+        vehicleId: rental.vehicleId,
+        renterId: rental.renterId,
+        rating: rating,
+        comment: comment
+      },
+      createdAt: new Date().toISOString(),
+      readAt: null
+    }
+    
+    await apiClient.post('/notifications', notification)
+    console.log('✅ Notificación de calificación creada para owner:', rental.ownerId)
+  } catch (error) {
+    console.error('Error creating review notification:', error)
+  }
+}
+
 // Crear notificación cuando un rental se completa
 async function createRentalCompletedNotification(rental) {
   try {
@@ -354,6 +428,7 @@ export function useRentalStore() {
     loadVehicles,
     loadRentals,
     updateRentalStatus,
+    rateRental,
     selectVehicle,
     selectedVehicle,
     filteredVehicles,

@@ -319,6 +319,7 @@ const handleSubmit = async () => {
       firstName: formData.firstName.trim(),
       lastName: formData.lastName.trim(),
       email: formData.email.toLowerCase().trim(),
+      password: formData.password,
       phone: formData.phone.trim(),
       dni: formData.dni,
       licenseNumber: formData.licenseNumber.trim(),

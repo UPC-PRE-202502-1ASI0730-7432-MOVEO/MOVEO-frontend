@@ -20,9 +20,18 @@ export const IamApi = {
   },
 
   /**
-   * Get user by email
+   * Get user by email (returns raw data for authentication)
    */
   async getUserByEmail(email) {
+    const users = await apiClient.get(`/users?email=${email}`)
+    // Return raw user data (including password) for authentication
+    return users.length > 0 ? users[0] : null
+  },
+
+  /**
+   * Get user by email as entity (without sensitive data)
+   */
+  async getUserByEmailAsEntity(email) {
     const users = await apiClient.get(`/users?email=${email}`)
     return users.length > 0 ? toUserEntity(users[0]) : null
   },

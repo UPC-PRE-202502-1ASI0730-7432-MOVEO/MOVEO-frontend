@@ -49,20 +49,27 @@ export async function login(email, password) {
   userState.error = null
   
   try {
-    // Buscar usuario por email
-    const user = await IamApi.getUserByEmail(email)
+    // Buscar usuario por email (devuelve datos crudos con password)
+    const rawUser = await IamApi.getUserByEmail(email)
     
-    if (!user) {
+    if (!rawUser) {
       throw new Error('Usuario no encontrado')
     }
     
-    // 🚀 DESARROLLO: Bypass de contraseña - cualquier password funciona
-    // En producción, aquí validarías la contraseña hasheada
-    console.log('✅ Login exitoso (modo desarrollo - sin validación de contraseña)')
+    // Validar contraseña
+    if (!rawUser.password || rawUser.password !== password) {
+      throw new Error('Contraseña incorrecta')
+    }
     
-    setUser(user)
+    console.log('✅ Login exitoso para:', rawUser.email)
+    
+    // Guardar usuario sin la contraseña por seguridad
+    const userToSave = { ...rawUser }
+    delete userToSave.password
+    
+    setUser(userToSave)
     userState.loading = false
-    return user
+    return userToSave
   } catch (error) {
     userState.loading = false
     userState.error = error.message || 'Error al iniciar sesión'
@@ -84,6 +91,7 @@ export async function register(userData) {
       firstName: userData.firstName,
       lastName: userData.lastName,
       email: userData.email,
+      password: userData.password, // Include password
       phone: userData.phone,
       dni: userData.dni,
       licenseNumber: userData.licenseNumber || null,

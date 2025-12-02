@@ -6,14 +6,25 @@ export class AdventureAssembler {
         // Normalize resource fields to entity
         return new Adventure({
             id: resource.id ?? resource._id ?? null,
-            title: resource.title ?? '',
+            title: resource.title ?? resource.name ?? '',
             description: resource.description ?? '',
-            location: resource.location ?? '',
+            location: resource.location ?? resource.endLocation ?? resource.destination ?? '',
             categoryId: resource.categoryId ?? null,
-            price: resource.price ?? null,
+            price: resource.price ?? resource.estimatedCost ?? null,
             rating: resource.rating ?? 0,
             images: resource.images ?? (resource.photos ?? []),
-            tags: resource.tags ?? []
+            tags: resource.tags ?? [],
+            // Preserve original fields for editing
+            vehicleName: resource.vehicleName,
+            startLocation: resource.startLocation,
+            endLocation: resource.endLocation,
+            type: resource.type,
+            duration: resource.duration,
+            difficulty: resource.difficulty,
+            featured: resource.featured,
+            maxCapacity: resource.maxCapacity,
+            ownerId: resource.ownerId,
+            imageUrl: resource.imageUrl
         });
     }
 

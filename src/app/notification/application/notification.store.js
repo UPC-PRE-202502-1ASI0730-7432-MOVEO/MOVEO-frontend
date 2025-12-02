@@ -34,6 +34,65 @@ export const useNotificationStore = () => {
     }
   }
 
+  // Crear nueva notificación
+  const createNotification = async (notification) => {
+    try {
+      const newNotification = {
+        ...notification,
+        read: false,
+        createdAt: new Date().toISOString()
+      }
+      
+      const created = await apiClient.post('/notifications', newNotification)
+      console.log('📬 Notificación creada:', created)
+      return created
+    } catch (error) {
+      console.error('Error creating notification:', error)
+      throw error
+    }
+  }
+
+  // Notificar al dueño sobre solicitud de alquiler
+  const notifyOwnerRentalRequest = async ({ ownerId, renterName, vehicleName, rentalId, vehicleId }) => {
+    const notification = {
+      userId: ownerId,
+      type: 'rental_request',
+      title: '¡Nueva Solicitud de Alquiler!',
+      message: `${renterName} quiere alquilar tu ${vehicleName}. Revisa los detalles y confirma la reserva.`,
+      relatedId: rentalId,
+      relatedType: 'rental',
+      actionUrl: '/rental/rental-requests',
+      actionLabel: 'Ver Solicitud',
+      metadata: {
+        rentalId,
+        vehicleId,
+        renterName
+      }
+    }
+    
+    return await createNotification(notification)
+  }
+
+  // Notificar al arrendatario sobre confirmación
+  const notifyRenterRentalConfirmed = async ({ renterId, vehicleName, rentalId, vehicleId, pickupDate }) => {
+    const notification = {
+      userId: renterId,
+      type: 'rental_confirmed',
+      title: 'Reserva Confirmada',
+      message: `Tu reserva del ${vehicleName} ha sido confirmada. Puedes recoger el vehículo el ${pickupDate}.`,
+      relatedId: rentalId,
+      relatedType: 'rental',
+      actionUrl: `/rental/my-rentals/${rentalId}`,
+      actionLabel: 'Ver Reserva',
+      metadata: {
+        rentalId,
+        vehicleId
+      }
+    }
+    
+    return await createNotification(notification)
+  }
+
   // Marcar notificación como leída
   const markAsRead = async (notificationId) => {
     try {
@@ -114,6 +173,9 @@ export const useNotificationStore = () => {
     unreadCount,
     recentNotifications,
     fetchNotifications,
+    createNotification,
+    notifyOwnerRentalRequest,
+    notifyRenterRentalConfirmed,
     markAsRead,
     markAllAsRead,
     deleteNotification

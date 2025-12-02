@@ -48,13 +48,15 @@ function goToAddVehicle() {
 <template>
   <div class="my-vehicles-page">
     <div class="page-header">
-      <div>
+      <div class="header-left">
         <h1>{{ t('rental.myVehicles.title') }}</h1>
-        <p>{{ t('rental.myVehicles.subtitle') }}</p>
+        <div class="header-stats" v-if="vehicles.length > 0">
+          <span class="stat-pill">{{ vehicles.length }} vehículo{{ vehicles.length !== 1 ? 's' : '' }}</span>
+        </div>
       </div>
-      <button @click="goToAddVehicle" class="btn-add">
-        <i class="pi pi-plus"></i>
-        {{ t('rental.myVehicles.addVehicle') }}
+      <button @click="goToAddVehicle" class="btn-add" v-if="vehicles.length > 0">
+        <span class="btn-icon">+</span>
+        <span>Agregar Vehículo</span>
       </button>
     </div>
 
@@ -64,15 +66,48 @@ function goToAddVehicle() {
       <p>{{ t('rental.myVehicles.loading') }}</p>
     </div>
 
-    <!-- Empty State -->
+    <!-- Empty State - Enhanced -->
     <div v-else-if="vehicles.length === 0" class="empty-state">
-      <i class="pi pi-car"></i>
-      <h2>{{ t('rental.myVehicles.empty.title') }}</h2>
-      <p>{{ t('rental.myVehicles.empty.message') }}</p>
-      <button @click="goToAddVehicle" class="btn-primary">
-        <i class="pi pi-plus"></i>
-        {{ t('rental.myVehicles.addFirstVehicle') }}
-      </button>
+      <div class="empty-animation">
+        <div class="floating-car">🚗</div>
+        <div class="floating-keys delay-1">🔑</div>
+        <div class="floating-road delay-2">🛣️</div>
+      </div>
+      
+      <div class="empty-content">
+        <h2 class="empty-title">¡Comienza a Compartir Tus Vehículos!</h2>
+        <p class="empty-description">
+          Aún no has agregado ningún vehículo a tu flota. Añade tu primer auto y empieza a generar ingresos.
+        </p>
+        
+        <div class="empty-benefits">
+          <div class="benefit-card">
+            <div class="benefit-icon">💰</div>
+            <h4>Ingresos Extra</h4>
+            <p>Monetiza tus vehículos cuando no los uses</p>
+          </div>
+          
+          <div class="benefit-card">
+            <div class="benefit-icon">🛡️</div>
+            <h4>100% Seguro</h4>
+            <p>Protección total con nuestro seguro integral</p>
+          </div>
+          
+          <div class="benefit-card">
+            <div class="benefit-icon">📊</div>
+            <h4>Control Total</h4>
+            <p>Gestiona disponibilidad y precios fácilmente</p>
+          </div>
+        </div>
+        
+        <button @click="goToAddVehicle" class="btn-primary">
+          <span class="btn-icon">➕</span>
+          <span>{{ t('rental.myVehicles.addFirstVehicle') }}</span>
+          <span class="btn-arrow">→</span>
+        </button>
+        
+
+      </div>
     </div>
 
     <!-- Vehicles Grid -->
@@ -140,41 +175,96 @@ function goToAddVehicle() {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
 }
 
 .page-header h1 {
   font-size: 2rem;
-  font-weight: 600;
-  color: var(--primary-dark);
-  margin-bottom: 0.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+  letter-spacing: -0.5px;
 }
 
-.page-header p {
-  color: var(--neutral-gray);
+.header-stats {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.stat-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background: #f5f5f5;
+  color: #666;
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 600;
 }
 
 .btn-add {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  background: var(--accent-orange);
-  color: white;
-  border: none;
-  border-radius: 8px;
+  background: white;
+  color: #1a1a1a;
+  border: 2px solid #1a1a1a;
+  border-radius: 50px;
   font-weight: 600;
+  font-size: 0.95rem;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-add::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: #1a1a1a;
+  transition: left 0.3s ease;
+  z-index: 0;
+}
+
+.btn-add:hover::before {
+  left: 0;
 }
 
 .btn-add:hover {
-  background: #e65100;
+  color: white;
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.loading-container,
-.empty-state {
+.btn-add span {
+  position: relative;
+  z-index: 1;
+}
+
+.btn-icon {
+  font-size: 1.25rem;
+  font-weight: 700;
+  transition: transform 0.3s ease;
+}
+
+.btn-add:hover .btn-icon {
+  transform: rotate(90deg);
+}
+
+.loading-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -183,41 +273,244 @@ function goToAddVehicle() {
   gap: 1rem;
 }
 
-.loading-container i,
-.empty-state i {
+.loading-container i {
   font-size: 4rem;
   color: var(--accent-orange);
 }
 
-.empty-state h2 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--primary-dark);
-  margin: 0;
+/* Empty State - Enhanced Modern Design */
+.empty-state {
+  background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%);
+  border-radius: 24px;
+  padding: 4rem 3rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+  border: 2px solid #f0f0f0;
+  position: relative;
+  overflow: hidden;
 }
 
-.empty-state p {
-  color: var(--neutral-gray);
+.empty-state::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -30%;
+  width: 80%;
+  height: 150%;
+  background: radial-gradient(circle, rgba(255, 111, 0, 0.05) 0%, transparent 70%);
+  animation: pulse-bg 4s ease-in-out infinite;
+}
+
+@keyframes pulse-bg {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.2); opacity: 0.9; }
+}
+
+.empty-animation {
+  position: relative;
+  height: 100px;
+  margin-bottom: 2.5rem;
+}
+
+.floating-car,
+.floating-keys,
+.floating-road {
+  position: absolute;
+  font-size: 3.5rem;
+  animation: float-smooth 3s ease-in-out infinite;
+  left: 50%;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
+}
+
+.floating-car {
+  font-size: 4.5rem;
+  z-index: 2;
+}
+
+.floating-keys {
+  font-size: 2.5rem;
+  left: 35%;
+  animation-delay: 0.5s;
+  opacity: 0.7;
+}
+
+.floating-road {
+  font-size: 2.5rem;
+  left: 65%;
+  animation-delay: 1s;
+  opacity: 0.7;
+}
+
+@keyframes float-smooth {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-15px); }
+}
+
+.empty-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.empty-title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #1a1a1a;
   margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.empty-description {
+  color: #666;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  max-width: 550px;
+  margin: 0 auto 3rem;
+}
+
+.empty-benefits {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.benefit-card {
+  background: white;
+  padding: 2rem 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  text-align: center;
+}
+
+.benefit-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+  border-color: #FF6F00;
+}
+
+.benefit-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  animation: bounce-icon 2.5s infinite;
+}
+
+@keyframes bounce-icon {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.benefit-card h4 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.benefit-card p {
+  margin: 0;
+  color: #777;
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
 .btn-primary {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.875rem 1.75rem;
-  background: var(--accent-orange);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
+  gap: 0.75rem;
+  padding: 1.25rem 2.5rem;
+  background: white;
+  color: #1a1a1a;
+  border: 3px solid #1a1a1a;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 1.15rem;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: #1a1a1a;
+  transition: left 0.4s ease;
+  z-index: -1;
+}
+
+.btn-primary:hover::before {
+  left: 0;
 }
 
 .btn-primary:hover {
-  background: #e65100;
-  transform: translateY(-2px);
+  color: white;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.btn-icon {
+  font-size: 1.5rem;
+  transition: transform 0.3s ease;
+}
+
+.btn-primary:hover .btn-icon {
+  transform: rotate(90deg);
+}
+
+.btn-arrow {
+  font-size: 1.5rem;
+  transition: transform 0.3s ease;
+}
+
+.btn-primary:hover .btn-arrow {
+  transform: translateX(5px);
+}
+
+.empty-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 3rem;
+  padding-top: 2.5rem;
+  border-top: 2px solid #f0f0f0;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #FF6F00;
+  margin-bottom: 0.25rem;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.85rem;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-divider {
+  width: 2px;
+  height: 40px;
+  background: linear-gradient(to bottom, transparent, #e0e0e0, transparent);
 }
 
 .vehicles-grid {
