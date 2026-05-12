@@ -1,5 +1,13 @@
 import { reactive, computed } from 'vue'
 import { IamApi } from '../infrastructure/iam-api.js'
+import {
+  IS_LOCAL_TEST_MODE,
+  clearStoredUser,
+  createDevUser,
+  getStoredUser,
+  normalizeUser,
+  setStoredUser
+} from '../infrastructure/local-auth.js'
 import { tokenManager } from '@/app/shared/infrastructure/apiClient.js'
 
 // Estado reactivo del usuario
@@ -10,30 +18,31 @@ export const userState = reactive({
   error: null
 })
 
-// Keys para localStorage
-const USER_KEY = 'moveo_current_user'
-
 // Inicializar con usuario guardado en localStorage
 function initializeUser() {
-  // Check if we have valid tokens
-  if (!tokenManager.hasValidToken()) {
+  if (IS_LOCAL_TEST_MODE) {
     tokenManager.clearTokens()
-    userState.currentUser = null
-    userState.isAuthenticated = false
+
+    const savedUser = getStoredUser()
+    if (savedUser) {
+      setUser(savedUser)
+      return
+    }
+
+    setUser(createDevUser())
     return
   }
-  
+
+  // Check if we have valid tokens
+  if (!tokenManager.hasValidToken()) {
+    clearAuthState()
+    return
+  }
+
   // If we have valid token, try to restore user from localStorage
-  const savedUser = localStorage.getItem(USER_KEY)
+  const savedUser = getStoredUser()
   if (savedUser) {
-    try {
-      const userData = JSON.parse(savedUser)
-      userState.currentUser = userData
-      userState.isAuthenticated = true
-    } catch (e) {
-      console.error('Error loading saved user:', e)
-      clearAuthState()
-    }
+    setUser(savedUser)
   }
 }
 
@@ -43,7 +52,7 @@ function clearAuthState() {
   userState.isAuthenticated = false
   userState.error = null
   tokenManager.clearTokens()
-  localStorage.removeItem(USER_KEY)
+  clearStoredUser()
 }
 
 // Computed properties
@@ -150,6 +159,16 @@ export async function register(userData) {
  * Obtener usuario actual desde el servidor
  */
 export async function fetchCurrentUser() {
+  if (IS_LOCAL_TEST_MODE) {
+    const savedUser = getStoredUser()
+    if (savedUser) {
+      setUser(savedUser)
+      return savedUser
+    }
+
+    return userState.currentUser
+  }
+
   if (!tokenManager.hasValidToken()) {
     return null
   }
@@ -170,23 +189,26 @@ export async function fetchCurrentUser() {
  * Verificar autenticación - útil al iniciar la app
  */
 export async function checkAuth() {
+  if (IS_LOCAL_TEST_MODE) {
+    const savedUser = getStoredUser()
+    if (savedUser) {
+      setUser(savedUser)
+      return true
+    }
+
+    return Boolean(userState.currentUser)
+  }
+
   if (!tokenManager.hasValidToken()) {
     clearAuthState()
     return false
   }
   
   // Si tenemos usuario en localStorage, estamos autenticados
-  const savedUser = localStorage.getItem(USER_KEY)
+  const savedUser = getStoredUser()
   if (savedUser) {
-    try {
-      const userData = JSON.parse(savedUser)
-      userState.currentUser = userData
-      userState.isAuthenticated = true
-      return true
-    } catch {
-      clearAuthState()
-      return false
-    }
+    setUser(savedUser)
+    return true
   }
   
   // Si no hay usuario guardado, intentar obtenerlo del servidor
@@ -202,10 +224,11 @@ export async function checkAuth() {
  * Setear usuario actual y guardar en localStorage
  */
 export function setUser(user) {
-  userState.currentUser = user
+  const normalizedUser = setStoredUser(user) || normalizeUser(user)
+  userState.currentUser = normalizedUser
   userState.isAuthenticated = true
   userState.error = null
-  localStorage.setItem(USER_KEY, JSON.stringify(user))
+  return normalizedUser
 }
 
 /**

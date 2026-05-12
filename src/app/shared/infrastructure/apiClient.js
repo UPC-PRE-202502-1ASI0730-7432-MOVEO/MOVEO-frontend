@@ -1,6 +1,6 @@
 // Cliente API con soporte JWT
-// Requiere que VITE_API_BASE_URL esté definido (sin fallback)
-const BASE = import.meta.env.VITE_API_BASE_URL
+// En desarrollo usamos el servidor local si no se define VITE_API_BASE_URL.
+const BASE = import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? 'http://localhost:5332/api/v1' : null)
 if (!BASE) {
   throw new Error('Falta la variable de entorno VITE_API_BASE_URL')
 }

@@ -5,6 +5,7 @@ import PageNotFound from '@/app/shared/views/page-not-found.vue'
 import NotificationsPage from '@/app/notification/presentation/views/notifications-page.vue'
 import { useUserStore } from '@/app/iam/application/user.store.js'
 import { tokenManager } from '@/app/shared/infrastructure/apiClient.js'
+import { IS_LOCAL_TEST_MODE } from '@/app/iam/infrastructure/local-auth.js'
 
 // Import nested route modules
 import iamRoutes from '@/app/iam/presentation/iam-router.js'
@@ -17,7 +18,7 @@ const routes = [
   // Root redirect - Start at login page
   { 
     path: '/', 
-    redirect: '/auth/login',
+    redirect: IS_LOCAL_TEST_MODE ? '/dashboard' : '/auth/login',
     // Hide main layout while redirecting to auth pages to avoid layout flash
     meta: { title: 'MOVEO', hideLayout: true }
   },
@@ -104,6 +105,11 @@ router.beforeEach(async (to, from, next) => {
   // Set page title
   const baseTitle = 'MOVEO'
   document.title = to.meta?.title ? `${baseTitle} - ${to.meta.title}` : baseTitle
+
+  if (IS_LOCAL_TEST_MODE) {
+    next()
+    return
+  }
   
   const userStore = useUserStore()
   const requiresAuth = to.meta?.requiresAuth
@@ -158,7 +164,7 @@ router.beforeEach(async (to, from, next) => {
 })
 
 // Handle auth:logout event from apiClient
-if (typeof window !== 'undefined') {
+if (!IS_LOCAL_TEST_MODE && typeof window !== 'undefined') {
   window.addEventListener('auth:logout', () => {
     router.push({ name: 'login', query: { reason: 'session_expired' } })
   })

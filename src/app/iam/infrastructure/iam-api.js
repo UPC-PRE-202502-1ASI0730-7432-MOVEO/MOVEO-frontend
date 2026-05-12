@@ -1,6 +1,55 @@
 // Repositorio / gateway API para IAM (users) con JWT Authentication
 import { apiClient, tokenManager } from '@/app/shared/infrastructure/apiClient.js'
 import { toUserEntity, toUserCollection } from './iam.assembler.js'
+import {
+  IS_LOCAL_TEST_MODE,
+  clearStoredUser,
+  getStoredUser,
+  normalizePreferences,
+  normalizeUser
+} from './local-auth.js'
+
+function buildAuthError(message, status) {
+  const error = new Error(message)
+  error.status = status
+  return error
+}
+
+function buildLocalSessionResponse(user) {
+  return {
+    user: normalizeUser(user)
+  }
+}
+
+function buildLocalRegisterPayload(userData) {
+  return {
+    role: userData.role || 'renter',
+    firstName: userData.firstName,
+    lastName: userData.lastName,
+    email: userData.email,
+    password: userData.password,
+    phone: userData.phone || null,
+    dni: userData.dni || null,
+    licenseNumber: userData.licenseNumber || null,
+    avatar: userData.avatar || null,
+    verified: {
+      email: false,
+      phone: false,
+      dni: false,
+      license: false,
+      bankAccount: false
+    },
+    stats: {
+      rating: 0,
+      reviewsCount: 0,
+      rentalsCount: 0,
+      vehiclesCount: 0,
+      memberSince: new Date().toISOString()
+    },
+    preferences: normalizePreferences(userData.preferences || {}),
+    bankAccount: userData.bankAccount || null
+  }
+}
 
 export const IamApi = {
   // ==================== AUTH ENDPOINTS ====================
@@ -11,6 +60,17 @@ export const IamApi = {
    * @returns {{ token, refreshToken, expiresAt, user }}
    */
   async login(email, password) {
+    if (IS_LOCAL_TEST_MODE) {
+      const users = await IamApi.getUserByEmail(email.toLowerCase().trim())
+      const rawUser = Array.isArray(users) ? users[0] : users
+
+      if (!rawUser || rawUser.password !== password) {
+        throw buildAuthError('Email o contraseña incorrectos', 401)
+      }
+
+      return buildLocalSessionResponse(rawUser)
+    }
+
     const response = await apiClient.post('/auth/login', { email, password })
     
     // Store tokens
@@ -27,6 +87,23 @@ export const IamApi = {
    * @returns {{ token, refreshToken, expiresAt, user }}
    */
   async register(userData) {
+    if (IS_LOCAL_TEST_MODE) {
+      const normalizedEmail = userData.email.toLowerCase().trim()
+      const users = await IamApi.getUserByEmail(normalizedEmail)
+      const existingUser = Array.isArray(users) ? users[0] : users
+
+      if (existingUser) {
+        throw buildAuthError('Ya existe una cuenta con este email', 409)
+      }
+
+      const createdUser = await apiClient.post('/users', buildLocalRegisterPayload({
+        ...userData,
+        email: normalizedEmail
+      }))
+
+      return buildLocalSessionResponse(createdUser)
+    }
+
     const response = await apiClient.post('/auth/register', userData)
     
     // Store tokens
@@ -43,6 +120,15 @@ export const IamApi = {
    * @returns {{ token, refreshToken, expiresAt, user }}
    */
   async refreshToken() {
+    if (IS_LOCAL_TEST_MODE) {
+      const storedUser = getStoredUser()
+      if (!storedUser) {
+        throw buildAuthError('No authenticated user', 401)
+      }
+
+      return buildLocalSessionResponse(storedUser)
+    }
+
     const accessToken = tokenManager.getAccessToken()
     const refreshToken = tokenManager.getRefreshToken()
     
@@ -68,6 +154,12 @@ export const IamApi = {
    * POST /api/v1/auth/logout
    */
   async logout() {
+    if (IS_LOCAL_TEST_MODE) {
+      tokenManager.clearTokens()
+      clearStoredUser()
+      return
+    }
+
     try {
       await apiClient.post('/auth/logout', {})
     } finally {
@@ -82,6 +174,10 @@ export const IamApi = {
    * @returns {User}
    */
   async getCurrentUser() {
+    if (IS_LOCAL_TEST_MODE) {
+      return getStoredUser()
+    }
+
     const data = await apiClient.get('/auth/me')
     return data
   },
@@ -91,6 +187,26 @@ export const IamApi = {
    * POST /api/v1/auth/change-password
    */
   async changePassword(currentPassword, newPassword) {
+    if (IS_LOCAL_TEST_MODE) {
+      const storedUser = getStoredUser()
+
+      if (!storedUser) {
+        throw buildAuthError('No authenticated user', 401)
+      }
+
+      const rawUser = await apiClient.get(`/users/${storedUser.id}`)
+
+      if (rawUser?.password && rawUser.password !== currentPassword) {
+        throw buildAuthError('Current password is incorrect', 400)
+      }
+
+      const updatedUser = await apiClient.patch(`/users/${storedUser.id}`, {
+        password: newPassword
+      })
+
+      return normalizeUser(updatedUser)
+    }
+
     return await apiClient.post('/auth/change-password', {
       currentPassword,
       newPassword
@@ -120,7 +236,7 @@ export const IamApi = {
    * @deprecated Use login() instead for authentication
    */
   async getUserByEmail(email) {
-    const users = await apiClient.get(`/users?email=${email}`)
+    const users = await apiClient.get(`/users?email=${encodeURIComponent(email)}`)
     // Return raw user data (including password) for authentication
     return users.length > 0 ? users[0] : null
   },
@@ -129,7 +245,7 @@ export const IamApi = {
    * Get user by email as entity (without sensitive data)
    */
   async getUserByEmailAsEntity(email) {
-    const users = await apiClient.get(`/users?email=${email}`)
+    const users = await apiClient.get(`/users?email=${encodeURIComponent(email)}`)
     return users.length > 0 ? toUserEntity(users[0]) : null
   },
 
@@ -163,6 +279,10 @@ export const IamApi = {
    * Check if user is authenticated with valid token
    */
   isAuthenticated() {
+    if (IS_LOCAL_TEST_MODE) {
+      return Boolean(getStoredUser())
+    }
+
     return tokenManager.hasValidToken()
   },
 
@@ -171,5 +291,8 @@ export const IamApi = {
    */
   clearAuth() {
     tokenManager.clearTokens()
+    if (IS_LOCAL_TEST_MODE) {
+      clearStoredUser()
+    }
   }
 }
